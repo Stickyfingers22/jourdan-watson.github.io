@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Jourdan Watson — Data Analyst & Applied Statistician. Portfolio of data analytics, machine learning, and business intelligence projects." />
+  <meta name="keywords" content="data analyst, data science, SQL, Python, statistics, machine learning, GE Aerospace, portfolio" />
+  <meta property="og:title" content="Jourdan Watson | Data Analytics Portfolio" />
+  <meta property="og:description" content="Applied Statistician & Data Analyst — GE Aerospace DTLP. Projects in aviation, sociology, finance, and fashion analytics." />
+  <title>Jourdan Watson | Data Analytics Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0c0c0c;
+      --bg-2: #141414;
+      --bg-3: #1c1c1c;
+      --border: rgba(255,255,255,0.08);
+      --border-hover: rgba(255,255,255,0.18);
+      --text: #f0ede8;
+      --text-2: #888680;
+      --text-3: #555350;
+      --accent: #b5d4f4;
+      --accent-2: #378add;
+      --green: #97c459;
+      --teal: #1d9e75;
+      --pink: #d4537e;
+      --amber: #ef9f27;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --radius-pill: 100px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    ::selection { background: var(--accent-2); color: #fff; }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(12,12,12,0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 0.5px solid var(--border);
+      padding: 0 2rem;
+    }
+
+    .nav-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-2);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    /* LAYOUT */
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    section { padding: 5rem 0; }
+    section + section { border-top: 0.5px solid var(--border); }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 2.5rem;
+    }
+
+    /* HERO */
+    #hero { padding: 6rem 0 5rem; }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 200px;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .hero-eyebrow {
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 1.25rem;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(42px, 6vw, 64px);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -2px;
+      margin-bottom: 1.5rem;
+    }
+
+    h1 .accent { color: var(--accent); }
+
+    .hero-bio {
+      font-size: 15px;
+      color: var(--text-2);
+      line-height: 1.85;
+      max-width: 540px;
+      margin-bottom: 2.25rem;
+    }
+
+    .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 22px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 500;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--text);
+      color: var(--bg);
+    }
+
+    .btn-primary:hover { background: #d0cdc8; }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 0.5px solid var(--border-hover);
+    }
+
+    .btn-outline:hover { background: var(--bg-3); border-color: var(--border-hover); }
+
+    .avatar-box {
+      width: 200px;
+      height: 200px;
+      border-radius: var(--radius);
+      background: var(--bg-3);
+      border: 0.5px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .avatar-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--bg-2);
+      border: 0.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .avatar-icon svg { opacity: 0.3; }
+    .avatar-label { font-size: 11px; color: var(--text-3); }
+
+    /* STATS */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 4rem;
+    }
+
+    .stat-card {
+      background: var(--bg-2);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+    }
+
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 30px;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+
+    .stat-lbl { font-size: 12px; color: var(--text-3); }
+
+    /* SKILLS */
+    .skills-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .skill-pill {
+      background: var(--bg-2);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-pill);
+      padding: 7px 14px;
+      font-size: 12px;
+      color: var(--text-2);
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    .skill-pill:hover { border-color: var(--border-hover); color: var(--text); }
+
+    /* EXPERIENCE */
+    .exp-item {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 2rem;
+      padding: 1.5rem 0;
+      border-bottom: 0.5px solid var(--border);
+    }
+
+    .exp-item:first-child { border-top: 0.5px solid var(--border); }
+
+    .exp-date { font-size: 12px; color: var(--text-3); padding-top: 3px; }
+
+    .exp-role { font-size: 15px; font-weight: 500; margin-bottom: 3px; }
+
+    .exp-company {
+      font-size: 13px;
+      color: var(--accent);
+      margin-bottom: 8px;
+      font-weight: 400;
+    }
+
+    .exp-desc { font-size: 13px; color: var(--text-2); line-height: 1.75; }
+
+    /* PROJECTS */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .proj-card {
+      background: var(--bg-2);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      text-decoration: none;
+      display: block;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .proj-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .proj-card:hover {
+      border-color: var(--border-hover);
+      background: var(--bg-3);
+      transform: translateY(-2px);
+    }
+
+    .proj-card:hover::before { opacity: 1; }
+
+    .proj-card.soc::before { background: linear-gradient(90deg, var(--teal), transparent); }
+    .proj-card.avi::before { background: linear-gradient(90deg, var(--accent-2), transparent); }
+    .proj-card.fin::before { background: linear-gradient(90deg, var(--green), transparent); }
+    .proj-card.fash::before { background: linear-gradient(90deg, var(--pink), transparent); }
+
+    .proj-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      margin-bottom: 1rem;
+    }
+
+    .tag-soc { background: rgba(29,158,117,0.12); color: #5dcaa5; }
+    .tag-avi { background: rgba(55,138,221,0.12); color: var(--accent); }
+    .tag-fin { background: rgba(151,196,89,0.12); color: var(--green); }
+    .tag-fash { background: rgba(212,83,126,0.12); color: #ed93b1; }
+
+    .proj-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 1.3;
+      margin-bottom: 0.75rem;
+      color: var(--text);
+    }
+
+    .proj-desc {
+      font-size: 13px;
+      color: var(--text-2);
+      line-height: 1.75;
+      margin-bottom: 1.25rem;
+    }
+
+    .proj-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    .chip {
+      font-size: 10px;
+      color: var(--text-3);
+      background: var(--bg);
+      border: 0.5px solid var(--border);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    .proj-arrow {
+      position: absolute;
+      top: 1.75rem;
+      right: 1.75rem;
+      color: var(--text-3);
+      font-size: 16px;
+      transition: color 0.15s, transform 0.15s;
+    }
+
+    .proj-card:hover .proj-arrow {
+      color: var(--text-2);
+      transform: translate(2px, -2px);
+    }
+
+    /* EDUCATION */
+    .edu-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .edu-card {
+      background: var(--bg-2);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+    }
+
+    .edu-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-3);
+      border: 0.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .edu-degree { font-size: 15px; font-weight: 500; margin-bottom: 4px; }
+    .edu-school { font-size: 13px; color: var(--text-2); margin-bottom: 6px; }
+    .edu-detail { font-size: 12px; color: var(--text-3); }
+
+    /* CERTIFICATIONS */
+    .cert-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .cert-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--bg-2);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.25rem;
+    }
+
+    .cert-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .cert-name { font-size: 14px; font-weight: 400; }
+    .cert-org { font-size: 12px; color: var(--text-3); margin-left: auto; }
+
+    /* CONTACT */
+    .contact-strip {
+      background: var(--bg-2);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .contact-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    .contact-sub { font-size: 14px; color: var(--text-2); }
+
+    .contact-links { display: flex; gap: 10px; flex-shrink: 0; }
+
+    .icon-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-sm);
+      border: 0.5px solid var(--border);
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-2);
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+
+    .icon-btn:hover { background: var(--bg-3); color: var(--text); border-color: var(--border-hover); }
+
+    /* FOOTER */
+    footer {
+      border-top: 0.5px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-3);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 680px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .avatar-box { display: none; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .projects-grid { grid-template-columns: 1fr; }
+      .edu-grid { grid-template-columns: 1fr; }
+      .exp-item { grid-template-columns: 1fr; gap: 4px; }
+      .contact-strip { flex-direction: column; text-align: center; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo">JW</a>
+      <ul class="nav-links">
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#education">Education</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div>
+          <p class="hero-eyebrow">Data Analytics Portfolio</p>
+          <h1>Jourdan<br><span class="accent">Watson</span></h1>
+          <p class="hero-bio">
+            Applied Statistician and Data Analyst with a B.S. in Mathematics and M.S. in Applied Statistics.
+            Currently in the Digital Technology Leadership Program at GE Aerospace, building analytics
+            solutions at the intersection of data science, business strategy, and systems thinking.
+          </p>
+          <div class="hero-ctas">
+            <a href="#projects" class="btn btn-primary">View Projects</a>
+            <a href="assets/Jourdan_Watson_Resume.pdf" class="btn btn-outline" target="_blank">Download Resume</a>
+          </div>
+        </div>
+        <div class="avatar-box">
+          <div class="avatar-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </div>
+          <span class="avatar-label">Add headshot</span>
+        </div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-num">6</div>
+          <div class="stat-lbl">Portfolio projects</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">M.S.</div>
+          <div class="stat-lbl">Applied Statistics</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">GE</div>
+          <div class="stat-lbl">Aerospace DTLP</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">5+</div>
+          <div class="stat-lbl">Years of experience</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="container">
+      <p class="section-label">Technical Skills</p>
+      <div class="skills-grid">
+        <span class="skill-pill">Python</span>
+        <span class="skill-pill">SQL</span>
+        <span class="skill-pill">R</span>
+        <span class="skill-pill">Pandas</span>
+        <span class="skill-pill">NumPy</span>
+        <span class="skill-pill">Scikit-Learn</span>
+        <span class="skill-pill">Statsmodels</span>
+        <span class="skill-pill">Plotly</span>
+        <span class="skill-pill">Matplotlib</span>
+        <span class="skill-pill">Power BI</span>
+        <span class="skill-pill">Tableau</span>
+        <span class="skill-pill">Databricks</span>
+        <span class="skill-pill">GCP</span>
+        <span class="skill-pill">AWS</span>
+        <span class="skill-pill">Machine Learning</span>
+        <span class="skill-pill">Time Series</span>
+        <span class="skill-pill">Forecasting</span>
+        <span class="skill-pill">A/B Testing</span>
+        <span class="skill-pill">Monte Carlo Simulation</span>
+        <span class="skill-pill">Random Forest</span>
+        <span class="skill-pill">Gradient Boosting</span>
+        <span class="skill-pill">Regression Modeling</span>
+        <span class="skill-pill">Clustering</span>
+        <span class="skill-pill">Feature Engineering</span>
+        <span class="skill-pill">Java</span>
+        <span class="skill-pill">Palantir</span>
+        <span class="skill-pill">Spotfire</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="container">
+      <p class="section-label">Experience</p>
+
+      <div class="exp-item">
+        <div class="exp-date">Jun 2025 — Present</div>
+        <div>
+          <div class="exp-role">Digital Technology Leadership Program</div>
+          <div class="exp-company">GE Aerospace · Cincinnati, OH</div>
+          <div class="exp-desc">Four-rotation enterprise technology program spanning TPM, Software Engineering, and Data Engineering disciplines. Building analytics solutions at scale across aviation systems and business operations.</div>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-date">Jun 2025 — Present</div>
+        <div>
+          <div class="exp-role">Data Analyst II</div>
+          <div class="exp-company">Centene Corporation · Remote</div>
+          <div class="exp-desc">SQL-driven reporting, dashboard development, and data pipeline work supporting managed care business intelligence. Delivering insights across healthcare operations data.</div>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-date">Summer 2024</div>
+        <div>
+          <div class="exp-role">Data Science Intern — Supply Chain AI/ML</div>
+          <div class="exp-company">GE Aerospace · Cincinnati, OH</div>
+          <div class="exp-desc">Built engine arrival date delay prediction models using machine learning. Reduced forecast error in supply chain planning, directly improving operational decision-making for engineering leadership.</div>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-date">2022 — 2024</div>
+        <div>
+          <div class="exp-role">Data Analyst Internships</div>
+          <div class="exp-company">Gordon Food Service · Urban League of West Michigan · Meijer</div>
+          <div class="exp-desc">Continuous corporate internship track through graduate school. Delivered SQL-based reporting, dashboards, and statistical analyses across supply chain, workforce development, and retail data domains.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="container">
+      <p class="section-label">Featured Projects</p>
+      <div class="projects-grid">
+
+        <a href="projects/economic-mobility/index.html" class="proj-card soc">
+          <span class="proj-arrow">↗</span>
+          <span class="proj-tag tag-soc">Sociology</span>
+          <div class="proj-title">Economic Mobility in Black America</div>
+          <div class="proj-desc">What factors drive upward economic mobility in Black communities? EDA, linear regression, correlation analysis, and feature importance across education, income, employment, and geography.</div>
+          <div class="proj-chips">
+            <span class="chip">Python</span>
+            <span class="chip">Regression</span>
+            <span class="chip">Plotly</span>
+            <span class="chip">Statistical Inference</span>
+          </div>
+        </a>
+
+        <a href="projects/housing-wealth-gap/index.html" class="proj-card soc">
+          <span class="proj-arrow">↗</span>
+          <span class="proj-tag tag-soc">Sociology</span>
+          <div class="proj-title">Housing & Wealth Gap Analysis</div>
+          <div class="proj-desc">How does homeownership contribute to wealth creation across demographic groups? Regression modeling, cohort analysis, geographic visualization, and trend analysis by race, income, and region.</div>
+          <div class="proj-chips">
+            <span class="chip">SQL</span>
+            <span class="chip">Cohort Analysis</span>
+            <span class="chip">Geo Viz</span>
+            <span class="chip">Trend Modeling</span>
+          </div>
+        </a>
+
+        <a href="projects/delta-flight-delay/index.html" class="proj-card avi">
+          <span class="proj-arrow">↗</span>
+          <span class="proj-tag tag-avi">Aviation</span>
+          <div class="proj-title">Delta Flight Delay Analytics</div>
+          <div class="proj-desc">What factors contribute most to airline delays and how can operations improve? SQL root cause analysis, time series trends, delay forecasting model, and KPI dashboard across airports and seasons.</div>
+          <div class="proj-chips">
+            <span class="chip">SQL</span>
+            <span class="chip">Time Series</span>
+            <span class="chip">Forecasting</span>
+            <span class="chip">Dashboard</span>
+          </div>
+        </a>
+
+        <a href="projects/airline-revenue/index.html" class="proj-card avi">
+          <span class="proj-arrow">↗</span>
+          <span class="proj-tag tag-avi">Aviation</span>
+          <div class="proj-title">Airline Revenue Optimization</div>
+          <div class="proj-desc">How can airlines maximize revenue while balancing capacity and demand? Time series forecasting, revenue modeling, pricing optimization, and capacity planning across routes and seasons.</div>
+          <div class="proj-chips">
+            <span class="chip">Forecasting</span>
+            <span class="chip">Optimization</span>
+            <span class="chip">Revenue Modeling</span>
+            <span class="chip">Python</span>
+          </div>
+        </a>
+
+        <a href="projects/luxury-fashion/index.html" class="proj-card fash">
+          <span class="proj-arrow">↗</span>
+          <span class="proj-tag tag-fash">Fashion</span>
+          <div class="proj-title">Luxury Fashion Pricing Analysis</div>
+          <div class="proj-desc">What drives pricing at Louis Vuitton, Dior, Gucci, and Prada? Regression and clustering to separate brand prestige markup from actual garment quality — material, manufacturing, and positioning.</div>
+          <div class="proj-chips">
+            <span class="chip">Clustering</span>
+            <span class="chip">Regression</span>
+            <span class="chip">Market Segmentation</span>
+          </div>
+        </a>
+
+        <a href="projects/wealth-growth/index.html" class="proj-card fin">
+          <span class="proj-arrow">↗</span>
+          <span class="proj-tag tag-fin">Finance</span>
+          <div class="proj-title">Income Diversification & Wealth Growth</div>
+          <div class="proj-desc">How do multiple income streams impact long-term wealth creation? Monte Carlo simulation, scenario modeling, and risk analysis across primary income, investments, and real estate on the path to FIRE.</div>
+          <div class="proj-chips">
+            <span class="chip">Monte Carlo</span>
+            <span class="chip">Simulation</span>
+            <span class="chip">Scenario Modeling</span>
+            <span class="chip">FIRE</span>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education">
+    <div class="container">
+      <p class="section-label">Education</p>
+      <div class="edu-grid">
+        <div class="edu-card">
+          <div class="edu-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(181,212,244,0.6)" stroke-width="1.5">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
+            </svg>
+          </div>
+          <div class="edu-degree">M.S. Applied Statistics</div>
+          <div class="edu-school">Grand Valley State University</div>
+          <div class="edu-detail">Completed in 3 years · Allendale, MI</div>
+        </div>
+        <div class="edu-card">
+          <div class="edu-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(181,212,244,0.6)" stroke-width="1.5">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
+            </svg>
+          </div>
+          <div class="edu-degree">B.S. Mathematics</div>
+          <div class="edu-school">Fort Valley State University</div>
+          <div class="edu-detail">Completed in 3 years · Fort Valley, GA</div>
+        </div>
+      </div>
+
+      <p class="section-label" style="margin-top: 3rem;">Certifications</p>
+      <div class="cert-list">
+        <div class="cert-item">
+          <div class="cert-dot"></div>
+          <div class="cert-name">AWS Certified Cloud Practitioner</div>
+          <div class="cert-org">Amazon Web Services</div>
+        </div>
+        <div class="cert-item">
+          <div class="cert-dot"></div>
+          <div class="cert-name">AWS Certified AI Practitioner</div>
+          <div class="cert-org">Amazon Web Services</div>
+        </div>
+        <div class="cert-item">
+          <div class="cert-dot" style="background: var(--text-3);"></div>
+          <div class="cert-name" style="color: var(--text-3);">Google Professional Data Engineer</div>
+          <div class="cert-org" style="color: var(--text-3);">In Progress</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-strip">
+        <div>
+          <div class="contact-heading">Let's connect</div>
+          <div class="contact-sub">Open to data analytics, data science, and leadership opportunities.</div>
+        </div>
+        <div class="contact-links">
+          <a href="https://linkedin.com/in/jourdanwatson" target="_blank" class="icon-btn" aria-label="LinkedIn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+              <rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>
+            </svg>
+          </a>
+          <a href="https://github.com/jourdanwatson" target="_blank" class="icon-btn" aria-label="GitHub">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+            </svg>
+          </a>
+          <a href="mailto:jourdan.watson@email.com" class="icon-btn" aria-label="Email">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 Jourdan Watson · Built with HTML, CSS & data-driven ambition</p>
+  </footer>
+
+</body>
+</html>
