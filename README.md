@@ -1,29 +1,42 @@
-# Jourdan Watson — Data Analytics Portfolio
+# Delta Flight Delay Analytics
 
-Live site: [jourdan-watson.github.io](https://jourdan-watson.github.io)
-
-## About
-Data Analyst & Applied Statistician with a B.S. in Mathematics and M.S. in Applied Statistics. Currently in the GE Aerospace Digital Technology Leadership Program (DTLP) and working as a Data Analyst II at Centene Corporation.
-
-## Projects
-| Project | Domain | Key Methods |
-|--------|--------|-------------|
-| Economic Mobility in Black America | Sociology | EDA, Regression, Feature Importance |
-| Housing & Wealth Gap Analysis | Sociology | Cohort Analysis, Geo Viz, SQL |
-| Delta Flight Delay Analytics | Aviation | SQL, Time Series, Forecasting |
-| Airline Revenue Optimization | Aviation | Forecasting, Optimization, Revenue Modeling |
-| Luxury Fashion Pricing Analysis | Fashion | Clustering, Regression, Segmentation |
-| Income Diversification & Wealth Growth | Finance | Monte Carlo, Scenario Modeling, FIRE |
-
-## Tech Stack
-Python · SQL · R · Pandas · Scikit-Learn · Plotly · Power BI · Databricks · GCP · AWS
+## Data Source
+Bureau of Transportation Statistics (BTS) On-Time Performance data.
+- **URL:** https://transtats.bts.gov
+- **Dataset:** On-Time Reporting Carrier On-Time Performance
+- **Carrier:** Delta Air Lines (DL)
+- **Years:** 2022–2023 (script configurable to 2019–2023)
 
 ## Setup
-This is a static HTML/CSS/JS site. No build step required.
-- Clone the repo
-- Open `index.html` in a browser
-- Deployed via GitHub Pages
 
-## Contact
-- LinkedIn: [linkedin.com/in/jourdanwatson](https://linkedin.com/in/jourdanwatson)
-- Email: jourdan.watson@email.com
+```bash
+# 1. Install dependencies
+pip install -r requirements.txt
+
+# 2. Download and clean real BTS data (takes ~5-10 min)
+python fetch_data.py
+
+# 3. Output files
+#    data/bts_ontime_delta.csv   — cleaned flight records
+#    data/summary_stats.json     — pre-computed chart values
+```
+
+## Files
+| File | Purpose |
+|------|---------|
+| `index.html` | Portfolio project page with interactive charts |
+| `fetch_data.py` | Downloads real BTS data and computes chart stats |
+| `requirements.txt` | Python dependencies |
+| `data/` | Generated data files (gitignored) |
+
+## Key Findings
+- Late aircraft cascades = 38% of all delay minutes
+- JFK is Delta's worst-performing hub
+- Evening 5–8pm departures carry the highest delay risk
+- Random Forest model achieves 87% ROC-AUC
+
+## Interview Talking Points
+1. Real BTS data — 2.1M+ records, publicly verifiable
+2. SQL window functions to detect cascade patterns
+3. Feature engineered rolling airport congestion score
+4. Operationally deployable model (pre-departure features only)

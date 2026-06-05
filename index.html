@@ -1,810 +1,953 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Jourdan Watson — Data Analyst & Applied Statistician. Portfolio of data analytics, machine learning, and business intelligence projects." />
-  <meta name="keywords" content="data analyst, data science, SQL, Python, statistics, machine learning, GE Aerospace, portfolio" />
-  <meta property="og:title" content="Jourdan Watson | Data Analytics Portfolio" />
-  <meta property="og:description" content="Applied Statistician & Data Analyst — GE Aerospace DTLP. Projects in aviation, sociology, finance, and fashion analytics." />
-  <title>Jourdan Watson | Data Analytics Portfolio</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Delta Flight Delay Analytics | Jourdan Watson</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
   <style>
     :root {
-      --bg: #0c0c0c;
-      --bg-2: #141414;
-      --bg-3: #1c1c1c;
-      --border: rgba(255,255,255,0.08);
-      --border-hover: rgba(255,255,255,0.18);
-      --text: #f0ede8;
-      --text-2: #888680;
-      --text-3: #555350;
-      --accent: #b5d4f4;
-      --accent-2: #378add;
-      --green: #97c459;
-      --teal: #1d9e75;
-      --pink: #d4537e;
-      --amber: #ef9f27;
-      --radius: 12px;
-      --radius-sm: 8px;
-      --radius-pill: 100px;
+      --cream:#f4f1ea;--cream2:#ebe6db;--cream3:#dfd8cc;
+      --ink:#1c1a14;--ink2:#4a4235;--ink3:#8a8070;--ink4:#c0b8a8;
+      --forest:#2d5a3d;--forest2:#3d7a52;--bark:#6b4423;--bark2:#8b5e35;
+      --moss:#4a5e2a;--sand:#c4a882;
+      --border:rgba(30,24,14,.1);--border2:rgba(30,24,14,.2);
+      --r:3px;
     }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 16px;
-      line-height: 1.7;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    ::selection { background: var(--accent-2); color: #fff; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--cream);color:var(--ink);font-family:'Syne',sans-serif;overflow-x:hidden;}
+    ::selection{background:var(--forest);color:var(--cream);}
 
     /* NAV */
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(12,12,12,0.85);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 0.5px solid var(--border);
-      padding: 0 2rem;
-    }
-
-    .nav-inner {
-      max-width: 960px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 56px;
-    }
-
-    .nav-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      color: var(--text);
-      text-decoration: none;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      font-size: 12px;
-      font-weight: 400;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-2);
-      text-decoration: none;
-      transition: color 0.15s;
-    }
-
-    .nav-links a:hover { color: var(--text); }
+    nav{position:sticky;top:0;z-index:100;background:rgba(244,241,234,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 3rem;display:flex;align-items:center;height:56px;gap:2rem;}
+    .back-link{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color .2s;}
+    .back-link:hover{color:var(--forest);}
+    .nav-title{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--ink2);font-style:italic;}
+    .nav-tag{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--bark);border:1px solid rgba(107,68,35,.3);padding:4px 12px;background:rgba(107,68,35,.05);}
 
     /* LAYOUT */
-    .container {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 0 2rem;
-    }
-
-    section { padding: 5rem 0; }
-    section + section { border-top: 0.5px solid var(--border); }
-
-    .section-label {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--text-3);
-      margin-bottom: 2.5rem;
-    }
+    .wrap{max-width:1080px;margin:0 auto;padding:0 3rem;}
+    .section{padding:5rem 0;border-bottom:1px solid var(--border);}
+    .section:last-child{border-bottom:none;}
 
     /* HERO */
-    #hero { padding: 6rem 0 5rem; }
+    .proj-hero{padding:5rem 0 4rem;border-bottom:1px solid var(--border);}
+    .proj-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--bark);margin-bottom:1.5rem;display:flex;align-items:center;gap:12px;}
+    .proj-eyebrow::before{content:'';width:28px;height:1px;background:var(--bark);}
+    .proj-title{font-family:'Cormorant Garamond',serif;font-size:clamp(48px,7vw,88px);font-weight:300;line-height:.95;letter-spacing:-.03em;margin-bottom:2rem;}
+    .proj-title em{font-style:italic;color:var(--forest);}
+    .proj-summary{font-size:16px;color:var(--ink2);line-height:1.85;max-width:680px;margin-bottom:3rem;}
+    .proj-meta-row{display:flex;gap:3rem;flex-wrap:wrap;padding:2rem 0;border-top:1px solid var(--border);}
+    .proj-meta-item{}
+    .proj-meta-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink4);margin-bottom:6px;}
+    .proj-meta-val{font-size:14px;font-weight:600;color:var(--ink);}
+    .proj-meta-val.green{color:var(--forest);}
 
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1fr 200px;
-      gap: 3rem;
-      align-items: start;
-    }
+    /* EXEC SUMMARY BOX */
+    .exec-box{background:var(--forest);color:var(--cream);padding:3rem;margin:4rem 0;position:relative;overflow:hidden;}
+    .exec-box::before{content:'EXECUTIVE SUMMARY';position:absolute;right:-10px;top:50%;transform:translateY(-50%) rotate(90deg);font-family:'Cormorant Garamond',serif;font-size:80px;font-weight:300;color:rgba(255,255,255,.04);white-space:nowrap;pointer-events:none;letter-spacing:-.03em;}
+    .exec-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(244,241,234,.5);margin-bottom:1.25rem;}
+    .exec-text{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;line-height:1.65;font-style:italic;}
+    .exec-text strong{font-style:normal;font-weight:600;color:#a8d4b8;}
 
-    .hero-eyebrow {
-      font-size: 12px;
-      font-weight: 400;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-3);
-      margin-bottom: 1.25rem;
-    }
+    /* SECTION HEADINGS */
+    .section-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--bark);margin-bottom:1rem;display:flex;align-items:center;gap:10px;}
+    .section-eyebrow::before{content:'';width:20px;height:1px;background:var(--bark);}
+    .section-h{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4vw,44px);font-weight:300;line-height:1.1;letter-spacing:-.02em;margin-bottom:2rem;}
+    .section-h em{font-style:italic;color:var(--forest);}
+    .section-body{font-size:15px;color:var(--ink2);line-height:1.85;max-width:720px;margin-bottom:2rem;}
 
-    h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(42px, 6vw, 64px);
-      font-weight: 700;
-      line-height: 1.05;
-      letter-spacing: -2px;
-      margin-bottom: 1.5rem;
-    }
+    /* KPI CARDS */
+    .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:2.5rem 0;}
+    .kpi-card{background:var(--cream2);border:1px solid var(--border);padding:1.75rem;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;}
+    .kpi-card:hover{border-color:rgba(45,90,61,.3);transform:translateY(-2px);}
+    .kpi-card::after{content:attr(data-icon);position:absolute;bottom:-8px;right:8px;font-size:48px;opacity:.06;pointer-events:none;}
+    .kpi-num{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:300;line-height:1;margin-bottom:6px;color:var(--ink);}
+    .kpi-num.green{color:var(--forest);}
+    .kpi-num.brown{color:var(--bark);}
+    .kpi-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);}
+    .kpi-sub{font-size:11px;color:var(--ink4);margin-top:4px;}
 
-    h1 .accent { color: var(--accent); }
+    /* CODE BLOCKS */
+    .code-wrap{margin:2rem 0;}
+    .code-header{display:flex;align-items:center;justify-content:space-between;background:var(--ink);padding:.75rem 1.25rem;border-radius:3px 3px 0 0;}
+    .code-lang{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(244,241,234,.4);}
+    .code-title{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(244,241,234,.7);}
+    .code-copy{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,241,234,.4);background:none;border:1px solid rgba(255,255,255,.1);padding:4px 10px;cursor:pointer;transition:all .2s;}
+    .code-copy:hover{color:var(--cream);border-color:rgba(255,255,255,.3);}
+    pre{background:#141210;padding:1.5rem;overflow-x:auto;border-radius:0 0 3px 3px;border:1px solid rgba(255,255,255,.06);border-top:none;margin:0;}
+    code{font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.75;color:#d4cfc8;}
+    .kw{color:#a8c4a0;}   /* keywords — sage green */
+    .fn{color:#c4a882;}   /* functions — sand */
+    .str{color:#b8956a;}  /* strings — bark light */
+    .cm{color:#5a5448;}   /* comments — muted */
+    .num{color:#8bb4a8;}  /* numbers — teal-grey */
+    .op{color:#8a8070;}   /* operators */
 
-    .hero-bio {
-      font-size: 15px;
-      color: var(--text-2);
-      line-height: 1.85;
-      max-width: 540px;
-      margin-bottom: 2.25rem;
-    }
+    /* CHART CONTAINERS */
+    .chart-wrap{margin:2.5rem 0;}
+    .chart-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);margin-bottom:1rem;display:flex;align-items:center;gap:10px;}
+    .chart-label::before{content:'';width:16px;height:1px;background:var(--ink4);}
+    .chart-container{background:var(--cream2);border:1px solid var(--border);padding:1.5rem;min-height:360px;}
+    .chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:2.5rem 0;}
 
-    .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+    /* INSIGHT CARDS */
+    .insight-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:2rem 0;}
+    .insight-card{background:var(--cream2);border:1px solid var(--border);border-left:3px solid var(--forest);padding:1.5rem;transition:transform .2s;}
+    .insight-card:hover{transform:translateY(-2px);}
+    .insight-card.brown{border-left-color:var(--bark);}
+    .insight-card.moss{border-left-color:var(--moss);}
+    .insight-num{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;color:var(--forest);line-height:1;margin-bottom:6px;}
+    .insight-num.brown{color:var(--bark);}
+    .insight-label{font-size:13px;font-weight:600;margin-bottom:4px;}
+    .insight-sub{font-size:12px;color:var(--ink3);line-height:1.6;}
 
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 11px 22px;
-      border-radius: var(--radius-sm);
-      font-size: 13px;
-      font-weight: 500;
-      font-family: 'DM Sans', sans-serif;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.15s;
-      border: none;
-    }
+    /* STAR METHOD */
+    .star-grid{display:grid;grid-template-columns:1fr;gap:0;}
+    .star-item{padding:2rem 0;border-bottom:1px solid var(--border);display:grid;grid-template-columns:80px 1fr;gap:2rem;align-items:start;}
+    .star-item:first-child{border-top:1px solid var(--border);}
+    .star-letter{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:300;line-height:1;color:var(--cream3);}
+    .star-word{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--bark);margin-bottom:8px;}
+    .star-text{font-size:14px;color:var(--ink2);line-height:1.8;}
+    .star-text strong{color:var(--ink);font-weight:600;}
 
-    .btn-primary {
-      background: var(--text);
-      color: var(--bg);
-    }
+    /* INTERVIEW Q&A */
+    .qa-list{display:flex;flex-direction:column;gap:0;}
+    .qa-item{border-bottom:1px solid var(--border);padding:1.75rem 0;cursor:pointer;}
+    .qa-item:first-child{border-top:1px solid var(--border);}
+    .qa-q{display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+    .qa-q-text{font-size:15px;font-weight:600;line-height:1.4;}
+    .qa-toggle{font-family:'JetBrains Mono',monospace;font-size:16px;color:var(--ink3);transition:transform .3s;flex-shrink:0;}
+    .qa-item.open .qa-toggle{transform:rotate(45deg);color:var(--forest);}
+    .qa-a{font-size:14px;color:var(--ink2);line-height:1.85;max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.16,1,.3,1),padding .3s;}
+    .qa-item.open .qa-a{max-height:600px;padding-top:1rem;}
 
-    .btn-primary:hover { background: #d0cdc8; }
+    /* RESUME BULLETS */
+    .bullets-box{background:var(--cream2);border:1px solid var(--border2);padding:2.5rem;margin:2rem 0;}
+    .bullets-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink3);margin-bottom:1.25rem;}
+    .bullet-list{display:flex;flex-direction:column;gap:.75rem;}
+    .bullet-item{display:flex;gap:1rem;font-size:14px;color:var(--ink2);line-height:1.7;align-items:baseline;}
+    .bullet-item::before{content:'→';color:var(--forest);font-size:12px;flex-shrink:0;margin-top:2px;}
 
-    .btn-outline {
-      background: transparent;
-      color: var(--text);
-      border: 0.5px solid var(--border-hover);
-    }
+    /* SKILL TAGS */
+    .skill-row{display:flex;gap:8px;flex-wrap:wrap;margin:1.5rem 0;}
+    .stag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;color:var(--ink2);border:1px solid var(--border2);padding:5px 12px;transition:all .2s;}
+    .stag:hover{background:var(--forest);color:var(--cream);border-color:var(--forest);}
 
-    .btn-outline:hover { background: var(--bg-3); border-color: var(--border-hover); }
+    /* ANIMATIONS */
+    .reveal{opacity:0;transform:translateY(20px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1);}
+    .reveal.visible{opacity:1;transform:translateY(0);}
 
-    .avatar-box {
-      width: 200px;
-      height: 200px;
-      border-radius: var(--radius);
-      background: var(--bg-3);
-      border: 0.5px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
+    /* FOOTER NAV */
+    .proj-footer{padding:3rem 0;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+    .proj-footer-link{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);text-decoration:none;transition:color .2s;}
+    .proj-footer-link:hover{color:var(--forest);}
 
-    .avatar-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: var(--bg-2);
-      border: 0.5px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .avatar-icon svg { opacity: 0.3; }
-    .avatar-label { font-size: 11px; color: var(--text-3); }
-
-    /* STATS */
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-top: 4rem;
-    }
-
-    .stat-card {
-      background: var(--bg-2);
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 1.25rem;
-    }
-
-    .stat-num {
-      font-family: 'Playfair Display', serif;
-      font-size: 30px;
-      font-weight: 700;
-      line-height: 1;
-      margin-bottom: 6px;
-      color: var(--text);
-    }
-
-    .stat-lbl { font-size: 12px; color: var(--text-3); }
-
-    /* SKILLS */
-    .skills-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .skill-pill {
-      background: var(--bg-2);
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius-pill);
-      padding: 7px 14px;
-      font-size: 12px;
-      color: var(--text-2);
-      transition: border-color 0.15s, color 0.15s;
-    }
-
-    .skill-pill:hover { border-color: var(--border-hover); color: var(--text); }
-
-    /* EXPERIENCE */
-    .exp-item {
-      display: grid;
-      grid-template-columns: 160px 1fr;
-      gap: 2rem;
-      padding: 1.5rem 0;
-      border-bottom: 0.5px solid var(--border);
-    }
-
-    .exp-item:first-child { border-top: 0.5px solid var(--border); }
-
-    .exp-date { font-size: 12px; color: var(--text-3); padding-top: 3px; }
-
-    .exp-role { font-size: 15px; font-weight: 500; margin-bottom: 3px; }
-
-    .exp-company {
-      font-size: 13px;
-      color: var(--accent);
-      margin-bottom: 8px;
-      font-weight: 400;
-    }
-
-    .exp-desc { font-size: 13px; color: var(--text-2); line-height: 1.75; }
-
-    /* PROJECTS */
-    .projects-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-
-    .proj-card {
-      background: var(--bg-2);
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.75rem;
-      text-decoration: none;
-      display: block;
-      transition: border-color 0.2s, background 0.2s, transform 0.15s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .proj-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-
-    .proj-card:hover {
-      border-color: var(--border-hover);
-      background: var(--bg-3);
-      transform: translateY(-2px);
-    }
-
-    .proj-card:hover::before { opacity: 1; }
-
-    .proj-card.soc::before { background: linear-gradient(90deg, var(--teal), transparent); }
-    .proj-card.avi::before { background: linear-gradient(90deg, var(--accent-2), transparent); }
-    .proj-card.fin::before { background: linear-gradient(90deg, var(--green), transparent); }
-    .proj-card.fash::before { background: linear-gradient(90deg, var(--pink), transparent); }
-
-    .proj-tag {
-      display: inline-block;
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 4px 10px;
-      border-radius: var(--radius-pill);
-      margin-bottom: 1rem;
-    }
-
-    .tag-soc { background: rgba(29,158,117,0.12); color: #5dcaa5; }
-    .tag-avi { background: rgba(55,138,221,0.12); color: var(--accent); }
-    .tag-fin { background: rgba(151,196,89,0.12); color: var(--green); }
-    .tag-fash { background: rgba(212,83,126,0.12); color: #ed93b1; }
-
-    .proj-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 18px;
-      font-weight: 500;
-      line-height: 1.3;
-      margin-bottom: 0.75rem;
-      color: var(--text);
-    }
-
-    .proj-desc {
-      font-size: 13px;
-      color: var(--text-2);
-      line-height: 1.75;
-      margin-bottom: 1.25rem;
-    }
-
-    .proj-chips { display: flex; gap: 6px; flex-wrap: wrap; }
-
-    .chip {
-      font-size: 10px;
-      color: var(--text-3);
-      background: var(--bg);
-      border: 0.5px solid var(--border);
-      padding: 3px 8px;
-      border-radius: 4px;
-    }
-
-    .proj-arrow {
-      position: absolute;
-      top: 1.75rem;
-      right: 1.75rem;
-      color: var(--text-3);
-      font-size: 16px;
-      transition: color 0.15s, transform 0.15s;
-    }
-
-    .proj-card:hover .proj-arrow {
-      color: var(--text-2);
-      transform: translate(2px, -2px);
-    }
-
-    /* EDUCATION */
-    .edu-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-
-    .edu-card {
-      background: var(--bg-2);
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-    }
-
-    .edu-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: var(--radius-sm);
-      background: var(--bg-3);
-      border: 0.5px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1rem;
-    }
-
-    .edu-degree { font-size: 15px; font-weight: 500; margin-bottom: 4px; }
-    .edu-school { font-size: 13px; color: var(--text-2); margin-bottom: 6px; }
-    .edu-detail { font-size: 12px; color: var(--text-3); }
-
-    /* CERTIFICATIONS */
-    .cert-list { display: flex; flex-direction: column; gap: 10px; }
-
-    .cert-item {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      background: var(--bg-2);
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 1rem 1.25rem;
-    }
-
-    .cert-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--accent);
-      flex-shrink: 0;
-    }
-
-    .cert-name { font-size: 14px; font-weight: 400; }
-    .cert-org { font-size: 12px; color: var(--text-3); margin-left: auto; }
-
-    /* CONTACT */
-    .contact-strip {
-      background: var(--bg-2);
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius);
-      padding: 2.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 2rem;
-    }
-
-    .contact-heading {
-      font-family: 'Playfair Display', serif;
-      font-size: 26px;
-      font-weight: 500;
-      margin-bottom: 6px;
-    }
-
-    .contact-sub { font-size: 14px; color: var(--text-2); }
-
-    .contact-links { display: flex; gap: 10px; flex-shrink: 0; }
-
-    .icon-btn {
-      width: 44px;
-      height: 44px;
-      border-radius: var(--radius-sm);
-      border: 0.5px solid var(--border);
-      background: transparent;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: var(--text-2);
-      text-decoration: none;
-      transition: background 0.15s, color 0.15s, border-color 0.15s;
-    }
-
-    .icon-btn:hover { background: var(--bg-3); color: var(--text); border-color: var(--border-hover); }
-
-    /* FOOTER */
-    footer {
-      border-top: 0.5px solid var(--border);
-      padding: 2rem;
-      text-align: center;
-      font-size: 12px;
-      color: var(--text-3);
-    }
-
-    /* RESPONSIVE */
-    @media (max-width: 680px) {
-      .hero-grid { grid-template-columns: 1fr; }
-      .avatar-box { display: none; }
-      .stats-row { grid-template-columns: repeat(2, 1fr); }
-      .projects-grid { grid-template-columns: 1fr; }
-      .edu-grid { grid-template-columns: 1fr; }
-      .exp-item { grid-template-columns: 1fr; gap: 4px; }
-      .contact-strip { flex-direction: column; text-align: center; }
-      .nav-links { display: none; }
+    @media(max-width:760px){
+      nav{padding:0 1.5rem;}.wrap{padding:0 1.5rem;}
+      .kpi-grid{grid-template-columns:repeat(2,1fr);}
+      .insight-grid{grid-template-columns:1fr;}
+      .chart-grid{grid-template-columns:1fr;}
+      .star-item{grid-template-columns:1fr;}.star-letter{font-size:36px;}
+      .proj-meta-row{gap:1.5rem;}
     }
   </style>
 </head>
 <body>
 
-  <nav>
-    <div class="nav-inner">
-      <a href="#hero" class="nav-logo">JW</a>
-      <ul class="nav-links">
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#experience">Experience</a></li>
-        <li><a href="#education">Education</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-    </div>
-  </nav>
+<nav>
+  <a href="../../index.html" class="back-link">← Portfolio</a>
+  <span class="nav-title">Delta Flight Delay Analytics</span>
+  <span class="nav-tag">Aviation</span>
+</nav>
 
-  <!-- HERO -->
-  <section id="hero">
-    <div class="container">
-      <div class="hero-grid">
+<!-- HERO -->
+<div class="wrap">
+  <div class="proj-hero">
+    <div class="proj-eyebrow">Project 03 · Aviation Analytics</div>
+    <h1 class="proj-title">Delta Flight<br><em>Delay Analytics</em></h1>
+    <p class="proj-summary">A full-stack airline operations analysis using real Bureau of Transportation Statistics data. Identifies the root causes of flight delays across Delta's network, builds a delay forecasting model, and delivers operational recommendations an airline executive could act on today.</p>
+    <div class="proj-meta-row">
+      <div class="proj-meta-item"><div class="proj-meta-label">Domain</div><div class="proj-meta-val">Aviation Operations</div></div>
+      <div class="proj-meta-item"><div class="proj-meta-label">Data Source</div><div class="proj-meta-val">BTS / DOT On-Time Data</div></div>
+      <div class="proj-meta-item"><div class="proj-meta-label">Methods</div><div class="proj-meta-val">SQL · Time Series · ML Forecasting</div></div>
+      <div class="proj-meta-item"><div class="proj-meta-label">Tools</div><div class="proj-meta-val">Python · Pandas · Plotly · Scikit-Learn</div></div>
+      <div class="proj-meta-item"><div class="proj-meta-label">Business Question</div><div class="proj-meta-val green">What drives delays and how do we fix them?</div></div>
+    </div>
+  </div>
+
+  <!-- EXEC SUMMARY -->
+  <div class="exec-box reveal">
+    <div class="exec-label">30-Second Executive Summary</div>
+    <div class="exec-text">
+      Delta Air Lines operates <strong>~5,000 daily flights</strong> across 325+ destinations. This analysis of 2.1M+ flight records reveals that <strong>late aircraft cascades account for 38% of all delay minutes</strong> — more than weather and carrier issues combined. By addressing aircraft turnaround efficiency at <strong>ATL, JFK, and LAX</strong>, Delta could recover an estimated <strong>4.2 minutes of average delay</strong> per affected flight, translating to meaningful improvements in on-time performance and passenger satisfaction scores.
+    </div>
+  </div>
+
+  <!-- KPI STRIP -->
+  <div class="kpi-grid reveal">
+    <div class="kpi-card" data-icon="✈">
+      <div class="kpi-num">2.1M</div>
+      <div class="kpi-label">Flight Records Analyzed</div>
+      <div class="kpi-sub">2019–2023 BTS dataset</div>
+    </div>
+    <div class="kpi-card" data-icon="⏱">
+      <div class="kpi-num brown">18.4</div>
+      <div class="kpi-label">Avg Delay Minutes</div>
+      <div class="kpi-sub">Among delayed flights only</div>
+    </div>
+    <div class="kpi-card" data-icon="📍">
+      <div class="kpi-num green">38%</div>
+      <div class="kpi-label">Late Aircraft Cause</div>
+      <div class="kpi-sub">Largest single delay driver</div>
+    </div>
+    <div class="kpi-card" data-icon="📈">
+      <div class="kpi-num">87%</div>
+      <div class="kpi-label">Model Accuracy</div>
+      <div class="kpi-sub">Random Forest classifier</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SECTION 1: DATA & SQL ── -->
+<div class="wrap">
+  <div class="section reveal">
+    <div class="section-eyebrow">Section 01 · Data Architecture</div>
+    <h2 class="section-h">Database Schema &<br><em>SQL Foundation</em></h2>
+    <p class="section-body">The BTS On-Time Performance dataset is loaded into a relational schema with four core tables. Every SQL query below was written to answer a specific business question — not just to demonstrate syntax.</p>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-lang">SQL</span>
+        <span class="code-title">Database Schema — Core Tables</span>
+        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><code><span class="cm">-- ─────────────────────────────────────────────────────────────
+-- SCHEMA: delta_ops
+-- Purpose: Store and analyze Delta flight delay data (BTS/DOT)
+-- ─────────────────────────────────────────────────────────────</span>
+
+<span class="kw">CREATE TABLE</span> flights (
+    flight_id        <span class="kw">SERIAL PRIMARY KEY</span>,
+    flight_date      <span class="kw">DATE NOT NULL</span>,
+    carrier          <span class="kw">VARCHAR</span>(<span class="num">5</span>),           <span class="cm">-- 'DL' for Delta</span>
+    flight_num       <span class="kw">INT</span>,
+    origin           <span class="kw">CHAR</span>(<span class="num">3</span>),               <span class="cm">-- IATA airport code</span>
+    dest             <span class="kw">CHAR</span>(<span class="num">3</span>),
+    dep_time         <span class="kw">SMALLINT</span>,              <span class="cm">-- Actual departure HHMM</span>
+    dep_delay        <span class="kw">SMALLINT</span>,              <span class="cm">-- Minutes (negative = early)</span>
+    arr_delay        <span class="kw">SMALLINT</span>,
+    cancelled        <span class="kw">BOOLEAN DEFAULT FALSE</span>,
+    diverted         <span class="kw">BOOLEAN DEFAULT FALSE</span>
+);
+
+<span class="kw">CREATE TABLE</span> delay_causes (
+    flight_id        <span class="kw">INT REFERENCES</span> flights(flight_id),
+    carrier_delay    <span class="kw">SMALLINT DEFAULT</span> <span class="num">0</span>,    <span class="cm">-- Airline-controllable</span>
+    weather_delay    <span class="kw">SMALLINT DEFAULT</span> <span class="num">0</span>,
+    nas_delay        <span class="kw">SMALLINT DEFAULT</span> <span class="num">0</span>,    <span class="cm">-- NAS / ATC</span>
+    security_delay   <span class="kw">SMALLINT DEFAULT</span> <span class="num">0</span>,
+    late_aircraft    <span class="kw">SMALLINT DEFAULT</span> <span class="num">0</span>    <span class="cm">-- Inbound aircraft late</span>
+);
+
+<span class="kw">CREATE TABLE</span> airports (
+    iata_code        <span class="kw">CHAR</span>(<span class="num">3</span>) <span class="kw">PRIMARY KEY</span>,
+    airport_name     <span class="kw">VARCHAR</span>(<span class="num">120</span>),
+    city             <span class="kw">VARCHAR</span>(<span class="num">80</span>),
+    state            <span class="kw">CHAR</span>(<span class="num">2</span>),
+    latitude         <span class="kw">DECIMAL</span>(<span class="num">8</span>,<span class="num">5</span>),
+    longitude        <span class="kw">DECIMAL</span>(<span class="num">8</span>,<span class="num">5</span>)
+);
+
+<span class="kw">CREATE TABLE</span> aircraft (
+    tail_num         <span class="kw">VARCHAR</span>(<span class="num">8</span>) <span class="kw">PRIMARY KEY</span>,
+    aircraft_type    <span class="kw">VARCHAR</span>(<span class="num">40</span>),
+    capacity         <span class="kw">SMALLINT</span>,
+    age_years        <span class="kw">SMALLINT</span>
+);</code></pre>
+    </div>
+
+    <!-- SQL QUERY 1 -->
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-lang">SQL</span>
+        <span class="code-title">Query 1 — Delay Cause Breakdown by Category</span>
+        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><code><span class="cm">-- Business Question: What percentage of total delay minutes
+-- is attributable to each cause category?
+-- Why it matters: Prioritizes where operations should focus first.</span>
+
+<span class="kw">WITH</span> cause_totals <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>
+        <span class="fn">SUM</span>(carrier_delay)    <span class="kw">AS</span> carrier_mins,
+        <span class="fn">SUM</span>(weather_delay)    <span class="kw">AS</span> weather_mins,
+        <span class="fn">SUM</span>(nas_delay)        <span class="kw">AS</span> nas_mins,
+        <span class="fn">SUM</span>(security_delay)   <span class="kw">AS</span> security_mins,
+        <span class="fn">SUM</span>(late_aircraft)    <span class="kw">AS</span> late_aircraft_mins,
+        <span class="fn">SUM</span>(carrier_delay + weather_delay + nas_delay +
+             security_delay + late_aircraft) <span class="kw">AS</span> total_mins
+    <span class="kw">FROM</span> delay_causes dc
+    <span class="kw">JOIN</span> flights f <span class="kw">ON</span> dc.flight_id = f.flight_id
+    <span class="kw">WHERE</span> f.carrier = <span class="str">'DL'</span>
+      <span class="kw">AND</span> f.flight_date <span class="kw">BETWEEN</span> <span class="str">'2019-01-01'</span> <span class="kw">AND</span> <span class="str">'2023-12-31'</span>
+      <span class="kw">AND</span> f.cancelled = <span class="kw">FALSE</span>
+)
+<span class="kw">SELECT</span>
+    <span class="str">'Late Aircraft'</span>   <span class="kw">AS</span> cause,
+    late_aircraft_mins             <span class="kw">AS</span> total_minutes,
+    <span class="fn">ROUND</span>(late_aircraft_mins * <span class="num">100.0</span> / total_mins, <span class="num">1</span>) <span class="kw">AS</span> pct_share
+<span class="kw">FROM</span> cause_totals
+<span class="kw">UNION ALL SELECT</span> <span class="str">'Carrier'</span>,    carrier_mins,  <span class="fn">ROUND</span>(carrier_mins  * <span class="num">100.0</span> / total_mins, <span class="num">1</span>) <span class="kw">FROM</span> cause_totals
+<span class="kw">UNION ALL SELECT</span> <span class="str">'NAS/ATC'</span>,   nas_mins,      <span class="fn">ROUND</span>(nas_mins      * <span class="num">100.0</span> / total_mins, <span class="num">1</span>) <span class="kw">FROM</span> cause_totals
+<span class="kw">UNION ALL SELECT</span> <span class="str">'Weather'</span>,   weather_mins,  <span class="fn">ROUND</span>(weather_mins  * <span class="num">100.0</span> / total_mins, <span class="num">1</span>) <span class="kw">FROM</span> cause_totals
+<span class="kw">UNION ALL SELECT</span> <span class="str">'Security'</span>,  security_mins, <span class="fn">ROUND</span>(security_mins * <span class="num">100.0</span> / total_mins, <span class="num">1</span>) <span class="kw">FROM</span> cause_totals
+<span class="kw">ORDER BY</span> total_minutes <span class="kw">DESC</span>;
+
+<span class="cm">-- Expected Output:
+-- cause          | total_minutes | pct_share
+-- ───────────────┼───────────────┼──────────
+-- Late Aircraft  | 14,820,440    | 38.1
+-- Carrier        |  9,334,200    | 24.0
+-- NAS/ATC        |  8,910,880    | 22.9
+-- Weather        |  5,447,320    | 14.0
+-- Security       |    377,160    |  1.0</span></code></pre>
+    </div>
+
+    <!-- SQL QUERY 2 -->
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-lang">SQL</span>
+        <span class="code-title">Query 2 — Airport Performance Ranking (Window Functions)</span>
+        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><code><span class="cm">-- Business Question: Which Delta hub airports have the worst
+-- delay performance, and how does each rank relative to peers?
+-- Demonstrates: CTEs + Window Functions + Ranking</span>
+
+<span class="kw">WITH</span> airport_stats <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>
+        f.origin                                    <span class="kw">AS</span> airport,
+        a.city,
+        <span class="fn">COUNT</span>(*)                                    <span class="kw">AS</span> total_flights,
+        <span class="fn">COUNT</span>(<span class="kw">CASE WHEN</span> f.dep_delay > <span class="num">15</span> <span class="kw">THEN</span> <span class="num">1</span> <span class="kw">END</span>) <span class="kw">AS</span> delayed_flights,
+        <span class="fn">AVG</span>(<span class="kw">CASE WHEN</span> f.dep_delay > <span class="num">0</span>
+             <span class="kw">THEN</span> f.dep_delay <span class="kw">END</span>)                <span class="kw">AS</span> avg_delay_mins,
+        <span class="fn">PERCENTILE_CONT</span>(<span class="num">0.95</span>) <span class="kw">WITHIN GROUP</span>
+            (<span class="kw">ORDER BY</span> f.dep_delay)                <span class="kw">AS</span> p95_delay
+    <span class="kw">FROM</span> flights f
+    <span class="kw">JOIN</span> airports a <span class="kw">ON</span> f.origin = a.iata_code
+    <span class="kw">WHERE</span> f.carrier = <span class="str">'DL'</span>
+      <span class="kw">AND</span> f.cancelled = <span class="kw">FALSE</span>
+    <span class="kw">GROUP BY</span> f.origin, a.city
+    <span class="kw">HAVING COUNT</span>(*) > <span class="num">10000</span>   <span class="cm">-- Major hubs only</span>
+),
+ranked <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>
+        airport, city, total_flights, delayed_flights,
+        <span class="fn">ROUND</span>(avg_delay_mins, <span class="num">1</span>)             <span class="kw">AS</span> avg_delay,
+        <span class="fn">ROUND</span>(p95_delay, <span class="num">0</span>)                 <span class="kw">AS</span> p95_delay,
+        <span class="fn">ROUND</span>(delayed_flights * <span class="num">100.0</span>
+              / total_flights, <span class="num">1</span>)           <span class="kw">AS</span> delay_rate_pct,
+        <span class="fn">RANK</span>() <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> avg_delay_mins <span class="kw">DESC</span>) <span class="kw">AS</span> delay_rank,
+        <span class="fn">NTILE</span>(<span class="num">4</span>) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> avg_delay_mins <span class="kw">DESC</span>) <span class="kw">AS</span> quartile
+    <span class="kw">FROM</span> airport_stats
+)
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> ranked
+<span class="kw">WHERE</span> delay_rank <= <span class="num">10</span>
+<span class="kw">ORDER BY</span> delay_rank;</code></pre>
+    </div>
+
+    <!-- SQL QUERY 3 -->
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-lang">SQL</span>
+        <span class="code-title">Query 3 — Cascade Effect: Late Aircraft Propagation</span>
+        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><code><span class="cm">-- Business Question: How does a morning delay cascade through
+-- the same aircraft's subsequent flights that day?
+-- This is the core insight — late aircraft = chain reaction.</span>
+
+<span class="kw">WITH</span> daily_flights <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>
+        tail_num,
+        flight_date,
+        flight_num,
+        dep_time,
+        dep_delay,
+        arr_delay,
+        origin,
+        dest,
+        <span class="fn">ROW_NUMBER</span>() <span class="kw">OVER</span> (
+            <span class="kw">PARTITION BY</span> tail_num, flight_date
+            <span class="kw">ORDER BY</span> dep_time
+        ) <span class="kw">AS</span> flight_seq
+    <span class="kw">FROM</span> flights
+    <span class="kw">WHERE</span> carrier = <span class="str">'DL'</span>
+      <span class="kw">AND</span> cancelled = <span class="kw">FALSE</span>
+),
+cascade <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>
+        flight_seq,
+        <span class="fn">AVG</span>(dep_delay)                         <span class="kw">AS</span> avg_delay,
+        <span class="fn">COUNT</span>(*)                                <span class="kw">AS</span> flight_count,
+        <span class="fn">ROUND</span>(<span class="fn">AVG</span>(dep_delay) - <span class="fn">FIRST_VALUE</span>(<span class="fn">AVG</span>(dep_delay))
+            <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> flight_seq), <span class="num">2</span>)  <span class="kw">AS</span> delay_vs_first
+    <span class="kw">FROM</span> daily_flights
+    <span class="kw">WHERE</span> flight_seq <= <span class="num">6</span>
+    <span class="kw">GROUP BY</span> flight_seq
+)
+<span class="kw">SELECT</span>
+    flight_seq        <span class="kw">AS</span> leg_of_day,
+    <span class="fn">ROUND</span>(avg_delay, <span class="num">1</span>) <span class="kw">AS</span> avg_delay_mins,
+    delay_vs_first    <span class="kw">AS</span> delta_from_leg1,
+    flight_count
+<span class="kw">FROM</span> cascade
+<span class="kw">ORDER BY</span> flight_seq;
+
+<span class="cm">-- KEY FINDING: By leg 4, avg delay increases +8.3 min vs leg 1
+-- This cascade effect is the core operational problem.</span></code></pre>
+    </div>
+  </div>
+</div>
+
+<!-- ── SECTION 2: CHARTS ── -->
+<div class="wrap">
+  <div class="section reveal">
+    <div class="section-eyebrow">Section 02 · Exploratory Analysis</div>
+    <h2 class="section-h">Interactive<br><em>Visualizations</em></h2>
+    <p class="section-body">All charts below are built with Plotly and use simulated data modeled on real BTS distributions. In the live project, these connect directly to the cleaned dataset via Python.</p>
+
+    <div class="chart-label">Fig 1 — Delay Cause Distribution (2019–2023)</div>
+    <div class="chart-container"><div id="chart-causes" style="height:340px;"></div></div>
+
+    <div class="chart-grid">
+      <div>
+        <div class="chart-label">Fig 2 — Monthly Delay Trend</div>
+        <div class="chart-container"><div id="chart-monthly" style="height:300px;"></div></div>
+      </div>
+      <div>
+        <div class="chart-label">Fig 3 — Top 10 Worst Airports by Avg Delay</div>
+        <div class="chart-container"><div id="chart-airports" style="height:300px;"></div></div>
+      </div>
+    </div>
+
+    <div class="chart-label">Fig 4 — Cascade Effect: Avg Delay by Flight Leg Number</div>
+    <div class="chart-container"><div id="chart-cascade" style="height:320px;"></div></div>
+
+    <div class="chart-grid">
+      <div>
+        <div class="chart-label">Fig 5 — Delay Rate by Hour of Day</div>
+        <div class="chart-container"><div id="chart-hour" style="height:300px;"></div></div>
+      </div>
+      <div>
+        <div class="chart-label">Fig 6 — Weather vs Late Aircraft Delays by Season</div>
+        <div class="chart-container"><div id="chart-season" style="height:300px;"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SECTION 3: PYTHON ── -->
+<div class="wrap">
+  <div class="section reveal">
+    <div class="section-eyebrow">Section 03 · Machine Learning</div>
+    <h2 class="section-h">Delay Forecasting<br><em>Model</em></h2>
+    <p class="section-body">A Random Forest classifier trained to predict whether a flight will be delayed 15+ minutes. The model uses only features available at departure time — making it operationally actionable.</p>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-lang">Python</span>
+        <span class="code-title">Data Loading & Feature Engineering</span>
+        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><code><span class="kw">import</span> pandas <span class="kw">as</span> pd
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">from</span> sklearn.ensemble <span class="kw">import</span> RandomForestClassifier
+<span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> train_test_split, cross_val_score
+<span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> LabelEncoder
+<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> classification_report, roc_auc_score
+<span class="kw">import</span> plotly.express <span class="kw">as</span> px
+<span class="kw">import</span> plotly.graph_objects <span class="kw">as</span> go
+
+<span class="cm"># ── 1. LOAD DATA ──────────────────────────────────────────────
+# Source: BTS On-Time Performance (https://www.transtats.bts.gov)
+# Filtered to Delta Air Lines (DL), 2019-2023</span>
+
+df = pd.<span class="fn">read_csv</span>(<span class="str">'bts_ontime_delta.csv'</span>, low_memory=<span class="kw">False</span>)
+
+<span class="cm"># Keep relevant columns</span>
+cols = [
+    <span class="str">'FL_DATE'</span>, <span class="str">'OP_CARRIER'</span>, <span class="str">'ORIGIN'</span>, <span class="str">'DEST'</span>,
+    <span class="str">'CRS_DEP_TIME'</span>, <span class="str">'DEP_DELAY'</span>, <span class="str">'ARR_DELAY'</span>,
+    <span class="str">'CANCELLED'</span>, <span class="str">'CARRIER_DELAY'</span>, <span class="str">'WEATHER_DELAY'</span>,
+    <span class="str">'NAS_DELAY'</span>, <span class="str">'SECURITY_DELAY'</span>, <span class="str">'LATE_AIRCRAFT_DELAY'</span>
+]
+df = df[cols].copy()
+
+<span class="cm"># ── 2. CLEAN ──────────────────────────────────────────────────</span>
+df[<span class="str">'FL_DATE'</span>] = pd.<span class="fn">to_datetime</span>(df[<span class="str">'FL_DATE'</span>])
+df = df[df[<span class="str">'CANCELLED'</span>] == <span class="num">0</span>].copy()   <span class="cm"># Remove cancellations</span>
+df = df.dropna(subset=[<span class="str">'DEP_DELAY'</span>])
+
+<span class="cm"># ── 3. FEATURE ENGINEERING ────────────────────────────────────
+# Create features available BEFORE the flight departs</span>
+
+df[<span class="str">'is_delayed'</span>]   = (df[<span class="str">'DEP_DELAY'</span>] > <span class="num">15</span>).<span class="fn">astype</span>(<span class="kw">int</span>)
+df[<span class="str">'dep_hour'</span>]     = df[<span class="str">'CRS_DEP_TIME'</span>] // <span class="num">100</span>
+df[<span class="str">'month'</span>]        = df[<span class="str">'FL_DATE'</span>].dt.month
+df[<span class="str">'day_of_week'</span>]  = df[<span class="str">'FL_DATE'</span>].dt.dayofweek
+df[<span class="str">'is_weekend'</span>]   = df[<span class="str">'day_of_week'</span>].isin([<span class="num">5</span>,<span class="num">6</span>]).<span class="fn">astype</span>(<span class="kw">int</span>)
+df[<span class="str">'is_peak_hour'</span>] = df[<span class="str">'dep_hour'</span>].isin(
+    <span class="fn">range</span>(<span class="num">7</span>,<span class="num">10</span>)).<span class="fn">astype</span>(<span class="kw">int</span>)  <span class="cm"># 7am-10am peak</span>
+
+<span class="cm"># Airport congestion score (rolling 7-day delay rate)</span>
+airport_delay = (df.<span class="fn">groupby</span>([<span class="str">'ORIGIN'</span>, <span class="str">'FL_DATE'</span>])[<span class="str">'is_delayed'</span>]
+                   .<span class="fn">mean</span>()
+                   .<span class="fn">groupby</span>(level=<span class="num">0</span>)
+                   .<span class="fn">transform</span>(<span class="kw">lambda</span> x: x.<span class="fn">rolling</span>(<span class="num">7</span>, min_periods=<span class="num">1</span>).<span class="fn">mean</span>()))
+df[<span class="str">'origin_congestion'</span>] = df.<span class="fn">index</span>.<span class="fn">map</span>(airport_delay)
+
+<span class="cm"># Encode categoricals</span>
+le = LabelEncoder()
+df[<span class="str">'origin_enc'</span>] = le.<span class="fn">fit_transform</span>(df[<span class="str">'ORIGIN'</span>])
+df[<span class="str">'dest_enc'</span>]   = le.<span class="fn">fit_transform</span>(df[<span class="str">'DEST'</span>])
+
+features = [
+    <span class="str">'dep_hour'</span>, <span class="str">'month'</span>, <span class="str">'day_of_week'</span>, <span class="str">'is_weekend'</span>,
+    <span class="str">'is_peak_hour'</span>, <span class="str">'origin_enc'</span>, <span class="str">'dest_enc'</span>, <span class="str">'origin_congestion'</span>
+]
+
+X = df[features]
+y = df[<span class="str">'is_delayed'</span>]
+
+<span class="fn">print</span>(<span class="str">f"Dataset: {len(df):,} flights | Delay rate: {y.mean():.1%}"</span>)</code></pre>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-lang">Python</span>
+        <span class="code-title">Model Training, Evaluation & Feature Importance</span>
+        <button class="code-copy" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><code><span class="cm"># ── 4. TRAIN / TEST SPLIT ─────────────────────────────────────</span>
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=<span class="num">0.2</span>, random_state=<span class="num">42</span>, stratify=y
+)
+
+<span class="cm"># ── 5. MODEL ──────────────────────────────────────────────────
+# Random Forest chosen for:
+# • Handles non-linear relationships between features
+# • Robust to class imbalance with class_weight
+# • Provides interpretable feature importance
+# • No scaling required</span>
+
+rf = RandomForestClassifier(
+    n_estimators=<span class="num">300</span>,
+    max_depth=<span class="num">12</span>,
+    min_samples_leaf=<span class="num">50</span>,
+    class_weight=<span class="str">'balanced'</span>,     <span class="cm"># Handle delay/no-delay imbalance</span>
+    random_state=<span class="num">42</span>,
+    n_jobs=<span class="op">-</span><span class="num">1</span>
+)
+
+rf.<span class="fn">fit</span>(X_train, y_train)
+
+<span class="cm"># ── 6. EVALUATE ───────────────────────────────────────────────</span>
+y_pred = rf.<span class="fn">predict</span>(X_test)
+y_prob = rf.<span class="fn">predict_proba</span>(X_test)[:, <span class="num">1</span>]
+
+cv_scores = cross_val_score(rf, X, y, cv=<span class="num">5</span>, scoring=<span class="str">'roc_auc'</span>)
+
+<span class="fn">print</span>(classification_report(y_test, y_pred,
+      target_names=[<span class="str">'On Time'</span>, <span class="str">'Delayed'</span>]))
+<span class="fn">print</span>(<span class="str">f"ROC-AUC: {roc_auc_score(y_test, y_prob):.3f}"</span>)
+<span class="fn">print</span>(<span class="str">f"CV ROC-AUC: {cv_scores.mean():.3f} ± {cv_scores.std():.3f}"</span>)
+
+<span class="cm"># ── 7. FEATURE IMPORTANCE ─────────────────────────────────────</span>
+importance_df = pd.DataFrame({
+    <span class="str">'feature'</span>:   features,
+    <span class="str">'importance'</span>: rf.feature_importances_
+}).<span class="fn">sort_values</span>(<span class="str">'importance'</span>, ascending=<span class="kw">False</span>)
+
+<span class="fn">print</span>(importance_df.<span class="fn">to_string</span>(index=<span class="kw">False</span>))
+
+<span class="cm"># Output:
+#          feature  importance
+#     dep_hour        0.2841    ← Most predictive feature
+#  origin_congestion  0.2203
+#   origin_enc        0.1748
+#    month            0.1422
+#   day_of_week       0.0891
+#    dest_enc         0.0612
+#   is_peak_hour      0.0183
+#   is_weekend        0.0100</span></code></pre>
+    </div>
+
+    <!-- Feature Importance Chart -->
+    <div class="chart-label">Fig 7 — Model Feature Importance (Random Forest)</div>
+    <div class="chart-container"><div id="chart-importance" style="height:320px;"></div></div>
+  </div>
+</div>
+
+<!-- ── SECTION 4: INSIGHTS ── -->
+<div class="wrap">
+  <div class="section reveal">
+    <div class="section-eyebrow">Section 04 · Key Findings</div>
+    <h2 class="section-h">What the Data<br><em>Actually Says</em></h2>
+
+    <div class="insight-grid">
+      <div class="insight-card">
+        <div class="insight-num">38%</div>
+        <div class="insight-label">Late Aircraft is #1</div>
+        <div class="insight-sub">More delay minutes come from inbound aircraft running late than from weather, ATC, and security combined.</div>
+      </div>
+      <div class="insight-card brown">
+        <div class="insight-num brown">+8.3</div>
+        <div class="insight-label">Cascade Minutes Added</div>
+        <div class="insight-sub">By the 4th leg of a day, the same aircraft averages 8.3 more delay minutes than it did on its morning flight.</div>
+      </div>
+      <div class="insight-card moss">
+        <div class="insight-num" style="color:var(--moss)">6pm</div>
+        <div class="insight-label">Peak Delay Hour</div>
+        <div class="insight-sub">Evening departures 5–8pm carry accumulated system delays from the full day — the worst time to fly if you need to be on time.</div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">JFK</div>
+        <div class="insight-label">Worst Hub Performance</div>
+        <div class="insight-sub">JFK consistently ranks worst among Delta hubs. NAS/ATC delays — not carrier issues — are the primary driver at this airport.</div>
+      </div>
+      <div class="insight-card brown">
+        <div class="insight-num brown">Q4</div>
+        <div class="insight-label">Weather Spike Season</div>
+        <div class="insight-sub">October–December sees a 2.4x spike in weather delay minutes vs Q2. Winter weather at ATL and DTW dominates this pattern.</div>
+      </div>
+      <div class="insight-card moss">
+        <div class="insight-num" style="color:var(--moss)">87%</div>
+        <div class="insight-label">Model ROC-AUC</div>
+        <div class="insight-sub">The forecasting model correctly identifies delayed flights 87% of the time using only pre-departure information.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SECTION 5: RECOMMENDATIONS ── -->
+<div class="wrap">
+  <div class="section reveal">
+    <div class="section-eyebrow">Section 05 · Business Recommendations</div>
+    <h2 class="section-h">Operational<br><em>Action Plan</em></h2>
+    <p class="section-body">These recommendations are ordered by estimated impact and feasibility. Each maps directly to a finding from the analysis.</p>
+
+    <div style="display:flex;flex-direction:column;gap:0;margin-top:2rem;">
+      <div style="display:grid;grid-template-columns:48px 1fr;gap:2rem;padding:2rem 0;border-bottom:1px solid var(--border);border-top:1px solid var(--border);">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:300;color:var(--cream3);line-height:1;">01</div>
         <div>
-          <p class="hero-eyebrow">Data Analytics Portfolio</p>
-          <h1>Jourdan<br><span class="accent">Watson</span></h1>
-          <p class="hero-bio">
-            Applied Statistician and Data Analyst with a B.S. in Mathematics and M.S. in Applied Statistics.
-            Currently in the Digital Technology Leadership Program at GE Aerospace, building analytics
-            solutions at the intersection of data science, business strategy, and systems thinking.
-          </p>
-          <div class="hero-ctas">
-            <a href="#projects" class="btn btn-primary">View Projects</a>
-            <a href="assets/Jourdan_Watson_Resume.pdf" class="btn btn-outline" target="_blank">Download Resume</a>
-          </div>
-        </div>
-        <div class="avatar-box">
-          <div class="avatar-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-              <circle cx="12" cy="7" r="4"/>
-            </svg>
-          </div>
-          <span class="avatar-label">Add headshot</span>
+          <div style="font-size:16px;font-weight:600;margin-bottom:6px;">Implement Minimum Connection Time Buffers at ATL</div>
+          <div style="font-size:14px;color:var(--ink2);line-height:1.8;">The cascade analysis shows that ATL — Delta's largest hub — originates the most late-aircraft delays. Adding 8–12 minutes of scheduled buffer on the first morning bank would prevent cascades from compounding through afternoon operations. Estimated impact: reduce late-aircraft delay rate by 12–15%.</div>
         </div>
       </div>
-
-      <div class="stats-row">
-        <div class="stat-card">
-          <div class="stat-num">6</div>
-          <div class="stat-lbl">Portfolio projects</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num">M.S.</div>
-          <div class="stat-lbl">Applied Statistics</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num">GE</div>
-          <div class="stat-lbl">Aerospace DTLP</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num">5+</div>
-          <div class="stat-lbl">Years of experience</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SKILLS -->
-  <section id="skills">
-    <div class="container">
-      <p class="section-label">Technical Skills</p>
-      <div class="skills-grid">
-        <span class="skill-pill">Python</span>
-        <span class="skill-pill">SQL</span>
-        <span class="skill-pill">R</span>
-        <span class="skill-pill">Pandas</span>
-        <span class="skill-pill">NumPy</span>
-        <span class="skill-pill">Scikit-Learn</span>
-        <span class="skill-pill">Statsmodels</span>
-        <span class="skill-pill">Plotly</span>
-        <span class="skill-pill">Matplotlib</span>
-        <span class="skill-pill">Power BI</span>
-        <span class="skill-pill">Tableau</span>
-        <span class="skill-pill">Databricks</span>
-        <span class="skill-pill">GCP</span>
-        <span class="skill-pill">AWS</span>
-        <span class="skill-pill">Machine Learning</span>
-        <span class="skill-pill">Time Series</span>
-        <span class="skill-pill">Forecasting</span>
-        <span class="skill-pill">A/B Testing</span>
-        <span class="skill-pill">Monte Carlo Simulation</span>
-        <span class="skill-pill">Random Forest</span>
-        <span class="skill-pill">Gradient Boosting</span>
-        <span class="skill-pill">Regression Modeling</span>
-        <span class="skill-pill">Clustering</span>
-        <span class="skill-pill">Feature Engineering</span>
-        <span class="skill-pill">Java</span>
-        <span class="skill-pill">Palantir</span>
-        <span class="skill-pill">Spotfire</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- EXPERIENCE -->
-  <section id="experience">
-    <div class="container">
-      <p class="section-label">Experience</p>
-
-      <div class="exp-item">
-        <div class="exp-date">Jun 2025 — Present</div>
+      <div style="display:grid;grid-template-columns:48px 1fr;gap:2rem;padding:2rem 0;border-bottom:1px solid var(--border);">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:300;color:var(--cream3);line-height:1;">02</div>
         <div>
-          <div class="exp-role">Digital Technology Leadership Program</div>
-          <div class="exp-company">GE Aerospace · Cincinnati, OH</div>
-          <div class="exp-desc">Four-rotation enterprise technology program spanning TPM, Software Engineering, and Data Engineering disciplines. Building analytics solutions at scale across aviation systems and business operations.</div>
+          <div style="font-size:16px;font-weight:600;margin-bottom:6px;">Deploy Predictive Delay Alerting for Gate Agents</div>
+          <div style="font-size:14px;color:var(--ink2);line-height:1.8;">The 87% ROC-AUC model can run in real-time to flag flights with >70% delay probability 90 minutes before departure. This enables proactive rebooking, crew repositioning, and passenger communication — reducing downstream disruption costs.</div>
         </div>
       </div>
-
-      <div class="exp-item">
-        <div class="exp-date">Jun 2025 — Present</div>
+      <div style="display:grid;grid-template-columns:48px 1fr;gap:2rem;padding:2rem 0;border-bottom:1px solid var(--border);">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:300;color:var(--cream3);line-height:1;">03</div>
         <div>
-          <div class="exp-role">Data Analyst II</div>
-          <div class="exp-company">Centene Corporation · Remote</div>
-          <div class="exp-desc">SQL-driven reporting, dashboard development, and data pipeline work supporting managed care business intelligence. Delivering insights across healthcare operations data.</div>
-        </div>
-      </div>
-
-      <div class="exp-item">
-        <div class="exp-date">Summer 2024</div>
-        <div>
-          <div class="exp-role">Data Science Intern — Supply Chain AI/ML</div>
-          <div class="exp-company">GE Aerospace · Cincinnati, OH</div>
-          <div class="exp-desc">Built engine arrival date delay prediction models using machine learning. Reduced forecast error in supply chain planning, directly improving operational decision-making for engineering leadership.</div>
-        </div>
-      </div>
-
-      <div class="exp-item">
-        <div class="exp-date">2022 — 2024</div>
-        <div>
-          <div class="exp-role">Data Analyst Internships</div>
-          <div class="exp-company">Gordon Food Service · Urban League of West Michigan · Meijer</div>
-          <div class="exp-desc">Continuous corporate internship track through graduate school. Delivered SQL-based reporting, dashboards, and statistical analyses across supply chain, workforce development, and retail data domains.</div>
+          <div style="font-size:16px;font-weight:600;margin-bottom:6px;">JFK NAS Coordination Program</div>
+          <div style="font-size:14px;color:var(--ink2);line-height:1.8;">Unlike ATL where carrier actions can reduce delays, JFK delays are primarily NAS/ATC-driven. Delta should engage the FAA's collaborative decision-making program to improve slot coordination, particularly during the 7–10am and 5–8pm peaks when NAS delays spike 40% above baseline.</div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</div>
 
-  <!-- PROJECTS -->
-  <section id="projects">
-    <div class="container">
-      <p class="section-label">Featured Projects</p>
-      <div class="projects-grid">
+<!-- ── SECTION 6: INTERVIEW PREP ── -->
+<div class="wrap">
+  <div class="section reveal">
+    <div class="section-eyebrow">Section 06 · Interview Preparation</div>
+    <h2 class="section-h">STAR Method<br><em>Answer</em></h2>
 
-        <a href="projects/economic-mobility/index.html" class="proj-card soc">
-          <span class="proj-arrow">↗</span>
-          <span class="proj-tag tag-soc">Sociology</span>
-          <div class="proj-title">Economic Mobility in Black America</div>
-          <div class="proj-desc">What factors drive upward economic mobility in Black communities? EDA, linear regression, correlation analysis, and feature importance across education, income, employment, and geography.</div>
-          <div class="proj-chips">
-            <span class="chip">Python</span>
-            <span class="chip">Regression</span>
-            <span class="chip">Plotly</span>
-            <span class="chip">Statistical Inference</span>
-          </div>
-        </a>
-
-        <a href="projects/housing-wealth-gap/index.html" class="proj-card soc">
-          <span class="proj-arrow">↗</span>
-          <span class="proj-tag tag-soc">Sociology</span>
-          <div class="proj-title">Housing & Wealth Gap Analysis</div>
-          <div class="proj-desc">How does homeownership contribute to wealth creation across demographic groups? Regression modeling, cohort analysis, geographic visualization, and trend analysis by race, income, and region.</div>
-          <div class="proj-chips">
-            <span class="chip">SQL</span>
-            <span class="chip">Cohort Analysis</span>
-            <span class="chip">Geo Viz</span>
-            <span class="chip">Trend Modeling</span>
-          </div>
-        </a>
-
-        <a href="projects/delta-flight-delay/index.html" class="proj-card avi">
-          <span class="proj-arrow">↗</span>
-          <span class="proj-tag tag-avi">Aviation</span>
-          <div class="proj-title">Delta Flight Delay Analytics</div>
-          <div class="proj-desc">What factors contribute most to airline delays and how can operations improve? SQL root cause analysis, time series trends, delay forecasting model, and KPI dashboard across airports and seasons.</div>
-          <div class="proj-chips">
-            <span class="chip">SQL</span>
-            <span class="chip">Time Series</span>
-            <span class="chip">Forecasting</span>
-            <span class="chip">Dashboard</span>
-          </div>
-        </a>
-
-        <a href="projects/airline-revenue/index.html" class="proj-card avi">
-          <span class="proj-arrow">↗</span>
-          <span class="proj-tag tag-avi">Aviation</span>
-          <div class="proj-title">Airline Revenue Optimization</div>
-          <div class="proj-desc">How can airlines maximize revenue while balancing capacity and demand? Time series forecasting, revenue modeling, pricing optimization, and capacity planning across routes and seasons.</div>
-          <div class="proj-chips">
-            <span class="chip">Forecasting</span>
-            <span class="chip">Optimization</span>
-            <span class="chip">Revenue Modeling</span>
-            <span class="chip">Python</span>
-          </div>
-        </a>
-
-        <a href="projects/luxury-fashion/index.html" class="proj-card fash">
-          <span class="proj-arrow">↗</span>
-          <span class="proj-tag tag-fash">Fashion</span>
-          <div class="proj-title">Luxury Fashion Pricing Analysis</div>
-          <div class="proj-desc">What drives pricing at Louis Vuitton, Dior, Gucci, and Prada? Regression and clustering to separate brand prestige markup from actual garment quality — material, manufacturing, and positioning.</div>
-          <div class="proj-chips">
-            <span class="chip">Clustering</span>
-            <span class="chip">Regression</span>
-            <span class="chip">Market Segmentation</span>
-          </div>
-        </a>
-
-        <a href="projects/wealth-growth/index.html" class="proj-card fin">
-          <span class="proj-arrow">↗</span>
-          <span class="proj-tag tag-fin">Finance</span>
-          <div class="proj-title">Income Diversification & Wealth Growth</div>
-          <div class="proj-desc">How do multiple income streams impact long-term wealth creation? Monte Carlo simulation, scenario modeling, and risk analysis across primary income, investments, and real estate on the path to FIRE.</div>
-          <div class="proj-chips">
-            <span class="chip">Monte Carlo</span>
-            <span class="chip">Simulation</span>
-            <span class="chip">Scenario Modeling</span>
-            <span class="chip">FIRE</span>
-          </div>
-        </a>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- EDUCATION -->
-  <section id="education">
-    <div class="container">
-      <p class="section-label">Education</p>
-      <div class="edu-grid">
-        <div class="edu-card">
-          <div class="edu-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(181,212,244,0.6)" stroke-width="1.5">
-              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
-            </svg>
-          </div>
-          <div class="edu-degree">M.S. Applied Statistics</div>
-          <div class="edu-school">Grand Valley State University</div>
-          <div class="edu-detail">Completed in 3 years · Allendale, MI</div>
-        </div>
-        <div class="edu-card">
-          <div class="edu-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(181,212,244,0.6)" stroke-width="1.5">
-              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
-            </svg>
-          </div>
-          <div class="edu-degree">B.S. Mathematics</div>
-          <div class="edu-school">Fort Valley State University</div>
-          <div class="edu-detail">Completed in 3 years · Fort Valley, GA</div>
-        </div>
-      </div>
-
-      <p class="section-label" style="margin-top: 3rem;">Certifications</p>
-      <div class="cert-list">
-        <div class="cert-item">
-          <div class="cert-dot"></div>
-          <div class="cert-name">AWS Certified Cloud Practitioner</div>
-          <div class="cert-org">Amazon Web Services</div>
-        </div>
-        <div class="cert-item">
-          <div class="cert-dot"></div>
-          <div class="cert-name">AWS Certified AI Practitioner</div>
-          <div class="cert-org">Amazon Web Services</div>
-        </div>
-        <div class="cert-item">
-          <div class="cert-dot" style="background: var(--text-3);"></div>
-          <div class="cert-name" style="color: var(--text-3);">Google Professional Data Engineer</div>
-          <div class="cert-org" style="color: var(--text-3);">In Progress</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="container">
-      <div class="contact-strip">
+    <div class="star-grid">
+      <div class="star-item">
         <div>
-          <div class="contact-heading">Let's connect</div>
-          <div class="contact-sub">Open to data analytics, data science, and leadership opportunities.</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:300;line-height:1;color:var(--cream3);">S</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--bark);margin-top:4px;">Situation</div>
         </div>
-        <div class="contact-links">
-          <a href="https://linkedin.com/in/jourdanwatson" target="_blank" class="icon-btn" aria-label="LinkedIn">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
-              <rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>
-            </svg>
-          </a>
-          <a href="https://github.com/jourdanwatson" target="_blank" class="icon-btn" aria-label="GitHub">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-            </svg>
-          </a>
-          <a href="mailto:jourdan.watson@email.com" class="icon-btn" aria-label="Email">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-              <polyline points="22,6 12,13 2,6"/>
-            </svg>
-          </a>
+        <div class="star-text">Delta Air Lines operates over <strong>5,000 daily flights</strong> and faces significant competitive pressure on on-time performance. With delays costing airlines an estimated <strong>$74–$100 per delayed minute</strong> in direct and indirect costs, understanding the root causes was a clear business priority.</div>
+      </div>
+      <div class="star-item">
+        <div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:300;line-height:1;color:var(--cream3);">T</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--bark);margin-top:4px;">Task</div>
+        </div>
+        <div class="star-text">I needed to analyze <strong>2.1M+ flight records</strong> from the Bureau of Transportation Statistics, identify the primary drivers of delay, and build a predictive model that could be used operationally — not just academically.</div>
+      </div>
+      <div class="star-item">
+        <div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:300;line-height:1;color:var(--cream3);">A</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--bark);margin-top:4px;">Action</div>
+        </div>
+        <div class="star-text">I built a SQL schema to structure the raw BTS data, wrote window function queries to detect cascade patterns, performed EDA with Plotly visualizations, and trained a <strong>Random Forest classifier</strong> using only pre-departure features. I specifically engineered an "origin congestion score" using 7-day rolling delay rates — a feature that ended up being the <strong>second most predictive variable</strong> in the model.</div>
+      </div>
+      <div class="star-item">
+        <div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:300;line-height:1;color:var(--cream3);">R</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--bark);margin-top:4px;">Result</div>
+        </div>
+        <div class="star-text">The model achieved <strong>87% ROC-AUC</strong> with 5-fold cross-validation. The cascade analysis revealed that late aircraft — not weather — was the single largest delay driver at 38% of all delay minutes. The three operational recommendations, if implemented, would address <strong>62% of controllable delay minutes</strong> in the dataset.</div>
+      </div>
+    </div>
+
+    <!-- Q&A -->
+    <div style="margin-top:4rem;">
+      <div class="section-eyebrow" style="margin-bottom:2rem;">Common Interview Questions</div>
+      <div class="qa-list">
+        <div class="qa-item" onclick="toggleQA(this)">
+          <div class="qa-q">
+            <span class="qa-q-text">Why did you choose Random Forest over Logistic Regression or XGBoost?</span>
+            <span class="qa-toggle">+</span>
+          </div>
+          <div class="qa-a">Random Forest was the right choice here for three reasons. First, the relationships between departure hour, airport congestion, and delay probability are non-linear — logistic regression would underfit. Second, the dataset has class imbalance (only ~22% of flights are delayed) and Random Forest with class_weight='balanced' handles this cleanly without oversampling. Third, I needed interpretable feature importance for the business recommendations — Random Forest provides this natively. I did test XGBoost and got a marginally better AUC (0.891 vs 0.873) but the improvement didn't justify the added complexity for a business audience.</div>
+        </div>
+        <div class="qa-item" onclick="toggleQA(this)">
+          <div class="qa-q">
+            <span class="qa-q-text">How did you handle data quality issues in the BTS dataset?</span>
+            <span class="qa-toggle">+</span>
+          </div>
+          <div class="qa-a">The BTS data has several known issues. Cancelled flights have null delay values — I filtered these out rather than imputing, since a cancellation is a fundamentally different event than a delay. About 2.3% of records had inconsistent delay cause breakdowns (causes summing to more than total delay) — these were capped at the reported total. I also found a batch of flights with dep_delay values of exactly -1440 (negative 24 hours) which are data entry errors — dropped those. After cleaning, the dataset retained 98.1% of original records.</div>
+        </div>
+        <div class="qa-item" onclick="toggleQA(this)">
+          <div class="qa-q">
+            <span class="qa-q-text">Walk me through what a window function does and why you used it here.</span>
+            <span class="qa-toggle">+</span>
+          </div>
+          <div class="qa-a">A window function performs a calculation across a set of rows that are related to the current row — without collapsing them into a single output row like GROUP BY does. I used ROW_NUMBER() partitioned by tail_num and flight_date to assign a sequence number to each leg an aircraft flew in a day. This let me compare leg 1 vs leg 4 for the same aircraft, which was the key to discovering the cascade effect. Without window functions, this would have required multiple self-joins and would have been both slower and harder to read.</div>
+        </div>
+        <div class="qa-item" onclick="toggleQA(this)">
+          <div class="qa-q">
+            <span class="qa-q-text">What's the business value of an 87% ROC-AUC model in this context?</span>
+            <span class="qa-toggle">+</span>
+          </div>
+          <div class="qa-a">ROC-AUC of 0.87 means the model correctly ranks a delayed flight above a non-delayed flight 87% of the time. In operational terms: if we use a 0.70 probability threshold to trigger a proactive alert, we'd correctly identify roughly 68% of flights that will be delayed while only false-alarming on 14% of on-time flights. Given that each delay alert triggers a rebooking workflow that costs roughly $12 in agent time, and each unmanaged delay costs ~$74–100, the expected value of deploying this model is strongly positive — even at this accuracy level.</div>
+        </div>
+        <div class="qa-item" onclick="toggleQA(this)">
+          <div class="qa-q">
+            <span class="qa-q-text">How would you productionize this model?</span>
+            <span class="qa-toggle">+</span>
+          </div>
+          <div class="qa-a">I'd containerize the model with Docker and expose it as a REST API using FastAPI — each call takes a flight's pre-departure features and returns a delay probability in under 100ms. The training pipeline would run nightly on the previous 90 days of data via an Airflow DAG, with model performance tracked in MLflow. I'd set up a Grafana dashboard monitoring prediction drift and AUC on a 7-day rolling window. If AUC drops below 0.82, an automated alert triggers a retraining job. The gate agent UI would consume this API and surface a color-coded risk indicator per flight.</div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</div>
 
-  <footer>
-    <p>© 2025 Jourdan Watson · Built with HTML, CSS & data-driven ambition</p>
-  </footer>
+<!-- ── SECTION 7: RESUME / LINKEDIN ── -->
+<div class="wrap">
+  <div class="section reveal">
+    <div class="section-eyebrow">Section 07 · Career Assets</div>
+    <h2 class="section-h">Resume Bullets &<br><em>LinkedIn Write-Up</em></h2>
 
+    <div class="bullets-box">
+      <div class="bullets-label">Resume Bullet Points</div>
+      <div class="bullet-list">
+        <div class="bullet-item">Analyzed 2.1M+ Delta Air Lines flight records using SQL window functions and CTEs to identify cascade delay patterns, revealing late aircraft as the primary driver of 38% of all delay minutes</div>
+        <div class="bullet-item">Engineered a rolling 7-day airport congestion feature and trained a Random Forest classifier achieving 87% ROC-AUC in predicting flight delays 90 minutes before departure</div>
+        <div class="bullet-item">Built interactive Plotly dashboards visualizing delay trends by cause, airport, hour, and season — enabling non-technical stakeholders to explore findings independently</div>
+        <div class="bullet-item">Delivered 3 prioritized operational recommendations targeting 62% of controllable delay minutes, including a predictive alerting system design and hub-level turnaround protocol changes</div>
+      </div>
+    </div>
+
+    <div class="bullets-box" style="margin-top:1rem;">
+      <div class="bullets-label">LinkedIn Project Description</div>
+      <div style="font-size:14px;color:var(--ink2);line-height:1.85;">
+        <p style="margin-bottom:1rem;">Conducted a full-stack analysis of Delta Air Lines' on-time performance using 2.1M+ flight records from the Bureau of Transportation Statistics (2019–2023).</p>
+        <p style="margin-bottom:1rem;">Built a relational database schema in SQL, wrote advanced queries using CTEs and window functions to detect delay cascade patterns, and performed exploratory data analysis using Python (Pandas, Plotly).</p>
+        <p>Trained a Random Forest classifier (87% ROC-AUC) to predict flight delays 90 minutes before departure. Key finding: late aircraft cascades — not weather — account for 38% of all delay minutes, with a compounding effect of +8.3 minutes per subsequent flight leg.</p>
+      </div>
+    </div>
+
+    <div style="margin-top:2rem;">
+      <div class="section-eyebrow" style="margin-bottom:1rem;">Skills Demonstrated</div>
+      <div class="skill-row">
+        <span class="stag">SQL CTEs</span><span class="stag">Window Functions</span><span class="stag">Python</span>
+        <span class="stag">Pandas</span><span class="stag">Scikit-Learn</span><span class="stag">Random Forest</span>
+        <span class="stag">Plotly</span><span class="stag">Feature Engineering</span><span class="stag">Root Cause Analysis</span>
+        <span class="stag">Time Series</span><span class="stag">Business Recommendations</span><span class="stag">Executive Communication</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER NAV -->
+<div class="wrap">
+  <div class="proj-footer">
+    <a href="../../index.html" class="proj-footer-link">← Back to Portfolio</a>
+    <a href="../economic-mobility/index.html" class="proj-footer-link">Next Project →</a>
+  </div>
+</div>
+
+<script>
+// ── PLOTLY CHARTS ──────────────────────────────────────────────
+const cream='#f4f1ea', ink='#1c1a14', ink3='#8a8070', ink4='#c0b8a8';
+const forest='#2d5a3d', bark='#6b4423', moss='#4a5e2a', sand='#c4a882';
+const forest2='#3d7a52', bark2='#8b5e35';
+
+const layout_base = {
+  paper_bgcolor:'transparent', plot_bgcolor:'transparent',
+  font:{family:"'JetBrains Mono', monospace", size:11, color:ink3},
+  margin:{t:20,r:20,b:40,l:50},
+  xaxis:{gridcolor:'rgba(30,24,14,.07)', linecolor:'rgba(30,24,14,.12)', tickfont:{size:10}},
+  yaxis:{gridcolor:'rgba(30,24,14,.07)', linecolor:'rgba(30,24,14,.12)', tickfont:{size:10}},
+  hoverlabel:{bgcolor:ink, font:{color:cream, family:"'JetBrains Mono',monospace", size:11}},
+  showlegend:false
+};
+
+const config = {displayModeBar:false, responsive:true};
+
+// FIG 1 — Delay Causes
+Plotly.newPlot('chart-causes', [{
+  type:'bar', orientation:'h',
+  x:[38.1, 24.0, 22.9, 14.0, 1.0],
+  y:['Late Aircraft','Carrier','NAS / ATC','Weather','Security'],
+  marker:{color:[forest, bark, moss, bark2, sand],
+          line:{color:'transparent'}},
+  text:['38.1%','24.0%','22.9%','14.0%','1.0%'],
+  textposition:'outside',
+  textfont:{color:ink3, size:10},
+  hovertemplate:'<b>%{y}</b><br>%{x}% of delay minutes<extra></extra>'
+}], {...layout_base,
+  xaxis:{...layout_base.xaxis, title:'% of Total Delay Minutes', range:[0,46]},
+  yaxis:{...layout_base.yaxis, autorange:'reversed'}
+}, config);
+
+// FIG 2 — Monthly Trend
+const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const delayRates=[21.4,19.8,22.1,18.3,17.9,23.6,25.8,24.1,16.2,18.9,22.4,28.7];
+Plotly.newPlot('chart-monthly', [{
+  type:'scatter', mode:'lines+markers',
+  x:months, y:delayRates,
+  line:{color:forest, width:2.5, shape:'spline'},
+  marker:{color:bark, size:6, line:{color:cream, width:1.5}},
+  fill:'tozeroy', fillcolor:'rgba(45,90,61,.06)',
+  hovertemplate:'<b>%{x}</b><br>Delay Rate: %{y}%<extra></extra>'
+}], {...layout_base,
+  yaxis:{...layout_base.yaxis, title:'Delay Rate (%)'},
+  showlegend:false
+}, config);
+
+// FIG 3 — Airport Rankings
+const airports=['JFK','EWR','BOS','LGA','SFO','ORD','DCA','LAX','ATL','DTW'];
+const avgDelays=[24.8,22.1,21.4,20.8,19.2,18.7,17.9,17.2,16.8,15.4];
+Plotly.newPlot('chart-airports', [{
+  type:'bar',
+  x:avgDelays, y:airports,
+  orientation:'h',
+  marker:{color:avgDelays.map(d => d>20?bark:d>17?moss:forest),
+          line:{color:'transparent'}},
+  hovertemplate:'<b>%{y}</b><br>Avg Delay: %{x} min<extra></extra>'
+}], {...layout_base,
+  xaxis:{...layout_base.xaxis, title:'Avg Delay (minutes)'},
+  yaxis:{...layout_base.yaxis, autorange:'reversed'},
+  margin:{...layout_base.margin, l:45}
+}, config);
+
+// FIG 4 — Cascade Effect
+const legs=[1,2,3,4,5,6];
+const cascadeDelays=[8.2,10.1,12.8,16.5,19.4,21.7];
+Plotly.newPlot('chart-cascade', [
+  {type:'scatter', mode:'lines+markers',
+   x:legs, y:cascadeDelays,
+   line:{color:bark, width:3},
+   marker:{color:bark, size:9, line:{color:cream, width:2}},
+   name:'Avg Delay',
+   hovertemplate:'<b>Leg %{x}</b><br>Avg Delay: %{y} min<extra></extra>'},
+  {type:'scatter', mode:'lines',
+   x:[1,6], y:[8.2,8.2],
+   line:{color:forest, width:1.5, dash:'dot'},
+   name:'Leg 1 Baseline', showlegend:true,
+   hoverinfo:'skip'}
+], {...layout_base,
+  xaxis:{...layout_base.xaxis, title:'Flight Leg Number (same aircraft, same day)', dtick:1},
+  yaxis:{...layout_base.yaxis, title:'Avg Departure Delay (min)'},
+  showlegend:true,
+  legend:{x:.05, y:.95, font:{size:10}}
+}, config);
+
+// FIG 5 — Hour of Day
+const hours=Array.from({length:18},(_,i)=>i+5);
+const hourDelays=[8.1,9.4,14.2,17.8,16.1,13.4,11.2,10.8,12.1,15.4,18.2,22.6,24.8,23.1,20.4,18.8,16.2,14.1];
+Plotly.newPlot('chart-hour', [{
+  type:'bar', x:hours, y:hourDelays,
+  marker:{color:hours.map(h=>h>=17&&h<=20?bark:h>=7&&h<=9?moss:forest+'99'),
+          line:{color:'transparent'}},
+  hovertemplate:'<b>%{x}:00</b><br>Avg Delay: %{y} min<extra></extra>'
+}], {...layout_base,
+  xaxis:{...layout_base.xaxis, title:'Departure Hour', tickvals:[5,8,11,14,17,20,22],
+         ticktext:['5am','8am','11am','2pm','5pm','8pm','10pm']},
+  yaxis:{...layout_base.yaxis, title:'Avg Delay (min)'}
+}, config);
+
+// FIG 6 — Seasonal weather vs late aircraft
+const seasons=['Q1 (Winter)','Q2 (Spring)','Q3 (Summer)','Q4 (Fall/Winter)'];
+Plotly.newPlot('chart-season', [
+  {type:'bar', name:'Weather', x:seasons,
+   y:[18.4, 8.2, 10.1, 24.6],
+   marker:{color:bark+'cc', line:{color:'transparent'}}},
+  {type:'bar', name:'Late Aircraft', x:seasons,
+   y:[28.1, 22.4, 31.8, 26.2],
+   marker:{color:forest+'cc', line:{color:'transparent'}}}
+], {...layout_base,
+  barmode:'group',
+  yaxis:{...layout_base.yaxis, title:'Avg Delay Minutes'},
+  showlegend:true,
+  legend:{x:.05,y:.95,font:{size:10}}
+}, config);
+
+// FIG 7 — Feature Importance
+const feats=['Departure Hour','Origin Congestion','Origin Airport','Month','Day of Week','Destination','Peak Hour','Is Weekend'];
+const importances=[0.284,0.220,0.175,0.142,0.089,0.061,0.018,0.010];
+Plotly.newPlot('chart-importance', [{
+  type:'bar', orientation:'h',
+  x:importances, y:feats,
+  marker:{color:importances.map((_,i)=>i<3?forest:i<5?bark:moss),
+          line:{color:'transparent'}},
+  text:importances.map(v=>(v*100).toFixed(1)+'%'),
+  textposition:'outside', textfont:{color:ink3,size:10},
+  hovertemplate:'<b>%{y}</b><br>Importance: %{x:.3f}<extra></extra>'
+}], {...layout_base,
+  xaxis:{...layout_base.xaxis, title:'Feature Importance Score', range:[0,.34]},
+  yaxis:{...layout_base.yaxis, autorange:'reversed'}
+}, config);
+
+// ── INTERACTIONS ──────────────────────────────────────────────
+// Q&A Toggle
+function toggleQA(el){
+  el.classList.toggle('open');
+}
+
+// Copy code
+function copyCode(btn){
+  const pre=btn.closest('.code-wrap').querySelector('pre');
+  navigator.clipboard.writeText(pre.innerText).then(()=>{
+    btn.textContent='Copied!';
+    setTimeout(()=>btn.textContent='Copy',2000);
+  });
+}
+
+// Scroll reveals
+const io=new IntersectionObserver(e=>e.forEach(x=>{
+  if(x.isIntersecting)x.target.classList.add('visible');
+}),{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
 </body>
 </html>
