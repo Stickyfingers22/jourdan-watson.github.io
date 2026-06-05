@@ -1,6 +1,6 @@
 # Jourdan Watson — Data Analytics Portfolio
 
-Live site: [jourdan-watson.github.io](https://jourdan-watson.github.io)
+Live site: [jourdan-watson.github.io](Live site: https://stickyfingers22.github.io/jourdan-watson.github.io)
 
 ## About
 Data Analyst & Applied Statistician with a B.S. in Mathematics and M.S. in Applied Statistics. Currently in the GE Aerospace Digital Technology Leadership Program (DTLP) and working as a Data Analyst II at Centene Corporation.
