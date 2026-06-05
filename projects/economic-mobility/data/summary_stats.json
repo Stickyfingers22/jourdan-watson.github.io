@@ -1,0 +1,113 @@
+{
+  "wealth_by_race": {
+    "White": {
+      "median_networth": 272000,
+      "median_income": 79987,
+      "n": 14349
+    },
+    "Black": {
+      "median_networth": 49590,
+      "median_income": 46479,
+      "n": 3493
+    },
+    "Hispanic": {
+      "median_networth": 60790,
+      "median_income": 48641,
+      "n": 3075
+    },
+    "Asian/Other": {
+      "median_networth": 514200,
+      "median_income": 114577,
+      "n": 1785
+    }
+  },
+  "top_metros": [
+    {
+      "name": "Dickinson",
+      "income": 68165
+    },
+    {
+      "name": "Bowman",
+      "income": 67767
+    },
+    {
+      "name": "East Grant UT",
+      "income": 67317
+    },
+    {
+      "name": "Williston",
+      "income": 65797
+    },
+    {
+      "name": "Sioux Center",
+      "income": 63464
+    },
+    {
+      "name": "Steele",
+      "income": 62766
+    },
+    {
+      "name": "Carrington",
+      "income": 62573
+    },
+    {
+      "name": "Sidney",
+      "income": 62391
+    },
+    {
+      "name": "Bismarck",
+      "income": 62194
+    },
+    {
+      "name": "Miller",
+      "income": 62010
+    }
+  ],
+  "bottom_metros": [
+    {
+      "name": "Mission",
+      "income": 27350
+    },
+    {
+      "name": "Greenville",
+      "income": 27719
+    },
+    {
+      "name": "Eagle Butte",
+      "income": 28428
+    },
+    {
+      "name": "Yazoo City",
+      "income": 28467
+    },
+    {
+      "name": "West Memphis",
+      "income": 29994
+    },
+    {
+      "name": "Barnwell",
+      "income": 30028
+    },
+    {
+      "name": "Bennettsville",
+      "income": 30338
+    },
+    {
+      "name": "Cordele",
+      "income": 30395
+    },
+    {
+      "name": "Henderson",
+      "income": 30458
+    },
+    {
+      "name": "Greenwood",
+      "income": 30666
+    }
+  ],
+  "atlas_stats": {
+    "mean": 44627,
+    "median": 44018,
+    "n_zones": 722
+  }
+}
