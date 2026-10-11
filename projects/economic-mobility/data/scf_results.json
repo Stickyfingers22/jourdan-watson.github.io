@@ -1,0 +1,297 @@
+{
+  "n_households": 4595,
+  "n_rows": 22975,
+  "by_education": [
+    {
+      "race": "Black",
+      "edu_group": "Bachelor's+",
+      "median_income": 72421,
+      "median_networth": 128150,
+      "n_households": 170
+    },
+    {
+      "race": "Black",
+      "edu_group": "HS diploma",
+      "median_income": 43236,
+      "median_networth": 54720,
+      "n_households": 211
+    },
+    {
+      "race": "Black",
+      "edu_group": "No HS diploma",
+      "median_income": 18376,
+      "median_networth": 7000,
+      "n_households": 91
+    },
+    {
+      "race": "Black",
+      "edu_group": "Some college / Assoc.",
+      "median_income": 44317,
+      "median_networth": 33700,
+      "n_households": 242
+    },
+    {
+      "race": "White",
+      "edu_group": "Bachelor's+",
+      "median_income": 123224,
+      "median_networth": 574460,
+      "n_households": 1683
+    },
+    {
+      "race": "White",
+      "edu_group": "HS diploma",
+      "median_income": 56207,
+      "median_networth": 153270,
+      "n_households": 499
+    },
+    {
+      "race": "White",
+      "edu_group": "No HS diploma",
+      "median_income": 34589,
+      "median_networth": 63151,
+      "n_households": 131
+    },
+    {
+      "race": "White",
+      "edu_group": "Some college / Assoc.",
+      "median_income": 67017,
+      "median_networth": 188600,
+      "n_households": 578
+    }
+  ],
+  "by_race": {
+    "White": {
+      "median_income": 79987,
+      "median_networth": 272000,
+      "homeownership_pct": 72.2,
+      "bachelors_pct": 44.1,
+      "stock_ownership_pct": 23.6,
+      "business_ownership_pct": 15.7,
+      "n_households": 2880
+    },
+    "Black": {
+      "median_income": 46479,
+      "median_networth": 49590,
+      "homeownership_pct": 46.7,
+      "bachelors_pct": 28.4,
+      "stock_ownership_pct": 13.1,
+      "business_ownership_pct": 11.5,
+      "n_households": 710
+    },
+    "Hispanic": {
+      "median_income": 48641,
+      "median_networth": 60790,
+      "homeownership_pct": 49.6,
+      "bachelors_pct": 21.0,
+      "stock_ownership_pct": 8.3,
+      "business_ownership_pct": 10.9,
+      "n_households": 618
+    },
+    "Asian/Other": {
+      "median_income": 114577,
+      "median_networth": 514200,
+      "homeownership_pct": 72.2,
+      "bachelors_pct": 65.5,
+      "stock_ownership_pct": 39.1,
+      "business_ownership_pct": 15.1,
+      "n_households": 365
+    }
+  },
+  "networth_by_homeownership": [
+    {
+      "race": "Black",
+      "homeowner": false,
+      "median_networth": 4500
+    },
+    {
+      "race": "Black",
+      "homeowner": true,
+      "median_networth": 196800
+    },
+    {
+      "race": "White",
+      "homeowner": false,
+      "median_networth": 13400
+    },
+    {
+      "race": "White",
+      "homeowner": true,
+      "median_networth": 435380
+    }
+  ],
+  "ols": {
+    "sample_households": 2244,
+    "r2_mean": 0.497,
+    "coefficients": {
+      "const": {
+        "coef": 8.1244,
+        "se": 0.1251,
+        "p": 0.0,
+        "pct_effect": 337487.9
+      },
+      "educ_years": {
+        "coef": 0.1517,
+        "se": 0.0077,
+        "p": 0.0,
+        "pct_effect": 16.4
+      },
+      "age_c": {
+        "coef": 0.0094,
+        "se": 0.0017,
+        "p": 0.0,
+        "pct_effect": 0.9
+      },
+      "age_c2": {
+        "coef": -0.0004,
+        "se": 0.0002,
+        "p": 0.0056,
+        "pct_effect": -0.0
+      },
+      "female": {
+        "coef": -0.127,
+        "se": 0.0606,
+        "p": 0.0362,
+        "pct_effect": -11.9
+      },
+      "married": {
+        "coef": 0.657,
+        "se": 0.0591,
+        "p": 0.0,
+        "pct_effect": 92.9
+      },
+      "homeowner": {
+        "coef": 0.347,
+        "se": 0.0436,
+        "p": 0.0,
+        "pct_effect": 41.5
+      },
+      "working": {
+        "coef": 0.5866,
+        "se": 0.066,
+        "p": 0.0,
+        "pct_effect": 79.8
+      },
+      "black": {
+        "coef": -0.2292,
+        "se": 0.0611,
+        "p": 0.0002,
+        "pct_effect": -20.5
+      },
+      "black_x_bachelors": {
+        "coef": -0.0143,
+        "se": 0.1,
+        "p": 0.8864,
+        "pct_effect": -1.4
+      }
+    }
+  },
+  "rf": {
+    "sample_households": 522,
+    "test_r2_mean": 0.3,
+    "permutation_importance": {
+      "married": 0.4057,
+      "educ_years": 0.2492,
+      "homeowner": 0.0369,
+      "AGE": 0.0252,
+      "female": 0.0015,
+      "owns_stocks": 0.0001,
+      "owns_business": -0.0001,
+      "KIDS": -0.0032,
+      "working": -0.008
+    }
+  },
+  "corr": {
+    "cols": [
+      "log_income",
+      "educ_years",
+      "AGE",
+      "homeowner",
+      "married",
+      "working",
+      "owns_stocks",
+      "log_networth"
+    ],
+    "matrix": [
+      [
+        1.0,
+        0.37,
+        0.06,
+        0.33,
+        0.45,
+        0.23,
+        0.26,
+        0.24
+      ],
+      [
+        0.37,
+        1.0,
+        -0.1,
+        0.11,
+        -0.01,
+        0.14,
+        0.21,
+        -0.08
+      ],
+      [
+        0.06,
+        -0.1,
+        1.0,
+        0.27,
+        0.1,
+        -0.37,
+        -0.11,
+        0.22
+      ],
+      [
+        0.33,
+        0.11,
+        0.27,
+        1.0,
+        0.28,
+        0.03,
+        0.08,
+        0.45
+      ],
+      [
+        0.45,
+        -0.01,
+        0.1,
+        0.28,
+        1.0,
+        0.11,
+        0.1,
+        0.22
+      ],
+      [
+        0.23,
+        0.14,
+        -0.37,
+        0.03,
+        0.11,
+        1.0,
+        0.06,
+        0.0
+      ],
+      [
+        0.26,
+        0.21,
+        -0.11,
+        0.08,
+        0.1,
+        0.06,
+        1.0,
+        0.05
+      ],
+      [
+        0.24,
+        -0.08,
+        0.22,
+        0.45,
+        0.22,
+        0.0,
+        0.05,
+        1.0
+      ]
+    ]
+  }
+}

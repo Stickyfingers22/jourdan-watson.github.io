@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Jourdan Watson</title>
+  <meta name="description" content="Jourdan Watson beyond the data: 17 countries, a childhood in South Korea, piano, reading, aviation and more."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root{
+      --cream:#f4f1ea;--cream2:#ebe6db;--cream3:#dfd8cc;
+      --ink:#1c1a14;--ink2:#4a4235;--ink3:#8a8070;--ink4:#c0b8a8;
+      --forest:#2d5a3d;--forest2:#3d7a52;--bark:#6b4423;--bark2:#8b5e35;--moss:#4a5e2a;--sand:#c4a882;
+      --border:rgba(30,24,14,.1);--border2:rgba(30,24,14,.2);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--cream);color:var(--ink);font-family:'Syne',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+    ::selection{background:var(--forest);color:var(--cream);}
+
+    nav{position:sticky;top:0;z-index:100;background:rgba(244,241,234,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 3rem;display:flex;align-items:center;height:56px;gap:2rem;}
+    .back-link{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);text-decoration:none;}
+    .back-link:hover{color:var(--forest);}
+    .nav-links{display:flex;gap:4px;margin-left:auto;}
+    .nav-links a{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);text-decoration:none;padding:6px 10px;}
+    .nav-links a:hover{color:var(--forest);}
+
+    .wrap{max-width:1080px;margin:0 auto;padding:0 3rem;}
+    .eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--bark);margin-bottom:1.5rem;display:flex;align-items:center;gap:12px;}
+    .eyebrow::before{content:'';width:28px;height:1px;background:var(--bark);}
+    h2.h{font-family:'Cormorant Garamond',serif;font-size:clamp(34px,5vw,56px);font-weight:300;line-height:1.05;letter-spacing:-.02em;margin-bottom:1.25rem;}
+    h2.h em{font-style:italic;color:var(--forest);}
+    .lede{font-size:16px;color:var(--ink2);line-height:1.9;max-width:640px;}
+    section{padding:6rem 0;border-bottom:1px solid var(--border);}
+
+    /* HERO */
+    .hero{min-height:82vh;display:grid;grid-template-columns:1fr 300px;gap:4rem;align-items:center;padding:5rem 0;border-bottom:1px solid var(--border);}
+    .hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(56px,9vw,112px);font-weight:300;line-height:.9;letter-spacing:-.03em;margin-bottom:2rem;}
+    .hero h1 em{font-style:italic;color:var(--bark);}
+    .hero p{font-size:17px;color:var(--ink2);line-height:1.9;max-width:560px;}
+    .portrait{aspect-ratio:4/5;background:var(--cream2);border:1px solid var(--border2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;position:relative;overflow:hidden;}
+    .portrait span{font-family:'Cormorant Garamond',serif;font-size:72px;font-weight:300;color:var(--bark);}
+    .portrait small{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);}
+    .portrait::after{content:'';position:absolute;inset:12px;border:1px solid var(--border);pointer-events:none;}
+
+    /* STATS */
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--border);}
+    .stat{padding:3rem 2rem;border-right:1px solid var(--border);}
+    .stat:last-child{border-right:none;}
+    .stat-n{font-family:'Cormorant Garamond',serif;font-size:64px;font-weight:300;line-height:1;letter-spacing:-.03em;}
+    .stat-l{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-top:8px;}
+
+    /* STORY */
+    .story{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;}
+    .story p{font-size:15px;color:var(--ink2);line-height:1.9;}
+    .story p+p{margin-top:1rem;}
+    .timeline{border-left:1px solid var(--border2);padding-left:2rem;}
+    .t-item{position:relative;padding-bottom:2rem;}
+    .t-item::before{content:'';position:absolute;left:calc(-2rem - 5px);top:6px;width:9px;height:9px;border-radius:50%;background:var(--cream);border:1px solid var(--bark);}
+    .t-item.now::before{background:var(--forest);border-color:var(--forest);}
+    .t-when{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:4px;}
+    .t-what{font-size:15px;font-weight:600;}
+    .t-sub{font-size:13px;color:var(--ink2);margin-top:2px;}
+
+    /* INTERESTS */
+    .int-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:3rem;}
+    .int{background:var(--cream2);border:1px solid var(--border);padding:2rem;position:relative;overflow:hidden;transition:transform .25s,border-color .25s;}
+    .int:hover{transform:translateY(-3px);border-color:rgba(45,90,61,.3);}
+    .int-ico{width:40px;height:40px;margin-bottom:1.25rem;color:var(--bark);}
+    .int h3{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:500;margin-bottom:.5rem;}
+    .int p{font-size:13px;color:var(--ink2);line-height:1.75;}
+    .int .tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--forest);border:1px solid rgba(45,90,61,.25);padding:3px 8px;margin-top:1rem;}
+    .int a{color:var(--forest);}
+
+    /* PIANO */
+    .piano-wrap{display:grid;grid-template-columns:1fr 1.2fr;gap:3rem;align-items:center;}
+    .piano{position:relative;height:180px;display:flex;user-select:none;background:var(--ink);padding:10px 10px 12px;}
+    .key{flex:1;background:#fbf9f4;border:1px solid var(--ink3);border-radius:0 0 4px 4px;margin:0 1px;cursor:pointer;display:flex;align-items:flex-end;justify-content:center;padding-bottom:10px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink3);transition:background .08s;}
+    .key:hover{background:#f0ebe0;}
+    .key.on{background:var(--sand);}
+    .key:focus-visible{outline:2px solid var(--forest);outline-offset:-2px;}
+    .bk{position:absolute;top:10px;width:7%;height:58%;background:var(--ink);border:1px solid #000;border-radius:0 0 3px 3px;cursor:pointer;z-index:2;box-shadow:inset 0 -6px 0 #2e2a22;}
+    .bk.on{background:var(--bark);}
+    .bk:focus-visible{outline:2px solid var(--sand);}
+    .piano-hint{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink3);margin-top:.75rem;letter-spacing:.06em;}
+    .piano-btns{display:flex;gap:8px;margin-top:1rem;flex-wrap:wrap;}
+
+    /* ASK ME */
+    .ask-head{display:flex;justify-content:space-between;align-items:end;gap:2rem;flex-wrap:wrap;margin-bottom:1.5rem;}
+    .chips{display:flex;gap:6px;flex-wrap:wrap;margin:2rem 0 1.5rem;}
+    .chip{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;padding:7px 14px;border:1px solid var(--border2);background:var(--cream);color:var(--ink2);cursor:pointer;transition:all .2s;}
+    .chip.active,.chip:hover{background:var(--ink);color:var(--cream);border-color:var(--ink);}
+    .btn{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:12px 22px;border:1px solid var(--forest);background:var(--forest);color:var(--cream);cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block;}
+    .btn:hover{background:var(--forest2);}
+    .btn.ghost{background:transparent;color:var(--ink);border-color:var(--border2);}
+    .btn.ghost:hover{background:var(--cream2);}
+    .q-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+    .q{background:var(--cream2);border:1px solid var(--border);padding:1.5rem;display:flex;flex-direction:column;justify-content:space-between;min-height:170px;transition:transform .2s,border-color .2s,opacity .25s;}
+    .q:hover{transform:translateY(-2px);border-color:var(--border2);}
+    .q.hide{display:none;}
+    .q.flash{border-color:var(--forest);box-shadow:0 0 0 3px rgba(45,90,61,.15);}
+    .q-cat{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--bark);margin-bottom:.75rem;}
+    .q-text{font-family:'Cormorant Garamond',serif;font-size:22px;line-height:1.25;}
+    .q-copy{align-self:flex-start;margin-top:1rem;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;background:none;border:none;color:var(--ink3);cursor:pointer;padding:0;}
+    .q-copy:hover{color:var(--forest);}
+    .spotlight{background:var(--ink);color:var(--cream);padding:3rem;margin-bottom:2rem;display:none;}
+    .spotlight.show{display:block;animation:pop .4s cubic-bezier(.16,1,.3,1);}
+    @keyframes pop{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+    .spotlight .q-cat{color:var(--sand);}
+    .spotlight .q-text{font-size:34px;}
+
+    .cta{text-align:center;padding:6rem 0;}
+    .cta h2{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,5vw,60px);font-weight:300;line-height:1.05;margin-bottom:1.5rem;}
+    .cta h2 em{font-style:italic;color:var(--bark);}
+    .cta-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+    footer{border-top:1px solid var(--border);padding:1.5rem 3rem;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink4);letter-spacing:.08em;display:flex;justify-content:space-between;}
+
+    .reveal{opacity:0;transform:translateY(20px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1);}
+    .reveal.visible{opacity:1;transform:none;}
+    @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none;}}
+
+    @media(max-width:860px){
+      nav{padding:0 1.5rem;}.nav-links{display:none;}
+      .wrap{padding:0 1.5rem;}
+      .hero{grid-template-columns:1fr;min-height:auto;gap:2rem;}.portrait{max-width:220px;}
+      .stats{grid-template-columns:repeat(2,1fr);}.stat:nth-child(2){border-right:none;}.stat{border-bottom:1px solid var(--border);}
+      .story,.piano-wrap{grid-template-columns:1fr;gap:2.5rem;}
+      .int-grid,.q-grid{grid-template-columns:1fr;}
+      footer{flex-direction:column;gap:6px;padding:1.5rem;}
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="back-link">← Portfolio</a>
+  <div class="nav-links">
+    <a href="#story">Story</a>
+    <a href="#interests">Interests</a>
+    <a href="#piano">Piano</a>
+    <a href="#ask">Ask Me</a>
+  </div>
+</nav>
+
+<div class="wrap">
+  <header class="hero">
+    <div>
+      <div class="eyebrow">About</div>
+      <h1>Beyond<br>the <em>data</em></h1>
+      <p>I'm Jourdan. I work in data and technology, I have a math degree and a statistics degree, and I've spent most of my life curious about how things work: economies, airplanes, songs, people. This page is the rest of the picture.</p>
+    </div>
+    <div class="portrait" aria-label="Photo placeholder">
+      <span>JW</span>
+      <small>Photo coming soon</small>
+    </div>
+  </header>
+</div>
+
+<div class="wrap">
+  <div class="stats reveal">
+    <div class="stat"><div class="stat-n" data-count="17">0</div><div class="stat-l">Countries visited</div></div>
+    <div class="stat"><div class="stat-n" data-count="4">0</div><div class="stat-l">Childhood years in Korea</div></div>
+    <div class="stat"><div class="stat-n" data-count="2">0</div><div class="stat-l">Degrees in 5 years</div></div>
+    <div class="stat"><div class="stat-n" data-count="1">0</div><div class="stat-l">Company founded</div></div>
+  </div>
+</div>
+
+<!-- STORY -->
+<div class="wrap" id="story">
+  <section class="reveal">
+    <div class="story">
+      <div>
+        <div class="eyebrow">The Story</div>
+        <h2 class="h">Seoul,<br><em>then everywhere</em></h2>
+        <p>I spent four years of my childhood, from age four to eight, living in South Korea. Growing up between two cultures early made new places feel less like a disruption and more like a puzzle to figure out.</p>
+        <p>That curiosity stuck. I've now been to 17 countries, and I tend to come back from each one with more questions than answers about how people live, work and spend their money, which is part of what pulled me toward economics and data in the first place.</p>
+      </div>
+      <div class="timeline">
+        <div class="t-item"><div class="t-when">Ages 4–8</div><div class="t-what">South Korea</div><div class="t-sub">Four years of childhood abroad</div></div>
+        <div class="t-item"><div class="t-when">Undergraduate</div><div class="t-what">B.S. Mathematics</div><div class="t-sub">Fort Valley State University, finished in 3 years</div></div>
+        <div class="t-item"><div class="t-when">Graduate</div><div class="t-what">M.S. Applied Statistics</div><div class="t-sub">Grand Valley State University, finished in 2 years</div></div>
+        <div class="t-item"><div class="t-when">Founder</div><div class="t-what">Prolific Dreamer</div><div class="t-sub">Streetwear and design company</div></div>
+        <div class="t-item now"><div class="t-when">Now</div><div class="t-what">Cincinnati, Ohio</div><div class="t-sub">Data and technology at GE Aerospace</div></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- INTERESTS -->
+<div class="wrap" id="interests">
+  <section class="reveal">
+    <div class="eyebrow">Interests</div>
+    <h2 class="h">What I do<br><em>when I'm not querying</em></h2>
+    <div class="int-grid">
+      <div class="int">
+        <svg class="int-ico" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="20" cy="20" r="15"/><path d="M5 20h30M20 5c5 4 7 9 7 15s-2 11-7 15M20 5c-5 4-7 9-7 15s2 11 7 15"/></svg>
+        <h3>Travel</h3>
+        <p>Seventeen countries and counting. I like places where daily life looks different from home: what people eat, how they get around, what things cost.</p>
+        <span class="tag">17 countries</span>
+      </div>
+      <div class="int">
+        <svg class="int-ico" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="5" y="10" width="30" height="20"/><path d="M11 10v12M17 10v12M23 10v12M29 10v12"/><path d="M9 10v8h4v-8M21 10v8h4v-8" fill="currentColor" stroke="none"/></svg>
+        <h3>Music</h3>
+        <p>I play the piano and have played other instruments over the years. Music and math share more than people think: patterns, structure, timing.</p>
+        <span class="tag">Piano</span>
+      </div>
+      <div class="int">
+        <svg class="int-ico" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M20 10c-4-3-9-3-14-2v22c5-1 10-1 14 2 4-3 9-3 14-2V8c-5-1-10-1-14 2zM20 10v22"/></svg>
+        <h3>Reading</h3>
+        <p>I read widely, and I've worked through a self-designed psychology curriculum built on open Yale and MIT courses, plus an intensive study of sociology on Black America and the global diaspora.</p>
+        <span class="tag">Psychology · Sociology</span>
+      </div>
+      <div class="int">
+        <svg class="int-ico" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 22l14-3 8-12h3l-3 12 9-1 3-4h2l-1 7 1 7h-2l-3-4-9-1 3 12h-3l-8-12-14-3z"/></svg>
+        <h3>Aviation</h3>
+        <p>I'm working toward a private pilot license. Working at GE Aerospace and analyzing Delta's delays only made me want to be on the other side of the cockpit door.</p>
+        <span class="tag">Student pilot</span>
+      </div>
+      <div class="int">
+        <svg class="int-ico" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M14 6l6 4 6-4 8 5-4 7-3-2v18H13V16l-3 2-4-7z"/></svg>
+        <h3>Fashion</h3>
+        <p>I founded <strong>Prolific Dreamer</strong>, a streetwear and design company. Fabric, fit and pricing are their own kind of data problem.</p>
+        <span class="tag">Founder</span>
+      </div>
+      <div class="int">
+        <svg class="int-ico" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M8 14h20v8a10 10 0 01-20 0z"/><path d="M28 16h3a4 4 0 010 8h-3M12 6c-1 2 1 3 0 5M18 6c-1 2 1 3 0 5M24 6c-1 2 1 3 0 5"/></svg>
+        <h3>Coffee</h3>
+        <p>Enough to build a <a href="../projects/coffee/index.html">whole data project</a> about it. Owning a coffee shop one day is on the long-term list.</p>
+        <span class="tag">Future café owner</span>
+      </div>
+      <div class="int">
+        <svg class="int-ico" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="20" cy="20" r="14"/><circle cx="20" cy="20" r="4"/><path d="M20 6v4M20 30v4"/></svg>
+        <h3>Hip-hop & R&B</h3>
+        <p>I love breaking down lyrics: wordplay, storytelling and how artists build meaning across a verse or an album.</p>
+        <span class="tag">Lyric analysis</span>
+      </div>
+      <div class="int">
+        <svg class="int-ico" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 17v6M10 13v14M30 13v14M34 17v6M10 20h20"/></svg>
+        <h3>Fitness</h3>
+        <p>Training and nutrition keep me grounded. It's also the most personal dataset I track.</p>
+        <span class="tag">Training · Nutrition</span>
+      </div>
+      <div class="int">
+        <svg class="int-ico" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 32h28M10 32V20M17 32V12M24 32V24M31 32V8"/></svg>
+        <h3>Data, for fun</h3>
+        <p>Most of my portfolio started as a question I couldn't stop thinking about: why flights run late, what a latte really costs, what closes the wealth gap.</p>
+        <span class="tag">Curiosity</span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- PIANO -->
+<div class="wrap" id="piano">
+  <section class="reveal">
+    <div class="piano-wrap">
+      <div>
+        <div class="eyebrow">Play Something</div>
+        <h2 class="h">One octave,<br><em>your turn</em></h2>
+        <p class="lede" style="font-size:15px">Since I play the piano, here's one for you. Click the keys, or use your keyboard: <strong>A S D F G H J K</strong> for white keys and <strong>W E T Y U</strong> for black keys.</p>
+        <div class="piano-btns">
+          <button class="btn ghost" id="play-scale">Play a scale</button>
+          <button class="btn ghost" id="play-chord">Play a chord</button>
+        </div>
+      </div>
+      <div>
+        <div class="piano" id="piano-keys" role="group" aria-label="Playable one-octave piano"></div>
+        <div class="piano-hint" id="piano-hint">Sound plays only after you click or press a key.</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ASK ME -->
+<div class="wrap" id="ask">
+  <section class="reveal" style="border-bottom:none">
+    <div class="ask-head">
+      <div>
+        <div class="eyebrow">Ask Me</div>
+        <h2 class="h">Questions you<br><em>can ask me</em></h2>
+        <p class="lede" style="font-size:15px">Interviewing me, meeting me at an event, or just curious? Skip "tell me about yourself." Pick one of these instead.</p>
+      </div>
+      <button class="btn" id="shuffle">Surprise me</button>
+    </div>
+
+    <div class="spotlight" id="spotlight" aria-live="polite">
+      <div class="q-cat" id="spot-cat"></div>
+      <div class="q-text" id="spot-text"></div>
+    </div>
+
+    <div class="chips" id="q-filter">
+      <button class="chip active" data-cat="all">All</button>
+      <button class="chip" data-cat="Travel">Travel</button>
+      <button class="chip" data-cat="Music & Books">Music & Books</button>
+      <button class="chip" data-cat="Aviation">Aviation</button>
+      <button class="chip" data-cat="Business">Business</button>
+      <button class="chip" data-cat="Data">Data</button>
+    </div>
+    <div class="q-grid" id="q-grid"></div>
+  </section>
+</div>
+
+<div class="wrap">
+  <div class="cta reveal">
+    <h2>Got a question<br>that's <em>not on the list?</em></h2>
+    <div class="cta-btns">
+      <a class="btn" href="../index.html#contact">Get in touch</a>
+      <a class="btn ghost" href="../index.html#projects">See my projects</a>
+    </div>
+  </div>
+</div>
+
+<footer><span>© 2026 Jourdan Watson</span><span>Cincinnati, OH</span></footer>
+
+<script>
+// Count-up stats
+const cio=new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting)return;
+  e.target.querySelectorAll('[data-count]').forEach(el=>{
+    const t=+el.dataset.count;let c=0;const step=Math.max(1,Math.ceil(t/25));
+    const iv=setInterval(()=>{c=Math.min(t,c+step);el.textContent=c;if(c>=t)clearInterval(iv);},40);
+  });
+  cio.unobserve(e.target);
+}),{threshold:.4});
+document.querySelectorAll('.stats').forEach(el=>cio.observe(el));
+
+// Reveal
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+// ── PIANO ──
+const whites=[['C',261.63,'a'],['D',293.66,'s'],['E',329.63,'d'],['F',349.23,'f'],['G',392.00,'g'],['A',440.00,'h'],['B',493.88,'j'],['C',523.25,'k']];
+const blacks=[['C#',277.18,'w',0],['D#',311.13,'e',1],['F#',369.99,'t',3],['G#',415.30,'y',4],['A#',466.16,'u',5]];
+const pianoEl=document.getElementById('piano-keys');
+let ctx=null;
+function tone(freq,el){
+  try{
+    ctx=ctx||new (window.AudioContext||window.webkitAudioContext)();
+    const o=ctx.createOscillator(),o2=ctx.createOscillator(),g=ctx.createGain();
+    o.type='triangle';o2.type='sine';o.frequency.value=freq;o2.frequency.value=freq*2;
+    const now=ctx.currentTime;
+    g.gain.setValueAtTime(0,now);g.gain.linearRampToValueAtTime(.22,now+.01);g.gain.exponentialRampToValueAtTime(.001,now+1.4);
+    o.connect(g);o2.connect(g);g.connect(ctx.destination);
+    o.start(now);o2.start(now);o.stop(now+1.5);o2.stop(now+1.5);
+  }catch(err){document.getElementById('piano-hint').textContent='Audio is not available in this browser.';}
+  if(el){el.classList.add('on');setTimeout(()=>el.classList.remove('on'),220);}
+}
+const keyMap={};
+whites.forEach(([n,f,k])=>{
+  const b=document.createElement('button');b.className='key';b.textContent=n;b.setAttribute('aria-label',n);
+  b.addEventListener('pointerdown',()=>tone(f,b));keyMap[k]=[f,b];pianoEl.appendChild(b);
+});
+blacks.forEach(([n,f,k,pos])=>{
+  const b=document.createElement('button');b.className='bk';b.setAttribute('aria-label',n);
+  b.style.left=`calc(10px + ${(pos+1)/8*100}% - ${(pos+1)/8*20}px - 3.5%)`;
+  b.addEventListener('pointerdown',e=>{e.stopPropagation();tone(f,b);});keyMap[k]=[f,b];pianoEl.appendChild(b);
+});
+document.addEventListener('keydown',e=>{
+  if(e.repeat||e.metaKey||e.ctrlKey||/input|textarea/i.test(document.activeElement.tagName))return;
+  const m=keyMap[e.key.toLowerCase()];if(m)tone(m[0],m[1]);
+});
+const whiteBtns=[...pianoEl.querySelectorAll('.key')];
+document.getElementById('play-scale').onclick=()=>whites.forEach((w,i)=>setTimeout(()=>tone(w[1],whiteBtns[i]),i*230));
+document.getElementById('play-chord').onclick=()=>[0,2,4].forEach(i=>tone(whites[i][1],whiteBtns[i]));
+
+// ── ASK ME ──
+const QUESTIONS=[
+  ['Travel','What do you remember most about living in Korea as a kid?'],
+  ['Travel','Of the 17 countries you\'ve visited, which surprised you the most?'],
+  ['Travel','Which country would you move to tomorrow if you could?'],
+  ['Travel','What\'s the best meal you\'ve had abroad?'],
+  ['Music & Books','What are you learning on the piano right now?'],
+  ['Music & Books','Besides piano, which instruments have you played?'],
+  ['Music & Books','What\'s the last book you couldn\'t put down?'],
+  ['Music & Books','Whose lyrics do you think are the most underrated?'],
+  ['Music & Books','What did teaching yourself psychology change about how you think?'],
+  ['Aviation','How is the private pilot license going?'],
+  ['Aviation','What\'s one thing about airlines most passengers don\'t know?'],
+  ['Business','What\'s the story behind Prolific Dreamer?'],
+  ['Business','What would your coffee shop look like?'],
+  ['Data','Math or statistics: which do you enjoy more, and why?'],
+  ['Data','Which project in your portfolio surprised you the most?'],
+  ['Data','If you had any dataset in the world, what would you analyze?']
+];
+const grid=document.getElementById('q-grid');
+QUESTIONS.forEach(([cat,q])=>{
+  const d=document.createElement('div');d.className='q';d.dataset.cat=cat;
+  d.innerHTML=`<div><div class="q-cat">${cat}</div><div class="q-text">${q}</div></div><button class="q-copy">Copy question</button>`;
+  d.querySelector('.q-copy').addEventListener('click',e=>{
+    const btn=e.currentTarget;
+    navigator.clipboard.writeText(q).then(()=>{btn.textContent='Copied ✓';setTimeout(()=>btn.textContent='Copy question',1500);}).catch(()=>{});
+  });
+  grid.appendChild(d);
+});
+document.querySelectorAll('#q-filter .chip').forEach(c=>c.addEventListener('click',()=>{
+  document.querySelectorAll('#q-filter .chip').forEach(x=>x.classList.remove('active'));c.classList.add('active');
+  const cat=c.dataset.cat;
+  grid.querySelectorAll('.q').forEach(q=>q.classList.toggle('hide',cat!=='all'&&q.dataset.cat!==cat));
+}));
+let last=-1;
+document.getElementById('shuffle').addEventListener('click',()=>{
+  let i;do{i=Math.floor(Math.random()*QUESTIONS.length);}while(i===last&&QUESTIONS.length>1);last=i;
+  const s=document.getElementById('spotlight');
+  document.getElementById('spot-cat').textContent=QUESTIONS[i][0];
+  document.getElementById('spot-text').textContent=QUESTIONS[i][1];
+  s.classList.remove('show');void s.offsetWidth;s.classList.add('show');
+  grid.querySelectorAll('.q').forEach(q=>q.classList.remove('flash'));
+  const card=grid.children[i];card.classList.add('flash');setTimeout(()=>card.classList.remove('flash'),1600);
+});
+</script>
+</body>
+</html>
