@@ -626,6 +626,9 @@
       footer { flex-direction: column; gap: 8px; text-align: center; padding: 1.5rem; }
     }
   .proj-row-tag.cof{color:#5c3a24;border-color:rgba(92,58,36,.3);background:rgba(92,58,36,.05);}
+.hero-photo{width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;object-position:50% 28%;display:block;margin-bottom:2rem;border:1px solid rgba(30,24,14,.15);filter:saturate(.92);}
+.hero-photo-m{display:none;}
+@media(max-width:860px){.hero-photo-m{display:block;width:96px;height:96px;border-radius:50%;object-fit:cover;object-position:50% 28%;margin-bottom:1.5rem;border:1px solid rgba(30,24,14,.15);}}
 </style>
 </head>
 <body>
@@ -739,6 +742,7 @@
   <div class="wrap">
     <div class="hero-inner">
       <div class="hero-left">
+        <img class="hero-photo-m" src="assets/headshot-400.jpg" alt="Jourdan Watson" width="400" height="400">
         <div class="hero-status">
           <span class="status-dot"></span>
           Available for opportunities
@@ -761,6 +765,7 @@
       <div class="hero-vert-line"></div>
 
       <div class="hero-right">
+        <img class="hero-photo" src="assets/headshot.jpg" alt="Jourdan Watson" width="800" height="800">
         <div class="hero-index">
           <div class="hero-index-item">
             <span class="hero-index-label">Status</span>
@@ -787,7 +792,6 @@
             <span class="hero-index-val gold">3 portfolio pieces</span>
           </div>
         </div>
-        <div class="hero-num">03</div>
       </div>
     </div>
   </div>

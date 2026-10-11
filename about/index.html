@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>About Jourdan Watson</title>
-  <meta name="description" content="Jourdan Watson beyond the data: 17 countries, a childhood in South Korea, piano, reading, aviation and more."/>
+  <meta name="description" content="Jourdan Watson beyond the data: 16 countries, a childhood in South Korea, piano, reading, aviation and more."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
@@ -41,6 +41,7 @@
     .hero h1 em{font-style:italic;color:var(--bark);}
     .hero p{font-size:17px;color:var(--ink2);line-height:1.9;max-width:560px;}
     .portrait{aspect-ratio:4/5;background:var(--cream2);border:1px solid var(--border2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;position:relative;overflow:hidden;}
+    .portrait img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;}
     .portrait span{font-family:'Cormorant Garamond',serif;font-size:72px;font-weight:300;color:var(--bark);}
     .portrait small{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);}
     .portrait::after{content:'';position:absolute;inset:12px;border:1px solid var(--border);pointer-events:none;}
@@ -63,6 +64,21 @@
     .t-when{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:4px;}
     .t-what{font-size:15px;font-weight:600;}
     .t-sub{font-size:13px;color:var(--ink2);margin-top:2px;}
+
+    /* TRAVEL MAP */
+    .map-box{background:var(--cream2);border:1px solid var(--border);padding:1rem;margin-top:2.5rem;position:relative;}
+    #travel-map{height:440px;}
+    .map-fallback{padding:2rem;font-size:13px;color:var(--ink3);}
+    .map-tools{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-top:1.5rem;}
+    .region-bar{display:flex;height:10px;flex:1;min-width:220px;}
+    .region-bar span{display:block;height:100%;}
+    .region-key{display:flex;gap:1rem;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink3);margin-top:.6rem;}
+    .region-key i{display:inline-block;width:8px;height:8px;margin-right:5px;vertical-align:middle;}
+    .country-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:1.5rem;}
+    .cc{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.04em;padding:7px 12px;border:1px solid var(--border2);background:var(--cream);color:var(--ink2);cursor:pointer;transition:all .2s;}
+    .cc:hover,.cc.active{background:var(--forest);color:var(--cream);border-color:var(--forest);}
+    .cc.home{border-color:var(--bark);color:var(--bark);}
+    .cc.home.active,.cc.home:hover{background:var(--bark);color:var(--cream);}
 
     /* INTERESTS */
     .int-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:3rem;}
@@ -122,6 +138,7 @@
     @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none;}}
 
     @media(max-width:860px){
+      #travel-map{height:300px;}
       nav{padding:0 1.5rem;}.nav-links{display:none;}
       .wrap{padding:0 1.5rem;}
       .hero{grid-template-columns:1fr;min-height:auto;gap:2rem;}.portrait{max-width:220px;}
@@ -131,6 +148,7 @@
       footer{flex-direction:column;gap:6px;padding:1.5rem;}
     }
   </style>
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" defer></script>
 </head>
 <body>
 
@@ -138,6 +156,7 @@
   <a href="../index.html" class="back-link">← Portfolio</a>
   <div class="nav-links">
     <a href="#story">Story</a>
+    <a href="#travel">Travel</a>
     <a href="#interests">Interests</a>
     <a href="#piano">Piano</a>
     <a href="#ask">Ask Me</a>
@@ -151,16 +170,13 @@
       <h1>Beyond<br>the <em>data</em></h1>
       <p>I'm Jourdan. I work in data and technology, I have a math degree and a statistics degree, and I've spent most of my life curious about how things work: economies, airplanes, songs, people. This page is the rest of the picture.</p>
     </div>
-    <div class="portrait" aria-label="Photo placeholder">
-      <span>JW</span>
-      <small>Photo coming soon</small>
-    </div>
+    <div class="portrait"><img src="../assets/headshot.jpg" alt="Jourdan Watson" width="800" height="800" loading="eager"></div>
   </header>
 </div>
 
 <div class="wrap">
   <div class="stats reveal">
-    <div class="stat"><div class="stat-n" data-count="17">0</div><div class="stat-l">Countries visited</div></div>
+    <div class="stat"><div class="stat-n" data-count="16">0</div><div class="stat-l">Countries visited</div></div>
     <div class="stat"><div class="stat-n" data-count="4">0</div><div class="stat-l">Childhood years in Korea</div></div>
     <div class="stat"><div class="stat-n" data-count="2">0</div><div class="stat-l">Degrees in 5 years</div></div>
     <div class="stat"><div class="stat-n" data-count="1">0</div><div class="stat-l">Company founded</div></div>
@@ -175,7 +191,7 @@
         <div class="eyebrow">The Story</div>
         <h2 class="h">Seoul,<br><em>then everywhere</em></h2>
         <p>I spent four years of my childhood, from age four to eight, living in South Korea. Growing up between two cultures early made new places feel less like a disruption and more like a puzzle to figure out.</p>
-        <p>That curiosity stuck. I've now been to 17 countries, and I tend to come back from each one with more questions than answers about how people live, work and spend their money, which is part of what pulled me toward economics and data in the first place.</p>
+        <p>That curiosity stuck. I've now been to 16 countries, and I tend to come back from each one with more questions than answers about how people live, work and spend their money, which is part of what pulled me toward economics and data in the first place.</p>
       </div>
       <div class="timeline">
         <div class="t-item"><div class="t-when">Ages 4–8</div><div class="t-what">South Korea</div><div class="t-sub">Four years of childhood abroad</div></div>
@@ -188,6 +204,24 @@
   </section>
 </div>
 
+<!-- TRAVEL -->
+<div class="wrap" id="travel">
+  <section class="reveal">
+    <div class="eyebrow">Travel</div>
+    <h2 class="h">16 countries,<br><em>3 continents</em></h2>
+    <p class="lede" style="font-size:15px">Hover a pin, or pick a country below to fly there. South Korea is the one I called home.</p>
+    <div class="map-box"><div id="travel-map"></div></div>
+    <div class="map-tools">
+      <div style="flex:1">
+        <div class="region-bar" id="region-bar"></div>
+        <div class="region-key" id="region-key"></div>
+      </div>
+      <button class="btn ghost" id="map-reset">Reset view</button>
+    </div>
+    <div class="country-chips" id="country-chips"></div>
+  </section>
+</div>
+
 <!-- INTERESTS -->
 <div class="wrap" id="interests">
   <section class="reveal">
@@ -197,8 +231,8 @@
       <div class="int">
         <svg class="int-ico" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="20" cy="20" r="15"/><path d="M5 20h30M20 5c5 4 7 9 7 15s-2 11-7 15M20 5c-5 4-7 9-7 15s2 11 7 15"/></svg>
         <h3>Travel</h3>
-        <p>Seventeen countries and counting. I like places where daily life looks different from home: what people eat, how they get around, what things cost.</p>
-        <span class="tag">17 countries</span>
+        <p>Sixteen countries and counting. I like places where daily life looks different from home: what people eat, how they get around, what things cost.</p>
+        <span class="tag">16 countries</span>
       </div>
       <div class="int">
         <svg class="int-ico" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="5" y="10" width="30" height="20"/><path d="M11 10v12M17 10v12M23 10v12M29 10v12"/><path d="M9 10v8h4v-8M21 10v8h4v-8" fill="currentColor" stroke="none"/></svg>
@@ -368,7 +402,7 @@ document.getElementById('play-chord').onclick=()=>[0,2,4].forEach(i=>tone(whites
 // ── ASK ME ──
 const QUESTIONS=[
   ['Travel','What do you remember most about living in Korea as a kid?'],
-  ['Travel','Of the 17 countries you\'ve visited, which surprised you the most?'],
+  ['Travel','Of the 16 countries you\'ve visited, which surprised you the most?'],
   ['Travel','Which country would you move to tomorrow if you could?'],
   ['Travel','What\'s the best meal you\'ve had abroad?'],
   ['Music & Books','What are you learning on the piano right now?'],
@@ -409,6 +443,67 @@ document.getElementById('shuffle').addEventListener('click',()=>{
   grid.querySelectorAll('.q').forEach(q=>q.classList.remove('flash'));
   const card=grid.children[i];card.classList.add('flash');setTimeout(()=>card.classList.remove('flash'),1600);
 });
+
+// ── TRAVEL MAP ──
+const PLACES=[
+  ['South Korea','KOR',37.57,126.98,'Asia','Lived here, ages 4–8'],
+  ['China','CHN',39.90,116.40,'Asia',''],
+  ['Canada','CAN',45.42,-75.70,'North America',''],
+  ['Mexico','MEX',19.43,-99.13,'North America',''],
+  ['Bahamas','BHS',25.04,-77.35,'Caribbean',''],
+  ['Puerto Rico','PRI',18.47,-66.11,'Caribbean',''],
+  ['Dominican Republic','DOM',18.49,-69.93,'Caribbean',''],
+  ['Aruba','ABW',12.52,-70.03,'Caribbean',''],
+  ['United Kingdom','GBR',51.51,-0.13,'Europe',''],
+  ['Scotland','GBR',55.95,-3.19,'Europe',''],
+  ['Netherlands','NLD',52.37,4.90,'Europe',''],
+  ['France','FRA',48.86,2.35,'Europe',''],
+  ['Monaco','MCO',43.74,7.42,'Europe',''],
+  ['Italy','ITA',41.90,12.50,'Europe',''],
+  ['Vatican City','VAT',41.90,12.45,'Europe',''],
+  ['Portugal','PRT',38.72,-9.14,'Europe','Lisbon']
+];
+const REGION_COL={'Europe':'#2d5a3d','Caribbean':'#c4a882','North America':'#8b5e35','Asia':'#6b4423'};
+const counts={};PLACES.forEach(p=>counts[p[4]]=(counts[p[4]]||0)+1);
+document.getElementById('region-bar').innerHTML=Object.entries(counts).map(([r,n])=>`<span style="width:${n/PLACES.length*100}%;background:${REGION_COL[r]}" title="${r}: ${n}"></span>`).join('');
+document.getElementById('region-key').innerHTML=Object.entries(counts).map(([r,n])=>`<span><i style="background:${REGION_COL[r]}"></i>${r} ${n}</span>`).join('');
+const chipBox=document.getElementById('country-chips');
+PLACES.forEach((p,i)=>{
+  const b=document.createElement('button');b.className='cc'+(p[0]==='South Korea'?' home':'');
+  b.textContent=p[0]+(p[5]==='Lisbon'?' · Lisbon':'');b.dataset.i=i;chipBox.appendChild(b);
+});
+const DEFAULT_GEO={projection:{type:'natural earth',scale:1.05,rotation:{lon:20}},center:{lon:20,lat:30}};
+function drawMap(){
+  if(typeof Plotly==='undefined'){document.getElementById('travel-map').innerHTML='<p class="map-fallback">The map needs an internet connection to load. Countries visited are listed below.</p>';return;}
+  const iso=[...new Set(PLACES.map(p=>p[1]))];
+  Plotly.newPlot('travel-map',[
+    {type:'choropleth',locationmode:'ISO-3',locations:iso,z:iso.map(()=>1),
+     colorscale:[[0,'#c9d6c8'],[1,'#c9d6c8']],showscale:false,hoverinfo:'skip',marker:{line:{color:'#f4f1ea',width:.5}}},
+    {type:'scattergeo',lat:PLACES.map(p=>p[2]),lon:PLACES.map(p=>p[3]),
+     text:PLACES.map(p=>p[0]),customdata:PLACES.map(p=>p[5]||p[4]),
+     mode:'markers',marker:{size:PLACES.map(p=>p[0]==='South Korea'?14:9),color:PLACES.map(p=>REGION_COL[p[4]]),line:{color:'#f4f1ea',width:1.5}},
+     hovertemplate:'<b>%{text}</b><br>%{customdata}<extra></extra>'}
+  ],{
+    paper_bgcolor:'transparent',margin:{t:0,r:0,b:0,l:0},showlegend:false,
+    hoverlabel:{bgcolor:'#1c1a14',bordercolor:'#1c1a14',font:{color:'#f4f1ea',family:"'JetBrains Mono',monospace",size:11}},
+    geo:{...DEFAULT_GEO,showframe:false,showcoastlines:false,showland:true,landcolor:'#dfd8cc',showocean:true,oceancolor:'#ebe6db',
+         showcountries:true,countrycolor:'#f4f1ea',countrywidth:.5,bgcolor:'transparent'}
+  },{displayModeBar:false,responsive:true,scrollZoom:false});
+}
+function flyTo(i){
+  if(typeof Plotly==='undefined')return;
+  const p=PLACES[i];
+  Plotly.relayout('travel-map',{'geo.center.lon':p[3],'geo.center.lat':p[2],'geo.projection.rotation.lon':p[3],'geo.projection.scale':4});
+}
+chipBox.addEventListener('click',e=>{
+  const b=e.target.closest('.cc');if(!b)return;
+  chipBox.querySelectorAll('.cc').forEach(x=>x.classList.remove('active'));b.classList.add('active');flyTo(+b.dataset.i);
+});
+document.getElementById('map-reset').addEventListener('click',()=>{
+  chipBox.querySelectorAll('.cc').forEach(x=>x.classList.remove('active'));
+  if(typeof Plotly!=='undefined')Plotly.relayout('travel-map',{'geo.center.lon':20,'geo.center.lat':30,'geo.projection.rotation.lon':20,'geo.projection.scale':1.05});
+});
+window.addEventListener('load',drawMap);
 </script>
 </body>
 </html>
