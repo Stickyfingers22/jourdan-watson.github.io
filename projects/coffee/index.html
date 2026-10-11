@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The World Runs on Coffee | Jourdan Watson</title>
+  <meta name="description" content="A data analysis of coffee across three lenses: the global commodity economy, the coffee shop industry, and caffeine habits."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+  <style>
+    :root{
+      --cream:#f4f1ea;--cream2:#ebe6db;--cream3:#dfd8cc;
+      --ink:#1c1a14;--ink2:#4a4235;--ink3:#8a8070;--ink4:#c0b8a8;
+      --forest:#2d5a3d;--forest2:#3d7a52;--bark:#6b4423;--bark2:#8b5e35;
+      --moss:#4a5e2a;--sand:#c4a882;
+      --espresso:#3b2417;--roast:#5c3a24;--crema:#c69c6d;--cherry:#8c2f22;
+      --border:rgba(30,24,14,.1);--border2:rgba(30,24,14,.2);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--cream);color:var(--ink);font-family:'Syne',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+    ::selection{background:var(--espresso);color:var(--cream);}
+
+    #scroll-bar{position:fixed;top:0;left:0;z-index:300;height:2px;width:0;background:linear-gradient(90deg,var(--roast),var(--crema));}
+
+    nav{position:sticky;top:0;z-index:100;background:rgba(244,241,234,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 3rem;display:flex;align-items:center;height:56px;gap:2rem;}
+    .back-link{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);text-decoration:none;transition:color .2s;}
+    .back-link:hover{color:var(--roast);}
+    .nav-title{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--ink2);font-style:italic;}
+    .nav-jump{display:flex;gap:4px;margin-left:auto;}
+    .nav-jump a{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);text-decoration:none;padding:6px 10px;border:1px solid transparent;transition:all .2s;}
+    .nav-jump a:hover,.nav-jump a.active{color:var(--espresso);border-color:var(--border2);background:var(--cream2);}
+    .nav-tag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--roast);border:1px solid rgba(92,58,36,.3);padding:4px 12px;background:rgba(92,58,36,.05);}
+
+    .wrap{max-width:1080px;margin:0 auto;padding:0 3rem;}
+    .section{padding:5rem 0;border-bottom:1px solid var(--border);}
+
+    /* HERO */
+    .proj-hero{padding:5rem 0 4rem;border-bottom:1px solid var(--border);display:grid;grid-template-columns:1fr 260px;gap:3rem;align-items:end;}
+    .proj-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--roast);margin-bottom:1.5rem;display:flex;align-items:center;gap:12px;}
+    .proj-eyebrow::before{content:'';width:28px;height:1px;background:var(--roast);}
+    .proj-title{font-family:'Cormorant Garamond',serif;font-size:clamp(52px,8vw,100px);font-weight:300;line-height:.92;letter-spacing:-.03em;margin-bottom:2rem;}
+    .proj-title em{font-style:italic;color:var(--roast);}
+    .proj-summary{font-size:16px;color:var(--ink2);line-height:1.85;max-width:620px;}
+    .cup-wrap{display:flex;justify-content:center;}
+    .cup{width:200px;height:auto;}
+    .steam path{stroke:var(--crema);stroke-width:2;fill:none;stroke-linecap:round;opacity:0;animation:steam 3.2s ease-in-out infinite;}
+    .steam path:nth-child(2){animation-delay:1s;}
+    .steam path:nth-child(3){animation-delay:2s;}
+    @keyframes steam{0%{opacity:0;transform:translateY(8px);}40%{opacity:.7;}100%{opacity:0;transform:translateY(-14px);}}
+    @media (prefers-reduced-motion:reduce){.steam path{animation:none;opacity:.5;}}
+
+    .proj-meta-row{display:flex;gap:3rem;flex-wrap:wrap;padding:2rem 0;border-bottom:1px solid var(--border);}
+    .proj-meta-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink4);margin-bottom:6px;}
+    .proj-meta-val{font-size:14px;font-weight:600;}
+    .proj-meta-val.accent{color:var(--roast);}
+
+    /* EXEC */
+    .exec-box{background:var(--espresso);color:var(--cream);padding:3rem;margin:4rem 0;position:relative;overflow:hidden;}
+    .exec-box::after{content:'';position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;border:30px solid rgba(198,156,109,.08);}
+    .exec-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(244,241,234,.5);margin-bottom:1.25rem;}
+    .exec-text{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;line-height:1.65;font-style:italic;position:relative;z-index:1;}
+    .exec-text strong{font-style:normal;font-weight:600;color:var(--crema);}
+
+    /* TABS for exec / 2-min / 5-min */
+    .pitch-tabs{display:flex;gap:0;border-bottom:1px solid var(--border2);margin-bottom:1.5rem;}
+    .pitch-tab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:10px 18px;background:none;border:none;border-bottom:2px solid transparent;color:var(--ink3);cursor:pointer;transition:all .2s;}
+    .pitch-tab.active{color:var(--espresso);border-bottom-color:var(--roast);}
+    .pitch-panel{display:none;font-size:15px;color:var(--ink2);line-height:1.9;max-width:760px;}
+    .pitch-panel.active{display:block;}
+    .pitch-panel p+p{margin-top:1rem;}
+
+    /* KPI */
+    .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:2.5rem 0;}
+    .kpi-card{background:var(--cream2);border:1px solid var(--border);padding:1.75rem;transition:border-color .2s,transform .2s;}
+    .kpi-card:hover{border-color:rgba(92,58,36,.35);transform:translateY(-2px);}
+    .kpi-num{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:300;line-height:1;margin-bottom:6px;color:var(--espresso);}
+    .kpi-num.crema{color:var(--bark2);}
+    .kpi-num.green{color:var(--forest);}
+    .kpi-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);}
+    .kpi-sub{font-size:11px;color:var(--ink3);margin-top:6px;line-height:1.5;}
+
+    /* PART HEADERS */
+    .part-head{display:grid;grid-template-columns:120px 1fr;gap:2rem;align-items:end;margin-bottom:2.5rem;}
+    .part-num{font-family:'Cormorant Garamond',serif;font-size:110px;font-weight:300;line-height:.8;color:var(--cream3);letter-spacing:-.04em;}
+    .section-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--roast);margin-bottom:1rem;display:flex;align-items:center;gap:10px;}
+    .section-eyebrow::before{content:'';width:20px;height:1px;background:var(--roast);}
+    .section-h{font-family:'Cormorant Garamond',serif;font-size:clamp(30px,4vw,48px);font-weight:300;line-height:1.08;letter-spacing:-.02em;}
+    .section-h em{font-style:italic;color:var(--roast);}
+    .section-body{font-size:15px;color:var(--ink2);line-height:1.85;max-width:720px;margin-bottom:2rem;}
+    .sub-h{font-size:17px;font-weight:600;margin:3rem 0 .75rem;}
+
+    /* CODE */
+    .code-wrap{margin:1.5rem 0 0;}
+    .code-header{display:flex;align-items:center;justify-content:space-between;gap:1rem;background:var(--ink);padding:.75rem 1.25rem;}
+    .code-lang{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(244,241,234,.4);}
+    .code-title{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(244,241,234,.75);flex:1;}
+    .code-copy{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,241,234,.5);background:none;border:1px solid rgba(255,255,255,.15);padding:4px 10px;cursor:pointer;}
+    .code-copy:hover{color:var(--cream);border-color:rgba(255,255,255,.4);}
+    pre{background:#141210;padding:1.5rem;overflow-x:auto;margin:0;}
+    code{font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.75;color:#d4cfc8;}
+    .kw{color:#a8c4a0;}.fn{color:#c4a882;}.str{color:#b8956a;}.cm{color:#6e665a;}.num{color:#8bb4a8;}
+
+    /* EXPLAIN GRID under code */
+    .explain{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--border);border-top:none;background:var(--cream2);margin-bottom:2.5rem;}
+    .explain div{padding:1rem 1.1rem;border-right:1px solid var(--border);font-size:12px;color:var(--ink2);line-height:1.65;}
+    .explain div:last-child{border-right:none;}
+    .explain b{display:block;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:400;letter-spacing:.12em;text-transform:uppercase;color:var(--roast);margin-bottom:6px;}
+
+    /* CHARTS */
+    .chart-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);margin:2.5rem 0 1rem;display:flex;align-items:center;gap:10px;}
+    .chart-label::before{content:'';width:16px;height:1px;background:var(--ink4);}
+    .chart-container{background:var(--cream2);border:1px solid var(--border);padding:1.25rem;}
+    .chart-note{font-size:12px;color:var(--ink3);margin-top:.6rem;line-height:1.6;}
+    .chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    .chart-grid .chart-label{margin-top:2.5rem;}
+    .chip-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:.75rem;}
+    .chip-btn{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;padding:6px 12px;border:1px solid var(--border2);background:var(--cream);color:var(--ink2);cursor:pointer;transition:all .2s;}
+    .chip-btn.active,.chip-btn:hover{background:var(--espresso);color:var(--cream);border-color:var(--espresso);}
+
+    /* CAFFEINE CALCULATOR */
+    .calc{display:grid;grid-template-columns:1fr 300px;gap:2rem;background:var(--cream2);border:1px solid var(--border);padding:2rem;margin-top:1rem;}
+    .calc-row{display:grid;grid-template-columns:1fr 110px;align-items:center;gap:1rem;padding:.6rem 0;border-bottom:1px solid var(--border);font-size:14px;}
+    .calc-row:last-child{border-bottom:none;}
+    .calc-row small{display:block;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink3);}
+    .stepper{display:flex;align-items:center;justify-content:flex-end;gap:8px;}
+    .stepper button{width:28px;height:28px;border:1px solid var(--border2);background:var(--cream);font-size:15px;cursor:pointer;color:var(--ink);}
+    .stepper button:hover{background:var(--espresso);color:var(--cream);}
+    .stepper span{font-family:'JetBrains Mono',monospace;font-size:13px;width:18px;text-align:center;}
+    .calc-out{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;border-left:1px solid var(--border);padding-left:2rem;}
+    .calc-mg{font-family:'Cormorant Garamond',serif;font-size:72px;font-weight:300;line-height:1;color:var(--espresso);}
+    .calc-unit{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:1rem;}
+    .meter{width:100%;height:8px;background:var(--cream3);position:relative;margin:.5rem 0;}
+    .meter-fill{height:100%;width:0;background:var(--forest);transition:width .4s,background .4s;}
+    .meter-mark{position:absolute;top:-4px;bottom:-4px;width:1px;background:var(--ink);}
+    .calc-verdict{font-size:13px;color:var(--ink2);line-height:1.6;margin-top:.75rem;min-height:3.2em;}
+
+    /* STATS METHOD CARDS */
+    .method-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:2rem;}
+    .method{background:var(--cream2);border:1px solid var(--border);padding:1.75rem;}
+    .method h4{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;margin-bottom:1rem;}
+    .method dl{display:grid;grid-template-columns:110px 1fr;gap:.6rem 1rem;font-size:13px;line-height:1.6;}
+    .method dt{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--roast);padding-top:3px;}
+    .method dd{color:var(--ink2);}
+
+    /* INSIGHTS */
+    .insight-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:2rem;}
+    .insight-card{background:var(--cream2);border:1px solid var(--border);border-left:3px solid var(--roast);padding:1.5rem;}
+    .insight-card.g{border-left-color:var(--forest);}
+    .insight-card.c{border-left-color:var(--crema);}
+    .insight-num{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;color:var(--roast);line-height:1;margin-bottom:6px;}
+    .insight-card.g .insight-num{color:var(--forest);}
+    .insight-card.c .insight-num{color:var(--bark2);}
+    .insight-label{font-size:13px;font-weight:600;margin-bottom:4px;}
+    .insight-sub{font-size:12px;color:var(--ink3);line-height:1.6;}
+
+    .rec{display:grid;grid-template-columns:48px 1fr;gap:2rem;padding:2rem 0;border-bottom:1px solid var(--border);}
+    .rec:first-of-type{border-top:1px solid var(--border);}
+    .rec-n{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:300;color:var(--cream3);line-height:1;}
+    .rec-t{font-size:16px;font-weight:600;margin-bottom:6px;}
+    .rec-d{font-size:14px;color:var(--ink2);line-height:1.8;}
+
+    /* STAR / QA */
+    .star-item{padding:2rem 0;border-bottom:1px solid var(--border);display:grid;grid-template-columns:80px 1fr;gap:2rem;}
+    .star-item:first-child{border-top:1px solid var(--border);}
+    .star-letter{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:300;line-height:1;color:var(--cream3);}
+    .star-word{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--roast);margin-top:4px;}
+    .star-text{font-size:14px;color:var(--ink2);line-height:1.8;}
+    .star-text strong{color:var(--ink);}
+    .qa-item{border-bottom:1px solid var(--border);padding:1.5rem 0;}
+    .qa-item:first-child{border-top:1px solid var(--border);}
+    .qa-q{display:flex;align-items:center;justify-content:space-between;gap:1rem;width:100%;background:none;border:none;text-align:left;cursor:pointer;font-family:'Syne',sans-serif;color:var(--ink);}
+    .qa-q-text{font-size:15px;font-weight:600;line-height:1.4;}
+    .qa-toggle{font-family:'JetBrains Mono',monospace;font-size:16px;color:var(--ink3);transition:transform .3s;}
+    .qa-item.open .qa-toggle{transform:rotate(45deg);color:var(--roast);}
+    .qa-a{font-size:14px;color:var(--ink2);line-height:1.85;max-height:0;overflow:hidden;transition:max-height .4s,padding .3s;}
+    .qa-item.open .qa-a{max-height:700px;padding-top:1rem;}
+
+    .bullets-box{background:var(--cream2);border:1px solid var(--border2);padding:2.5rem;margin-top:1rem;}
+    .bullets-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink3);margin-bottom:1.25rem;}
+    .bullet-item{display:flex;gap:1rem;font-size:14px;color:var(--ink2);line-height:1.7;margin-bottom:.75rem;}
+    .bullet-item::before{content:'→';color:var(--roast);flex-shrink:0;}
+    .skill-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:1.5rem;}
+    .stag{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink2);border:1px solid var(--border2);padding:5px 12px;transition:all .2s;}
+    .stag:hover{background:var(--espresso);color:var(--cream);border-color:var(--espresso);}
+
+    .source-note{font-size:12px;color:var(--ink3);line-height:1.7;border-left:2px solid var(--crema);padding:.75rem 1rem;background:var(--cream2);margin-top:2rem;}
+    .source-note a{color:var(--roast);}
+
+    .proj-footer{padding:3rem 0;display:flex;justify-content:space-between;}
+    .proj-footer a{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);text-decoration:none;}
+    .proj-footer a:hover{color:var(--roast);}
+
+    .reveal{opacity:0;transform:translateY(20px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1);}
+    .reveal.visible{opacity:1;transform:none;}
+
+    @media(max-width:860px){
+      nav{padding:0 1.5rem;}.nav-jump,.nav-title{display:none;}.nav-tag{margin-left:auto;}
+      .wrap{padding:0 1.5rem;}
+      .proj-hero{grid-template-columns:1fr;}.cup-wrap{display:none;}
+      .kpi-grid{grid-template-columns:repeat(2,1fr);}
+      .chart-grid,.method-grid,.insight-grid{grid-template-columns:1fr;}
+      .explain{grid-template-columns:1fr;}.explain div{border-right:none;border-bottom:1px solid var(--border);}
+      .part-head{grid-template-columns:1fr;}.part-num{font-size:64px;}
+      .calc{grid-template-columns:1fr;}.calc-out{border-left:none;padding-left:0;border-top:1px solid var(--border);padding-top:1.5rem;}
+      .star-item{grid-template-columns:1fr;gap:.5rem;}
+      .method dl{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+<div id="scroll-bar"></div>
+
+<nav>
+  <a href="../../index.html" class="back-link">← Portfolio</a>
+  <span class="nav-title">The World Runs on Coffee</span>
+  <div class="nav-jump">
+    <a href="#economy">Economy</a>
+    <a href="#industry">Industry</a>
+    <a href="#caffeine">Caffeine</a>
+    <a href="#models">Models</a>
+    <a href="#interview">Interview</a>
+  </div>
+  <span class="nav-tag">Consumer · Commodities</span>
+</nav>
+
+<!-- HERO -->
+<div class="wrap">
+  <header class="proj-hero">
+    <div>
+      <div class="proj-eyebrow">Project 02 · Three-Lens Analysis</div>
+      <h1 class="proj-title">The World<br><em>Runs on Coffee</em></h1>
+      <p class="proj-summary">One drink, three datasets. This project follows coffee from the farm to the café counter to the bloodstream: who grows it and why its price swings, how chains like Starbucks turned a commodity into a $6 product, and how much caffeine people actually consume against health guidelines.</p>
+    </div>
+    <div class="cup-wrap" aria-hidden="true">
+      <svg class="cup" viewBox="0 0 200 200">
+        <g class="steam">
+          <path d="M80 60 q-8 -14 0 -26 q8 -12 0 -24"/>
+          <path d="M100 60 q-8 -14 0 -26 q8 -12 0 -24"/>
+          <path d="M120 60 q-8 -14 0 -26 q8 -12 0 -24"/>
+        </g>
+        <ellipse cx="100" cy="176" rx="72" ry="10" fill="#dfd8cc"/>
+        <path d="M44 72 h112 l-10 86 q-2 14 -16 14 h-60 q-14 0 -16 -14 z" fill="#3b2417"/>
+        <path d="M156 88 q26 0 26 22 q0 22 -30 26" fill="none" stroke="#3b2417" stroke-width="10" stroke-linecap="round"/>
+        <ellipse cx="100" cy="72" rx="56" ry="9" fill="#c69c6d"/>
+        <ellipse cx="100" cy="72" rx="44" ry="6" fill="#8b5e35"/>
+      </svg>
+    </div>
+  </header>
+
+  <div class="proj-meta-row">
+    <div><div class="proj-meta-label">Lenses</div><div class="proj-meta-val">Economy · Industry · Behavior</div></div>
+    <div><div class="proj-meta-label">Data Sources</div><div class="proj-meta-val">USDA FAS · IMF via FRED · ICO · Starbucks 10-K · FDA</div></div>
+    <div><div class="proj-meta-label">Methods</div><div class="proj-meta-val">Time Series · Clustering · Regression · ANOVA</div></div>
+    <div><div class="proj-meta-label">Tools</div><div class="proj-meta-val">SQL · Python · Statsmodels · Scikit-Learn · Plotly</div></div>
+    <div><div class="proj-meta-label">Core Question</div><div class="proj-meta-val accent">What sets the price of a cup, and who captures the value?</div></div>
+  </div>
+
+  <!-- EXEC SUMMARY -->
+  <div class="exec-box reveal">
+    <div class="exec-label">30-Second Executive Summary</div>
+    <div class="exec-text">
+      Roughly <strong>two-thirds of the world's coffee comes from five countries</strong>, and Brazil alone grows about a third. That concentration means one bad Brazilian harvest moves global prices: arabica futures hit <strong>record highs above $4 per pound in early 2025</strong> after drought cut supply. Yet in a café, the beans are a <strong>small slice of a $5–6 latte</strong>; rent, labor, milk and margin are most of it. The value in coffee is captured downstream, by the brands that control the experience, not the farms that grow the crop.
+    </div>
+  </div>
+
+  <div class="kpi-grid reveal">
+    <div class="kpi-card">
+      <div class="kpi-num">~175M</div>
+      <div class="kpi-label">Bags Produced / Year</div>
+      <div class="kpi-sub">60 kg bags, world, 2024/25 (USDA FAS)</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num crema">~37%</div>
+      <div class="kpi-label">Brazil's Share</div>
+      <div class="kpi-sub">Largest single producer by a wide margin</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num">$4+/lb</div>
+      <div class="kpi-label">Arabica Record</div>
+      <div class="kpi-sub">ICE futures peak, early 2025</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num green">400 mg</div>
+      <div class="kpi-label">FDA Daily Guideline</div>
+      <div class="kpi-sub">Caffeine limit for most healthy adults</div>
+    </div>
+  </div>
+
+  <div class="pitch-tabs" role="tablist">
+    <button class="pitch-tab active" data-panel="p2" role="tab">2-Minute · Hiring Manager</button>
+    <button class="pitch-tab" data-panel="p5" role="tab">5-Minute · Senior Data Scientist</button>
+  </div>
+  <div class="pitch-panel active" id="p2">
+    <p>I built a three-part analysis on coffee because it is a rare product where you can follow one item through a full value chain with public data. Part one uses USDA production data and IMF price series to show how concentrated supply is and how Brazilian harvests drive price shocks. Part two looks at the café industry: Starbucks store growth from its 10-K filings and a cost breakdown of a latte to show where the money goes. Part three covers consumption: caffeine content by drink against the FDA's 400 mg guideline, with an interactive calculator.</p>
+    <p>Technically, it covers SQL with CTEs and window functions for year-over-year changes and rankings, a seasonal time series decomposition and Holt-Winters forecast of prices, K-means clustering of countries into producer and consumer profiles, and a regression of price changes on lagged Brazilian output.</p>
+  </div>
+  <div class="pitch-panel" id="p5">
+    <p>The price model is the interesting part. Monthly arabica prices are non-stationary with heavy volatility clustering, so I log-transform, check an ADF test, and work in log returns for the regression. The explanatory variable is the year-over-year change in Brazilian production lagged one crop year, because futures traders price expected supply, and the realized harvest confirms or corrects that. I report the coefficient with HAC (Newey-West) standard errors, since monthly residuals are autocorrelated.</p>
+    <p>For the forecast I use additive Holt-Winters on the log series and evaluate on a held-out final 24 months against a naive random-walk benchmark using MAPE. Commodity prices are close to a random walk, so the honest result is usually that the model barely beats naive; I treat the forecast as a scenario band, not a point prediction. The clustering standardizes production, consumption per capita and export share, picks k with silhouette scores, and the result separates large exporters, high-consumption importers, and producers that also drink most of what they grow, like Ethiopia.</p>
+    <p>The main limitation is that the price series is a global average; it hides quality premiums and the share of the export price that reaches farmers, which needs farm-gate data I don't have.</p>
+  </div>
+</div>
+
+<!-- PART I · ECONOMY -->
+<div class="wrap" id="economy">
+  <section class="section reveal">
+    <div class="part-head">
+      <div class="part-num">I</div>
+      <div>
+        <div class="section-eyebrow">The Global Economy</div>
+        <h2 class="section-h">From the farm:<br><em>who grows it, and what it costs</em></h2>
+      </div>
+    </div>
+    <p class="section-body">Coffee grows in a narrow band between the tropics, mostly on smallholder farms. Supply is concentrated, demand is spread across the world, and the price in between is set on futures exchanges in New York (arabica) and London (robusta).</p>
+
+    <div class="chart-label">Fig 1 — Top Producing Countries, 2024/25 (million 60 kg bags)</div>
+    <div class="chart-container"><div id="chart-producers" style="height:360px;"></div></div>
+    <p class="chart-note">Approximate USDA Foreign Agricultural Service estimates. Brazil grows mostly arabica; Vietnam grows mostly robusta, the cheaper bean used in instant coffee and blends.</p>
+
+    <div class="chart-label">Fig 2 — Global Coffee Price, Annual Average (US cents / lb)</div>
+    <div class="chip-row" id="price-toggle">
+      <button class="chip-btn active" data-range="all">2010–2025</button>
+      <button class="chip-btn" data-range="recent">2020–2025</button>
+    </div>
+    <div class="chart-container"><div id="chart-price" style="height:340px;"></div></div>
+    <p class="chart-note">Approximate ICO composite indicator annual averages. The 2021–22 spike followed Brazil's 2021 frost; the 2024–25 surge followed drought in Brazil and lower robusta output in Vietnam.</p>
+
+    <div class="chart-label">Fig 3 — Who Drinks the Most? Consumption per Person (kg / year)</div>
+    <div class="chart-container"><div id="chart-percap" style="height:340px;"></div></div>
+    <p class="chart-note">Approximate per-capita figures from ICO and national statistics. The Nordic countries lead; the U.S. drinks the most coffee in total but sits mid-table per person.</p>
+
+    <h3 class="sub-h">SQL · Schema and queries</h3>
+    <p class="section-body" style="margin-bottom:0">A small star schema: a country dimension with yearly production and consumption facts, plus a monthly price fact table.</p>
+
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">SQL</span><span class="code-title">Schema — coffee_warehouse</span><button class="code-copy">Copy</button></div>
+      <pre><code><span class="kw">CREATE TABLE</span> dim_country (
+    country_code   <span class="kw">CHAR</span>(<span class="num">3</span>) <span class="kw">PRIMARY KEY</span>,   <span class="cm">-- ISO-3</span>
+    country_name   <span class="kw">VARCHAR</span>(<span class="num">80</span>),
+    region         <span class="kw">VARCHAR</span>(<span class="num">40</span>),
+    population_m   <span class="kw">DECIMAL</span>(<span class="num">8</span>,<span class="num">2</span>)
+);
+
+<span class="kw">CREATE TABLE</span> fact_supply (               <span class="cm">-- one row per country per marketing year</span>
+    country_code   <span class="kw">CHAR</span>(<span class="num">3</span>) <span class="kw">REFERENCES</span> dim_country,
+    market_year    <span class="kw">SMALLINT</span>,
+    production_kb  <span class="kw">INT</span>,       <span class="cm">-- thousand 60 kg bags</span>
+    arabica_kb     <span class="kw">INT</span>,
+    robusta_kb     <span class="kw">INT</span>,
+    exports_kb     <span class="kw">INT</span>,
+    consumption_kb <span class="kw">INT</span>,
+    <span class="kw">PRIMARY KEY</span> (country_code, market_year)
+);
+
+<span class="kw">CREATE TABLE</span> fact_price (                <span class="cm">-- monthly benchmark prices</span>
+    price_month    <span class="kw">DATE PRIMARY KEY</span>,
+    arabica_c_lb   <span class="kw">DECIMAL</span>(<span class="num">7</span>,<span class="num">2</span>),  <span class="cm">-- US cents per pound</span>
+    robusta_c_lb   <span class="kw">DECIMAL</span>(<span class="num">7</span>,<span class="num">2</span>)
+);</code></pre>
+    </div>
+    <div class="explain">
+      <div><b>What</b>Two fact tables at different grains (yearly supply, monthly price) sharing a country dimension.</div>
+      <div><b>Why</b>Keeping grains separate avoids duplicating yearly values onto 12 monthly rows.</div>
+      <div><b>Business value</b>Lets an importer join supply shocks to price moves without manual spreadsheets.</div>
+      <div><b>Output</b>~60 countries × 15 years of supply; ~190 monthly price rows.</div>
+      <div><b>Talking point</b>Explain grain choice: mixing grains in one table is a classic double-counting bug.</div>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">SQL</span><span class="code-title">Query 1 — Market share, rank and running total (CTE + window functions)</span><button class="code-copy">Copy</button></div>
+      <pre><code><span class="kw">WITH</span> y <span class="kw">AS</span> (
+    <span class="kw">SELECT</span> c.country_name, s.production_kb
+    <span class="kw">FROM</span> fact_supply s
+    <span class="kw">JOIN</span> dim_country c <span class="kw">USING</span> (country_code)
+    <span class="kw">WHERE</span> s.market_year = <span class="num">2024</span>
+)
+<span class="kw">SELECT</span>
+    country_name,
+    production_kb,
+    <span class="fn">RANK</span>() <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> production_kb <span class="kw">DESC</span>)                 <span class="kw">AS</span> producer_rank,
+    <span class="fn">ROUND</span>(<span class="num">100.0</span> * production_kb / <span class="fn">SUM</span>(production_kb) <span class="kw">OVER</span> (), <span class="num">1</span>)   <span class="kw">AS</span> share_pct,
+    <span class="fn">ROUND</span>(<span class="num">100.0</span> * <span class="fn">SUM</span>(production_kb) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> production_kb <span class="kw">DESC</span>)
+          / <span class="fn">SUM</span>(production_kb) <span class="kw">OVER</span> (), <span class="num">1</span>)                         <span class="kw">AS</span> cumulative_pct
+<span class="kw">FROM</span> y
+<span class="kw">ORDER BY</span> producer_rank
+<span class="kw">LIMIT</span> <span class="num">10</span>;</code></pre>
+    </div>
+    <div class="explain">
+      <div><b>What</b>Ranks producers and computes each country's share and the running cumulative share.</div>
+      <div><b>Why</b>A running total answers "how many countries make up most of supply?" in one pass.</div>
+      <div><b>Business value</b>Quantifies supply concentration risk for a buyer sourcing beans.</div>
+      <div><b>Output</b>Brazil #1 near 37%; cumulative share passes ~65% by the fifth country.</div>
+      <div><b>Talking point</b><code>SUM() OVER ()</code> with an empty window is the grand total; adding <code>ORDER BY</code> makes it running.</div>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">SQL</span><span class="code-title">Query 2 — Year-over-year price change and shock flag (LAG + CASE)</span><button class="code-copy">Copy</button></div>
+      <pre><code><span class="kw">WITH</span> annual <span class="kw">AS</span> (
+    <span class="kw">SELECT</span> <span class="fn">EXTRACT</span>(<span class="kw">YEAR FROM</span> price_month) <span class="kw">AS</span> yr,
+           <span class="fn">AVG</span>(arabica_c_lb)               <span class="kw">AS</span> avg_price
+    <span class="kw">FROM</span> fact_price
+    <span class="kw">GROUP BY</span> <span class="num">1</span>
+),
+brazil <span class="kw">AS</span> (
+    <span class="kw">SELECT</span> market_year <span class="kw">AS</span> yr, production_kb
+    <span class="kw">FROM</span> fact_supply <span class="kw">WHERE</span> country_code = <span class="str">'BRA'</span>
+)
+<span class="kw">SELECT</span>
+    a.yr,
+    <span class="fn">ROUND</span>(a.avg_price, <span class="num">1</span>)                                              <span class="kw">AS</span> avg_price,
+    <span class="fn">ROUND</span>(<span class="num">100.0</span> * (a.avg_price / <span class="fn">LAG</span>(a.avg_price) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> a.yr) - <span class="num">1</span>), <span class="num">1</span>) <span class="kw">AS</span> price_yoy_pct,
+    <span class="fn">ROUND</span>(<span class="num">100.0</span> * (b.production_kb / <span class="fn">LAG</span>(b.production_kb) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> a.yr) - <span class="num">1</span>), <span class="num">1</span>) <span class="kw">AS</span> brazil_yoy_pct,
+    <span class="kw">CASE</span>
+        <span class="kw">WHEN</span> a.avg_price / <span class="fn">LAG</span>(a.avg_price) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> a.yr) > <span class="num">1.25</span> <span class="kw">THEN</span> <span class="str">'price shock'</span>
+        <span class="kw">WHEN</span> a.avg_price / <span class="fn">LAG</span>(a.avg_price) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> a.yr) < <span class="num">0.80</span> <span class="kw">THEN</span> <span class="str">'price collapse'</span>
+        <span class="kw">ELSE</span> <span class="str">'normal'</span>
+    <span class="kw">END</span>                                                              <span class="kw">AS</span> regime
+<span class="kw">FROM</span> annual a
+<span class="kw">LEFT JOIN</span> brazil b <span class="kw">USING</span> (yr)
+<span class="kw">ORDER BY</span> a.yr;</code></pre>
+    </div>
+    <div class="explain">
+      <div><b>What</b>Annual average price, its year-over-year change, Brazil's output change, and a labeled regime.</div>
+      <div><b>Why</b>Puts supply and price side by side so you can see whether shocks line up with harvests.</div>
+      <div><b>Business value</b>A roaster can flag years where hedging would have mattered most.</div>
+      <div><b>Output</b>2021, 2022 and 2024 flagged as shocks; 2018–19 as a soft period.</div>
+      <div><b>Talking point</b><code>LEFT JOIN</code> keeps price years even when supply data lags a year behind.</div>
+    </div>
+  </section>
+</div>
+
+<!-- PART II · INDUSTRY -->
+<div class="wrap" id="industry">
+  <section class="section reveal">
+    <div class="part-head">
+      <div class="part-num">II</div>
+      <div>
+        <div class="section-eyebrow">The Coffee Shop Industry</div>
+        <h2 class="section-h">To the counter:<br><em>how a commodity becomes a brand</em></h2>
+      </div>
+    </div>
+    <p class="section-body">A pound of green arabica makes roughly 40 to 50 cups. Even at record prices, the beans in one latte cost well under a dollar. The rest of the menu price pays for the location, the people, the milk, and the brand.</p>
+
+    <div class="chart-grid">
+      <div>
+        <div class="chart-label">Fig 4 — Where a $5.75 Latte's Money Goes</div>
+        <div class="chart-container"><div id="chart-latte" style="height:330px;"></div></div>
+        <p class="chart-note">Illustrative cost model built from typical café cost ratios (labor ~30%, occupancy ~10–15%, cost of goods ~25–30%). Individual shops vary widely.</p>
+      </div>
+      <div>
+        <div class="chart-label">Fig 5 — Starbucks Global Store Count</div>
+        <div class="chart-container"><div id="chart-sbux" style="height:330px;"></div></div>
+        <p class="chart-note">Approximate fiscal year-end counts from Starbucks annual 10-K filings. Growth since 2019 has been driven mostly by China and drive-thru formats.</p>
+      </div>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">SQL</span><span class="code-title">Query 3 — Store growth by region with ranking (JOIN + PARTITION BY)</span><button class="code-copy">Copy</button></div>
+      <pre><code><span class="cm">-- fact_stores: one row per fiscal year per region, from 10-K store tables</span>
+<span class="kw">WITH</span> growth <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>
+        region,
+        fiscal_year,
+        store_count,
+        store_count - <span class="fn">LAG</span>(store_count) <span class="kw">OVER</span> (
+            <span class="kw">PARTITION BY</span> region <span class="kw">ORDER BY</span> fiscal_year)   <span class="kw">AS</span> net_new
+    <span class="kw">FROM</span> fact_stores
+)
+<span class="kw">SELECT</span>
+    region,
+    <span class="fn">SUM</span>(net_new)                                     <span class="kw">AS</span> net_new_2019_2024,
+    <span class="fn">DENSE_RANK</span>() <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> <span class="fn">SUM</span>(net_new) <span class="kw">DESC</span>)      <span class="kw">AS</span> growth_rank,
+    <span class="fn">ROUND</span>(<span class="num">100.0</span> * <span class="fn">SUM</span>(net_new) / <span class="fn">SUM</span>(<span class="fn">SUM</span>(net_new)) <span class="kw">OVER</span> (), <span class="num">1</span>) <span class="kw">AS</span> share_of_growth_pct
+<span class="kw">FROM</span> growth
+<span class="kw">WHERE</span> fiscal_year <span class="kw">BETWEEN</span> <span class="num">2020</span> <span class="kw">AND</span> <span class="num">2024</span>
+<span class="kw">GROUP BY</span> region
+<span class="kw">ORDER BY</span> growth_rank;</code></pre>
+    </div>
+    <div class="explain">
+      <div><b>What</b>Net new stores per region over five years and each region's share of total growth.</div>
+      <div><b>Why</b><code>PARTITION BY</code> restarts <code>LAG</code> for each region so years don't bleed across regions.</div>
+      <div><b>Business value</b>Shows where a chain is betting its expansion capital.</div>
+      <div><b>Output</b>China and U.S. account for most net new stores.</div>
+      <div><b>Talking point</b><code>SUM(SUM(x)) OVER ()</code>: an aggregate inside a window, evaluated after GROUP BY.</div>
+    </div>
+  </section>
+</div>
+
+<!-- PART III · CAFFEINE -->
+<div class="wrap" id="caffeine">
+  <section class="section reveal">
+    <div class="part-head">
+      <div class="part-num">III</div>
+      <div>
+        <div class="section-eyebrow">The Habit</div>
+        <h2 class="section-h">Into the bloodstream:<br><em>how much caffeine is too much?</em></h2>
+      </div>
+    </div>
+    <p class="section-body">Caffeine is the most widely used psychoactive substance in the world. Regular users build tolerance and get withdrawal headaches when they stop, which is part of why coffee demand barely moves when prices rise. The FDA puts the safe daily amount for most healthy adults at about 400 mg.</p>
+
+    <div class="chart-label">Fig 6 — Caffeine by Drink (mg per serving)</div>
+    <div class="chart-container"><div id="chart-caffeine" style="height:380px;"></div></div>
+    <p class="chart-note">Typical values; actual content varies by bean, roast and brew method. The dashed line marks the FDA's 400 mg daily guideline. A single large drip coffee from a major chain can supply most of it.</p>
+
+    <div class="chart-label">Interactive — Build Your Day</div>
+    <div class="calc" id="calc">
+      <div id="calc-rows"></div>
+      <div class="calc-out">
+        <div class="calc-mg" id="calc-mg">0</div>
+        <div class="calc-unit">mg caffeine today</div>
+        <div class="meter"><div class="meter-fill" id="meter-fill"></div><div class="meter-mark" style="left:66.7%"></div></div>
+        <div style="display:flex;justify-content:space-between;width:100%;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink3);"><span>0</span><span style="margin-left:auto;margin-right:8%">400 FDA</span><span>600</span></div>
+        <div class="calc-verdict" id="calc-verdict">Add drinks to see where your day lands.</div>
+      </div>
+    </div>
+
+    <div class="chart-label">Fig 7 — Daily Coffee Drinking by Age, U.S. Adults (% who drank coffee yesterday)</div>
+    <div class="chart-container"><div id="chart-age" style="height:300px;"></div></div>
+    <p class="chart-note">Approximate figures from the National Coffee Association's National Coffee Data Trends survey. Daily drinking rises with age, while younger drinkers lean toward cold brew and espresso drinks.</p>
+  </section>
+</div>
+
+<!-- MODELS -->
+<div class="wrap" id="models">
+  <section class="section reveal">
+    <div class="section-eyebrow">Python · Statistical Modeling</div>
+    <h2 class="section-h" style="margin-bottom:2rem">Four models,<br><em>one per question</em></h2>
+
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">Python</span><span class="code-title">1 · Load the warehouse tables produced by fetch_data.py</span><button class="code-copy">Copy</button></div>
+      <pre><code><span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">import</span> pandas <span class="kw">as</span> pd
+
+supply = pd.<span class="fn">read_csv</span>(<span class="str">"data/supply.csv"</span>)              <span class="cm"># country, market_year, production_kb, ...</span>
+price  = pd.<span class="fn">read_csv</span>(<span class="str">"data/price_monthly.csv"</span>,       <span class="cm"># date, arabica_c_lb</span>
+                     parse_dates=[<span class="str">"date"</span>], index_col=<span class="str">"date"</span>)
+price  = price.<span class="fn">asfreq</span>(<span class="str">"MS"</span>)                           <span class="cm"># enforce month-start frequency</span>
+price[<span class="str">"log_p"</span>] = np.<span class="fn">log</span>(price[<span class="str">"arabica_c_lb"</span>])          <span class="cm"># multiplicative swings become additive</span>
+<span class="fn">print</span>(price.<span class="fn">tail</span>(), supply.shape)</code></pre>
+    </div>
+    <div class="explain">
+      <div><b>Line by line</b>Reads two tables, sets a monthly index, adds a log price column.</div>
+      <div><b>Business</b>One reproducible source of truth instead of copied spreadsheet numbers.</div>
+      <div><b>Statistics</b>Log prices make a 20% move look the same at 100¢ and at 300¢.</div>
+      <div><b>Output</b>Last five monthly prices and the supply table's dimensions.</div>
+      <div><b>Interview</b>"I log-transform because commodity moves are proportional, not absolute."</div>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">Python</span><span class="code-title">2 · Decompose and forecast price (Statsmodels)</span><button class="code-copy">Copy</button></div>
+      <pre><code><span class="kw">from</span> statsmodels.tsa.seasonal <span class="kw">import</span> STL
+<span class="kw">from</span> statsmodels.tsa.stattools <span class="kw">import</span> adfuller
+<span class="kw">from</span> statsmodels.tsa.holtwinters <span class="kw">import</span> ExponentialSmoothing
+
+y = price[<span class="str">"log_p"</span>].<span class="fn">dropna</span>()
+
+<span class="cm"># Stationarity check: a high p-value means the level wanders (random-walk-like)</span>
+<span class="fn">print</span>(<span class="str">"ADF p-value:"</span>, <span class="fn">round</span>(<span class="fn">adfuller</span>(y)[<span class="num">1</span>], <span class="num">3</span>))
+
+<span class="cm"># Split trend / seasonal / remainder</span>
+stl = <span class="fn">STL</span>(y, period=<span class="num">12</span>, robust=<span class="kw">True</span>).<span class="fn">fit</span>()
+
+<span class="cm"># Hold out the last 24 months for honest evaluation</span>
+train, test = y[:-<span class="num">24</span>], y[-<span class="num">24</span>:]
+hw = <span class="fn">ExponentialSmoothing</span>(train, trend=<span class="str">"add"</span>, damped_trend=<span class="kw">True</span>,
+                          seasonal=<span class="str">"add"</span>, seasonal_periods=<span class="num">12</span>).<span class="fn">fit</span>()
+fc = np.<span class="fn">exp</span>(hw.<span class="fn">forecast</span>(<span class="num">24</span>))
+naive = np.<span class="fn">repeat</span>(np.<span class="fn">exp</span>(train.iloc[-<span class="num">1</span>]), <span class="num">24</span>)       <span class="cm"># random-walk benchmark</span>
+
+mape = <span class="kw">lambda</span> a, f: np.<span class="fn">mean</span>(np.<span class="fn">abs</span>((a - f) / a)) * <span class="num">100</span>
+actual = np.<span class="fn">exp</span>(test)
+<span class="fn">print</span>(<span class="str">f"Holt-Winters MAPE: {mape(actual, fc):.1f}%  |  Naive MAPE: {mape(actual, naive):.1f}%"</span>)</code></pre>
+    </div>
+    <div class="explain">
+      <div><b>Line by line</b>ADF test, STL decomposition, damped Holt-Winters fit on training months, compared to naive.</div>
+      <div><b>Business</b>Gives a buyer a price range for budgeting a year of bean purchases.</div>
+      <div><b>Statistics</b>Damped trend stops the forecast from extrapolating a spike forever.</div>
+      <div><b>Output</b>Two MAPE values; the gap between them is the model's real value.</div>
+      <div><b>Interview</b>"Always beat naive first; commodity prices are hard to forecast."</div>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">Python</span><span class="code-title">3 · Does Brazil's harvest move the price? (OLS with Newey-West errors)</span><button class="code-copy">Copy</button></div>
+      <pre><code><span class="kw">import</span> statsmodels.api <span class="kw">as</span> sm
+
+annual = price[<span class="str">"arabica_c_lb"</span>].<span class="fn">resample</span>(<span class="str">"YS"</span>).<span class="fn">mean</span>().<span class="fn">to_frame</span>(<span class="str">"p"</span>)
+annual[<span class="str">"yr"</span>] = annual.index.year
+bra = supply.<span class="fn">query</span>(<span class="str">"country_code == 'BRA'"</span>)[[<span class="str">"market_year"</span>, <span class="str">"production_kb"</span>]]
+
+df = annual.<span class="fn">merge</span>(bra, left_on=<span class="str">"yr"</span>, right_on=<span class="str">"market_year"</span>)
+df[<span class="str">"price_ret"</span>]  = np.<span class="fn">log</span>(df[<span class="str">"p"</span>]).<span class="fn">diff</span>()                  <span class="cm"># % change in price</span>
+df[<span class="str">"brazil_chg"</span>] = np.<span class="fn">log</span>(df[<span class="str">"production_kb"</span>]).<span class="fn">diff</span>()       <span class="cm"># % change in output</span>
+df = df.<span class="fn">dropna</span>()
+
+X = sm.<span class="fn">add_constant</span>(df[[<span class="str">"brazil_chg"</span>]])
+model = sm.<span class="fn">OLS</span>(df[<span class="str">"price_ret"</span>], X).<span class="fn">fit</span>(cov_type=<span class="str">"HAC"</span>, cov_kwds={<span class="str">"maxlags"</span>: <span class="num">1</span>})
+<span class="fn">print</span>(model.<span class="fn">summary</span>().tables[<span class="num">1</span>])
+<span class="cm"># Expect a negative coefficient: bigger Brazilian crop → lower price</span></code></pre>
+    </div>
+    <div class="explain">
+      <div><b>Line by line</b>Annual prices joined to Brazil output, both converted to log changes, regressed.</div>
+      <div><b>Business</b>Tells a buyer how much to worry when Brazil forecasts a short crop.</div>
+      <div><b>Statistics</b>Differencing removes trends that would create a fake correlation; HAC fixes autocorrelated errors.</div>
+      <div><b>Output</b>Coefficient, robust standard error, p-value for <code>brazil_chg</code>.</div>
+      <div><b>Interview</b>"With ~15 annual points, I report direction and uncertainty, not a precise elasticity."</div>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">Python</span><span class="code-title">4 · Cluster countries into coffee profiles (K-means) + ANOVA</span><button class="code-copy">Copy</button></div>
+      <pre><code><span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> StandardScaler
+<span class="kw">from</span> sklearn.cluster <span class="kw">import</span> KMeans
+<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> silhouette_score
+<span class="kw">from</span> scipy.stats <span class="kw">import</span> f_oneway
+
+latest = supply.<span class="fn">query</span>(<span class="str">"market_year == market_year.max()"</span>).<span class="fn">copy</span>()
+latest[<span class="str">"export_ratio"</span>]  = latest.exports_kb / latest.production_kb.<span class="fn">clip</span>(lower=<span class="num">1</span>)
+latest[<span class="str">"log_production"</span>] = np.<span class="fn">log1p</span>(latest.production_kb)
+latest[<span class="str">"log_consumption"</span>] = np.<span class="fn">log1p</span>(latest.consumption_kb)
+feats = [<span class="str">"log_production"</span>, <span class="str">"log_consumption"</span>, <span class="str">"export_ratio"</span>]
+
+Z = <span class="fn">StandardScaler</span>().<span class="fn">fit_transform</span>(latest[feats])     <span class="cm"># equal weight per feature</span>
+scores = {k: <span class="fn">silhouette_score</span>(Z, <span class="fn">KMeans</span>(k, n_init=<span class="num">20</span>, random_state=<span class="num">42</span>).<span class="fn">fit_predict</span>(Z))
+          <span class="kw">for</span> k <span class="kw">in</span> <span class="fn">range</span>(<span class="num">2</span>, <span class="num">7</span>)}
+best_k = <span class="fn">max</span>(scores, key=scores.get)
+latest[<span class="str">"cluster"</span>] = <span class="fn">KMeans</span>(best_k, n_init=<span class="num">20</span>, random_state=<span class="num">42</span>).<span class="fn">fit_predict</span>(Z)
+<span class="fn">print</span>(<span class="str">"silhouette by k:"</span>, scores)
+<span class="fn">print</span>(latest.<span class="fn">groupby</span>(<span class="str">"cluster"</span>)[feats].<span class="fn">mean</span>().<span class="fn">round</span>(<span class="num">2</span>))
+
+<span class="cm"># Do the clusters differ on export_ratio? One-way ANOVA</span>
+groups = [g.export_ratio.values <span class="kw">for</span> _, g <span class="kw">in</span> latest.<span class="fn">groupby</span>(<span class="str">"cluster"</span>)]
+<span class="fn">print</span>(<span class="str">"ANOVA:"</span>, <span class="fn">f_oneway</span>(*groups))</code></pre>
+    </div>
+    <div class="explain">
+      <div><b>Line by line</b>Builds three features, standardizes, chooses k by silhouette, labels clusters, tests differences.</div>
+      <div><b>Business</b>Segments markets: where to source beans vs where to sell finished coffee.</div>
+      <div><b>Statistics</b>Logs tame Brazil's size; scaling stops one feature from dominating distances.</div>
+      <div><b>Output</b>Silhouette per k, cluster means, an F-statistic and p-value.</div>
+      <div><b>Interview</b>"ANOVA here is descriptive; clusters are built to differ, so a low p-value is expected."</div>
+    </div>
+
+    <div class="chart-label">Fig 8 — Country Profiles: Production vs Consumption (log scale)</div>
+    <div class="chart-container"><div id="chart-cluster" style="height:400px;"></div></div>
+    <p class="chart-note">Approximate values. Colors show three profiles the clustering is designed to separate. Hover any point.</p>
+
+    <h3 class="sub-h">Why each method, and where it breaks</h3>
+    <div class="method-grid">
+      <div class="method"><h4>Time series forecast</h4><dl>
+        <dt>Why</dt><dd>Monthly prices have trend and mild seasonality around harvest cycles.</dd>
+        <dt>Assumes</dt><dd>Past structure continues; errors are roughly constant in log terms.</dd>
+        <dt>Read it as</dt><dd>A scenario range for budgeting, not a call on next month's price.</dd>
+        <dt>Limits</dt><dd>Cannot anticipate frosts, droughts or policy shocks.</dd>
+        <dt>So what</dt><dd>Pair with hedging rather than relying on the point forecast.</dd>
+      </dl></div>
+      <div class="method"><h4>Regression</h4><dl>
+        <dt>Why</dt><dd>Gives a direction and size for the Brazil–price link.</dd>
+        <dt>Assumes</dt><dd>Linear relation in log changes; no big omitted driver correlated with Brazil.</dd>
+        <dt>Read it as</dt><dd>A 10% bigger crop is associated with a coefficient × 10% price move.</dd>
+        <dt>Limits</dt><dd>Small sample; Vietnam, currency (BRL/USD) and demand also matter.</dd>
+        <dt>So what</dt><dd>Watch Brazil's crop forecasts as an early warning signal.</dd>
+      </dl></div>
+      <div class="method"><h4>Clustering</h4><dl>
+        <dt>Why</dt><dd>No labels exist for "type of coffee country"; K-means finds natural groups.</dd>
+        <dt>Assumes</dt><dd>Roughly round, similar-sized clusters in scaled space.</dd>
+        <dt>Read it as</dt><dd>Profiles, not hard categories; check border countries by hand.</dd>
+        <dt>Limits</dt><dd>Sensitive to feature choice and scaling.</dd>
+        <dt>So what</dt><dd>Guides sourcing and market-entry shortlists.</dd>
+      </dl></div>
+      <div class="method"><h4>ANOVA & validation</h4><dl>
+        <dt>Why</dt><dd>Confirms cluster differences and compares forecast error on held-out data.</dd>
+        <dt>Assumes</dt><dd>ANOVA: independent groups, similar variances.</dd>
+        <dt>Read it as</dt><dd>Out-of-sample MAPE vs naive is the number that matters.</dd>
+        <dt>Limits</dt><dd>In-sample fit always looks better than reality.</dd>
+        <dt>So what</dt><dd>Only report models that beat a simple benchmark.</dd>
+      </dl></div>
+    </div>
+  </section>
+</div>
+
+<!-- FINDINGS -->
+<div class="wrap">
+  <section class="section reveal">
+    <div class="section-eyebrow">Findings</div>
+    <h2 class="section-h" style="margin-bottom:0">What the data<br><em>says</em></h2>
+    <div class="insight-grid">
+      <div class="insight-card"><div class="insight-num">5 countries</div><div class="insight-label">Grow most of the world's coffee</div><div class="insight-sub">Brazil, Vietnam, Colombia, Indonesia and Ethiopia supply roughly two-thirds of global output.</div></div>
+      <div class="insight-card c"><div class="insight-num">~3x</div><div class="insight-label">Price swing in four years</div><div class="insight-sub">The composite price roughly tripled from its 2019 low to 2025, driven by weather in a few growing regions.</div></div>
+      <div class="insight-card g"><div class="insight-num">&lt;10%</div><div class="insight-label">Beans' share of a latte</div><div class="insight-sub">Labor, rent, milk and margin dwarf the coffee itself, which is why menu prices lag bean prices.</div></div>
+      <div class="insight-card"><div class="insight-num">~40K</div><div class="insight-label">Starbucks stores worldwide</div><div class="insight-sub">The store base grew by about 9,000 between 2019 and 2024, led by China and drive-thru formats.</div></div>
+      <div class="insight-card c"><div class="insight-num">1 drink</div><div class="insight-label">Can hit most of the FDA limit</div><div class="insight-sub">A large chain drip coffee can carry 300+ mg, close to the 400 mg daily guideline.</div></div>
+      <div class="insight-card g"><div class="insight-num">Nordics</div><div class="insight-label">Drink the most per person</div><div class="insight-sub">Finland tops the list near 12 kg per person a year, about 2.5x the U.S. per-capita level.</div></div>
+    </div>
+  </section>
+</div>
+
+<div class="wrap">
+  <section class="section reveal">
+    <div class="section-eyebrow">Recommendations</div>
+    <h2 class="section-h" style="margin-bottom:2rem">If you ran a<br><em>coffee business</em></h2>
+    <div class="rec"><div class="rec-n">01</div><div><div class="rec-t">Hedge against Brazil, not against "coffee"</div><div class="rec-d">Supply risk is concentrated in one country's weather. A roaster should tie hedging and inventory decisions to Brazilian crop forecasts (CONAB, USDA) and diversify sourcing toward Colombia, Central America and East Africa for arabica.</div></div></div>
+    <div class="rec"><div class="rec-n">02</div><div><div class="rec-t">Price on experience, not on beans</div><div class="rec-d">Because beans are a small share of cost, cafés can absorb bean spikes for a while. Labor scheduling and occupancy are the bigger levers on margin; menu increases should be timed to sustained price levels, not short spikes.</div></div></div>
+    <div class="rec"><div class="rec-n">03</div><div><div class="rec-t">Market caffeine clarity</div><div class="rec-d">Many drinkers do not know a large cold brew can carry 200–300 mg. Listing caffeine per size and offering half-caf options serves health-aware customers and the older, daily-drinking segment without reducing visits.</div></div></div>
+  </section>
+</div>
+
+<!-- INTERVIEW -->
+<div class="wrap" id="interview">
+  <section class="section reveal">
+    <div class="section-eyebrow">Interview Preparation</div>
+    <h2 class="section-h" style="margin-bottom:2rem">STAR method<br><em>answer</em></h2>
+    <div class="star-item"><div><div class="star-letter">S</div><div class="star-word">Situation</div></div><div class="star-text">Coffee prices hit record highs in 2024–25 and café prices kept climbing. I wanted to understand <strong>whether rising bean costs actually explain the price of a cup</strong>, using only public data.</div></div>
+    <div class="star-item"><div><div class="star-letter">T</div><div class="star-word">Task</div></div><div class="star-text">Build an end-to-end analysis across three lenses: global supply and price, the café business, and consumer caffeine habits. Each lens had to answer one question with a method I could defend.</div></div>
+    <div class="star-item"><div><div class="star-letter">A</div><div class="star-word">Action</div></div><div class="star-text">I wrote a pipeline that pulls USDA production data and IMF monthly prices, modeled them in a small SQL warehouse, and used <strong>window functions</strong> for shares and year-over-year changes. In Python I ran an STL decomposition and a <strong>Holt-Winters forecast checked against a naive benchmark</strong>, an OLS of price changes on Brazilian output with Newey-West errors, and <strong>K-means clustering</strong> of countries. I published it with interactive Plotly charts.</div></div>
+    <div class="star-item"><div><div class="star-letter">R</div><div class="star-word">Result</div></div><div class="star-text">The analysis showed supply is concentrated enough that Brazil's weather sets world prices, while beans are a <strong>small fraction of a café drink's cost</strong>. The clearest lesson was methodological: the price forecast is only useful as a range, and I learned to report models against a benchmark rather than in isolation.</div></div>
+
+    <div class="section-eyebrow" style="margin:4rem 0 1.5rem">Common Questions</div>
+    <div class="qa-list">
+      <div class="qa-item"><button class="qa-q"><span class="qa-q-text">Why combine three topics in one project instead of going deep on one?</span><span class="qa-toggle">+</span></button><div class="qa-a">Because the question that ties them together, "what sets the price of a cup?", can't be answered from one dataset. Supply data explains bean prices, the café cost structure explains why menu prices don't track beans one-for-one, and consumption habits explain why demand barely drops when prices rise. Each section is scoped to one question and one method so it stays defensible.</div></div>
+      <div class="qa-item"><button class="qa-q"><span class="qa-q-text">Your forecast barely beats naive. Isn't that a failure?</span><span class="qa-toggle">+</span></button><div class="qa-a">No, that's the expected result for a traded commodity, and showing it is part of being honest. Futures prices already reflect public information, so a simple statistical model shouldn't consistently outperform a random walk. The value is in the uncertainty band, which a buyer can use to budget, and in having a benchmark so nobody mistakes a pretty forecast line for predictive power.</div></div>
+      <div class="qa-item"><button class="qa-q"><span class="qa-q-text">Why regress on changes instead of price levels?</span><span class="qa-toggle">+</span></button><div class="qa-a">Both price and Brazilian production trend over time, and regressing one trending series on another produces strong-looking but meaningless correlations (spurious regression). Taking log differences turns both into percentage changes, which are closer to stationary, and the coefficient becomes an elasticity-like number that's easy to explain.</div></div>
+      <div class="qa-item"><button class="qa-q"><span class="qa-q-text">How did you choose the number of clusters?</span><span class="qa-toggle">+</span></button><div class="qa-a">I compared silhouette scores for k from 2 to 6 and checked that the winning solution made business sense: large exporters, high-consumption importers, and producers that drink much of their own crop. If the top silhouette had produced groups I couldn't describe, I would have preferred a slightly lower-scoring but interpretable k.</div></div>
+      <div class="qa-item"><button class="qa-q"><span class="qa-q-text">What would you do with more data?</span><span class="qa-toggle">+</span></button><div class="qa-a">Get farm-gate prices to measure how much of the export price reaches growers, add the BRL/USD exchange rate and Vietnamese output to the price model, and use transaction data from a café chain to estimate how sensitive customers actually are to menu price increases.</div></div>
+    </div>
+  </section>
+</div>
+
+<div class="wrap">
+  <section class="section reveal" style="border-bottom:none">
+    <div class="section-eyebrow">Career Assets</div>
+    <h2 class="section-h" style="margin-bottom:1rem">Resume bullets &<br><em>LinkedIn write-up</em></h2>
+    <div class="bullets-box">
+      <div class="bullets-label">Resume Bullets (Personal Project)</div>
+      <div class="bullet-item">Built an end-to-end coffee market analysis combining USDA production data and IMF monthly price series in a SQL star schema, using CTEs and window functions for market share, running totals and year-over-year changes</div>
+      <div class="bullet-item">Forecast global arabica prices with STL decomposition and damped Holt-Winters, evaluated on a 24-month holdout against a random-walk benchmark using MAPE</div>
+      <div class="bullet-item">Estimated the relationship between Brazilian harvest changes and price returns with OLS and Newey-West standard errors; segmented 50+ countries with K-means chosen by silhouette score</div>
+      <div class="bullet-item">Published findings as an interactive Plotly web page, including a caffeine intake calculator benchmarked against FDA guidelines</div>
+    </div>
+    <div class="bullets-box">
+      <div class="bullets-label">LinkedIn Project Description</div>
+      <p style="font-size:14px;color:var(--ink2);line-height:1.85">The World Runs on Coffee: a three-part data project following coffee from farm to cup. Using USDA, IMF and company filing data, I analyzed how concentrated global supply is, modeled how Brazilian harvests move prices, broke down where the money in a café latte goes, and compared common drinks against the FDA's caffeine guideline. Tools: SQL, Python (pandas, statsmodels, scikit-learn), Plotly.</p>
+    </div>
+    <div class="skill-row">
+      <span class="stag">SQL Window Functions</span><span class="stag">Star Schema</span><span class="stag">Time Series</span><span class="stag">Holt-Winters</span><span class="stag">STL</span><span class="stag">OLS · HAC Errors</span><span class="stag">K-Means</span><span class="stag">ANOVA</span><span class="stag">Plotly</span><span class="stag">Data Storytelling</span>
+    </div>
+
+    <div class="source-note">
+      <strong>About the numbers.</strong> Chart values on this page are approximate figures compiled from the USDA Foreign Agricultural Service PSD database, the IMF global coffee price series (via FRED), the International Coffee Organization, Starbucks annual 10-K filings, the National Coffee Association and the FDA. The latte cost breakdown is an illustrative model. Run <code>fetch_data.py</code> in this folder to download the latest USDA and price data and regenerate exact values.
+    </div>
+  </section>
+
+  <div class="proj-footer">
+    <a href="../../index.html">← Back to Portfolio</a>
+    <a href="../airline-revenue/index.html">Delta Flight Delays →</a>
+  </div>
+</div>
+
+<script>
+const C={cream:'#f4f1ea',ink:'#1c1a14',ink3:'#8a8070',espresso:'#3b2417',roast:'#5c3a24',crema:'#c69c6d',bark2:'#8b5e35',forest:'#2d5a3d',moss:'#4a5e2a',sand:'#c4a882',cherry:'#8c2f22'};
+const cfg={displayModeBar:false,responsive:true};
+const base=()=>({paper_bgcolor:'transparent',plot_bgcolor:'transparent',
+  font:{family:"'JetBrains Mono',monospace",size:11,color:C.ink3},
+  margin:{t:16,r:20,b:44,l:56},
+  xaxis:{gridcolor:'rgba(30,24,14,.07)',linecolor:'rgba(30,24,14,.15)',zeroline:false},
+  yaxis:{gridcolor:'rgba(30,24,14,.07)',linecolor:'rgba(30,24,14,.15)',zeroline:false},
+  hoverlabel:{bgcolor:C.ink,bordercolor:C.ink,font:{color:C.cream,family:"'JetBrains Mono',monospace",size:11}},
+  showlegend:false});
+
+function safePlot(id,data,layout){
+  if(typeof Plotly==='undefined'){
+    const el=document.getElementById(id);
+    if(el) el.innerHTML='<p style="padding:2rem;font-size:13px;color:#8a8070">Chart library did not load. Open this page from the live site (not as a local file) to see interactive charts.</p>';
+    return;
+  }
+  Plotly.newPlot(id,data,layout,cfg);
+}
+
+// FIG 1 producers
+const prod=[['Brazil',65.0],['Vietnam',29.0],['Colombia',13.0],['Indonesia',10.9],['Ethiopia',8.4],['Uganda',6.7],['India',6.0],['Honduras',5.5],['Peru',4.0],['Mexico',3.9]];
+safePlot('chart-producers',[{type:'bar',orientation:'h',
+  x:prod.map(d=>d[1]),y:prod.map(d=>d[0]),
+  marker:{color:prod.map((d,i)=>i===0?C.espresso:i<5?C.bark2:C.sand)},
+  text:prod.map(d=>d[1].toFixed(1)),textposition:'outside',textfont:{size:10,color:C.ink3},
+  hovertemplate:'<b>%{y}</b><br>%{x:.1f}M bags<extra></extra>'}],
+  {...base(),xaxis:{...base().xaxis,title:'Million 60 kg bags',range:[0,75]},yaxis:{...base().yaxis,autorange:'reversed'},margin:{t:10,r:30,b:44,l:80}});
+
+// FIG 2 price
+const years=[2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025];
+const ico=[147,210,156,120,155,125,127,127,109,101,108,150,200,167,240,300];
+function drawPrice(range){
+  const s=range==='recent'?years.indexOf(2020):0;
+  const x=years.slice(s),y=ico.slice(s);
+  safePlot('chart-price',[
+    {type:'scatter',mode:'lines',x,y,line:{color:C.roast,width:2.5,shape:'spline'},fill:'tozeroy',fillcolor:'rgba(92,58,36,.07)',hovertemplate:'<b>%{x}</b><br>%{y}¢ / lb<extra></extra>'},
+    {type:'scatter',mode:'markers+text',x:[2021,2024],y:[150,240],text:['Brazil frost','Drought'],textposition:'top left',textfont:{size:10,color:C.cherry},marker:{color:C.cherry,size:8},hoverinfo:'skip'}
+  ],{...base(),yaxis:{...base().yaxis,title:'US cents / lb',range:[0,340]},xaxis:{...base().xaxis,dtick:range==='recent'?1:2}});
+}
+drawPrice('all');
+document.querySelectorAll('#price-toggle .chip-btn').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('#price-toggle .chip-btn').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');drawPrice(b.dataset.range);
+}));
+
+// FIG 3 per capita
+const pc=[['Finland',12.0],['Norway',9.9],['Iceland',9.0],['Denmark',8.7],['Netherlands',8.4],['Sweden',8.2],['Switzerland',7.9],['Canada',6.5],['Germany',5.5],['Brazil',5.8],['Italy',5.9],['U.S.',4.4],['Japan',3.6],['U.K.',3.0]].sort((a,b)=>b[1]-a[1]);
+safePlot('chart-percap',[{type:'bar',x:pc.map(d=>d[0]),y:pc.map(d=>d[1]),
+  marker:{color:pc.map(d=>d[0]==='U.S.'?C.forest:d[0]==='Brazil'?C.crema:C.roast)},
+  hovertemplate:'<b>%{x}</b><br>%{y} kg per person / yr<extra></extra>'}],
+  {...base(),yaxis:{...base().yaxis,title:'kg / person / year'},margin:{t:10,r:20,b:70,l:56}});
+
+// FIG 4 latte
+safePlot('chart-latte',[{type:'pie',hole:.58,sort:false,direction:'clockwise',
+  labels:['Labor','Rent & occupancy','Milk','Cup, lid, sleeve','Coffee beans','Other overhead','Operating profit'],
+  values:[1.75,0.75,0.55,0.25,0.35,1.05,1.05],
+  marker:{colors:[C.espresso,C.roast,'#e8dfcf',C.sand,C.cherry,C.ink3,C.forest],line:{color:C.cream,width:2}},
+  textinfo:'percent',textfont:{size:10,color:C.cream},
+  hovertemplate:'<b>%{label}</b><br>$%{value:.2f} · %{percent}<extra></extra>'}],
+  {...base(),showlegend:true,legend:{font:{size:10},x:1,y:.5},margin:{t:10,r:10,b:10,l:10},
+   annotations:[{text:'$5.75',showarrow:false,font:{size:22,family:"'Cormorant Garamond',serif",color:C.ink}}]});
+
+// FIG 5 starbucks
+const sy=[2015,2016,2017,2018,2019,2020,2021,2022,2023,2024];
+const ss=[23043,25085,27339,29324,31256,32660,33833,35711,38038,40199];
+safePlot('chart-sbux',[{type:'bar',x:sy,y:ss,marker:{color:sy.map(y=>y>=2020?C.forest:C.moss+'99')},
+  hovertemplate:'<b>FY%{x}</b><br>%{y:,} stores<extra></extra>'}],
+  {...base(),yaxis:{...base().yaxis,title:'Stores',tickformat:',.0f'}});
+
+// FIG 6 caffeine
+const caf=[['Decaf coffee, 8 oz',2],['Cola, 12 oz',34],['Black tea, 8 oz',47],['Espresso, 1 shot',63],['Energy drink, 8 oz',80],['Brewed coffee, 8 oz',95],['Latte, 16 oz (2 shots)',150],['Cold brew, 16 oz',205],['Chain drip coffee, 16 oz',310]];
+safePlot('chart-caffeine',[{type:'bar',orientation:'h',x:caf.map(d=>d[1]),y:caf.map(d=>d[0]),
+  marker:{color:caf.map(d=>d[1]>=200?C.cherry:d[1]>=90?C.roast:C.sand)},
+  text:caf.map(d=>d[1]+' mg'),textposition:'outside',textfont:{size:10,color:C.ink3},
+  hovertemplate:'<b>%{y}</b><br>%{x} mg · %{customdata}% of 400 mg<extra></extra>',customdata:caf.map(d=>Math.round(d[1]/4))}],
+  {...base(),xaxis:{...base().xaxis,title:'mg caffeine',range:[0,460]},margin:{t:10,r:30,b:44,l:170},
+   shapes:[{type:'line',x0:400,x1:400,y0:-.5,y1:caf.length-.5,line:{color:C.forest,dash:'dash',width:1.5}}],
+   annotations:[{x:400,y:caf.length-.5,text:'FDA 400 mg',showarrow:false,yanchor:'bottom',font:{size:10,color:C.forest}}]});
+
+// FIG 7 age
+safePlot('chart-age',[{type:'bar',x:['18–24','25–39','40–59','60+'],y:[51,66,70,72],
+  marker:{color:[C.sand,C.bark2,C.roast,C.espresso]},text:['51%','66%','70%','72%'],textposition:'outside',textfont:{size:10,color:C.ink3},
+  hovertemplate:'<b>Age %{x}</b><br>%{y}% drank coffee yesterday<extra></extra>'}],
+  {...base(),yaxis:{...base().yaxis,title:'% past-day drinkers',range:[0,85]}});
+
+// FIG 8 clusters (log production vs log consumption, thousand bags)
+const ctry=[
+  ['Brazil',65000,22400,'Large exporter'],['Vietnam',29000,3100,'Large exporter'],['Colombia',13000,2000,'Large exporter'],['Indonesia',10900,4800,'Large exporter'],['Honduras',5500,400,'Large exporter'],['Uganda',6700,300,'Large exporter'],['Peru',4000,250,'Large exporter'],
+  ['Ethiopia',8400,4300,'Producer-consumer'],['India',6000,1500,'Producer-consumer'],['Mexico',3900,2500,'Producer-consumer'],['Philippines',600,3300,'Producer-consumer'],
+  ['United States',5,27000,'Importer'],['Germany',1,8500,'Importer'],['Japan',1,7400,'Importer'],['France',1,5500,'Importer'],['Italy',1,5600,'Importer'],['Canada',1,4100,'Importer'],['Finland',1,1100,'Importer'],['South Korea',1,3000,'Importer']
+];
+const groupColors={'Large exporter':C.espresso,'Producer-consumer':C.crema,'Importer':C.forest};
+safePlot('chart-cluster',Object.keys(groupColors).map(g=>{
+  const d=ctry.filter(r=>r[3]===g);
+  return {type:'scatter',mode:'markers+text',name:g,x:d.map(r=>r[1]),y:d.map(r=>r[2]),text:d.map(r=>r[0]),
+    textposition:'top center',textfont:{size:9,color:C.ink3},
+    marker:{color:groupColors[g],size:11,line:{color:C.cream,width:1.5}},
+    hovertemplate:'<b>%{text}</b><br>Production: %{x:,}k bags<br>Consumption: %{y:,}k bags<extra>'+g+'</extra>'};
+}),{...base(),showlegend:true,legend:{orientation:'h',y:1.08,font:{size:10}},
+  xaxis:{...base().xaxis,type:'log',title:'Production (thousand bags, log)'},yaxis:{...base().yaxis,type:'log',title:'Consumption (thousand bags, log)'}});
+
+// CAFFEINE CALCULATOR
+const drinks=[['Brewed coffee','8 oz',95],['Espresso shot','1 oz',63],['Latte','16 oz',150],['Cold brew','16 oz',205],['Black tea','8 oz',47],['Energy drink','8 oz',80],['Cola','12 oz',34]];
+const counts=drinks.map(()=>0);
+const rowsEl=document.getElementById('calc-rows');
+drinks.forEach((d,i)=>{
+  const r=document.createElement('div');r.className='calc-row';
+  r.innerHTML=`<div>${d[0]}<small>${d[1]} · ${d[2]} mg</small></div><div class="stepper"><button aria-label="Remove ${d[0]}">−</button><span>0</span><button aria-label="Add ${d[0]}">+</button></div>`;
+  const [minus,plus]=r.querySelectorAll('button');const n=r.querySelector('span');
+  minus.onclick=()=>{counts[i]=Math.max(0,counts[i]-1);n.textContent=counts[i];updateCalc();};
+  plus.onclick=()=>{counts[i]=Math.min(9,counts[i]+1);n.textContent=counts[i];updateCalc();};
+  rowsEl.appendChild(r);
+});
+function updateCalc(){
+  const mg=counts.reduce((s,c,i)=>s+c*drinks[i][2],0);
+  document.getElementById('calc-mg').textContent=mg;
+  const fill=document.getElementById('meter-fill');
+  fill.style.width=Math.min(100,mg/600*100)+'%';
+  fill.style.background=mg>400?C.cherry:mg>300?C.bark2:C.forest;
+  document.getElementById('calc-verdict').textContent=
+    mg===0?'Add drinks to see where your day lands.':
+    mg<=200?'Light day. Well under the FDA guideline.':
+    mg<=400?`Within the guideline, ${400-mg} mg of headroom left.`:
+    `${mg-400} mg over the 400 mg guideline. Jitters, poor sleep and a faster heart rate become more likely.`;
+}
+
+// UI
+document.querySelectorAll('.pitch-tab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.pitch-tab').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.pitch-panel').forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');document.getElementById(t.dataset.panel).classList.add('active');
+}));
+document.querySelectorAll('.qa-q').forEach(q=>q.addEventListener('click',()=>q.parentElement.classList.toggle('open')));
+document.querySelectorAll('.code-copy').forEach(b=>b.addEventListener('click',()=>{
+  const pre=b.closest('.code-wrap').querySelector('pre');
+  navigator.clipboard.writeText(pre.innerText).then(()=>{b.textContent='Copied';setTimeout(()=>b.textContent='Copy',1600);}).catch(()=>{});
+}));
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');window.dispatchEvent(new Event('resize'));}}),{threshold:.06});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+const bar=document.getElementById('scroll-bar');
+const jump=[...document.querySelectorAll('.nav-jump a')];
+window.addEventListener('scroll',()=>{
+  bar.style.width=(scrollY/(document.body.scrollHeight-innerHeight)*100)+'%';
+  let cur='';['economy','industry','caffeine','models','interview'].forEach(id=>{const el=document.getElementById(id);if(el&&scrollY>=el.offsetTop-120)cur=id;});
+  jump.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur));
+},{passive:true});
+</script>
+</body>
+</html>
