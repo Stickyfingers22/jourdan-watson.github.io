@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Economic Mobility in Black America | Jourdan Watson</title>
+  <meta name="description" content="What predicts income and wealth for Black American households? A weighted analysis of the Federal Reserve's 2022 Survey of Consumer Finances."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+  <style>
+    :root{
+      --cream:#f4f1ea;--cream2:#ebe6db;--cream3:#dfd8cc;
+      --ink:#1c1a14;--ink2:#4a4235;--ink3:#8a8070;--ink4:#c0b8a8;
+      --forest:#2d5a3d;--bark:#6b4423;--bark2:#8b5e35;--moss:#4a5e2a;--sand:#c4a882;
+      --teal:#2a6b5a;--deep:#1d3f36;
+      --border:rgba(30,24,14,.1);--border2:rgba(30,24,14,.2);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--cream);color:var(--ink);font-family:'Syne',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+    ::selection{background:var(--teal);color:var(--cream);}
+    #scroll-bar{position:fixed;top:0;left:0;z-index:300;height:2px;width:0;background:linear-gradient(90deg,var(--teal),var(--sand));}
+
+    nav{position:sticky;top:0;z-index:100;background:rgba(244,241,234,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 3rem;display:flex;align-items:center;height:56px;gap:2rem;}
+    .back-link{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);text-decoration:none;}
+    .back-link:hover{color:var(--teal);}
+    .nav-title{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--ink2);font-style:italic;}
+    .nav-jump{display:flex;gap:4px;margin-left:auto;}
+    .nav-jump a{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);text-decoration:none;padding:6px 10px;border:1px solid transparent;transition:all .2s;}
+    .nav-jump a:hover,.nav-jump a.active{color:var(--deep);border-color:var(--border2);background:var(--cream2);}
+    .nav-tag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);border:1px solid rgba(42,107,90,.3);padding:4px 12px;background:rgba(42,107,90,.05);}
+
+    .wrap{max-width:1080px;margin:0 auto;padding:0 3rem;}
+    .section{padding:5rem 0;border-bottom:1px solid var(--border);}
+
+    .proj-hero{padding:5rem 0 3.5rem;border-bottom:1px solid var(--border);}
+    .proj-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);margin-bottom:1.5rem;display:flex;align-items:center;gap:12px;}
+    .proj-eyebrow::before{content:'';width:28px;height:1px;background:var(--teal);}
+    .proj-title{font-family:'Cormorant Garamond',serif;font-size:clamp(48px,7.5vw,94px);font-weight:300;line-height:.93;letter-spacing:-.03em;margin-bottom:2rem;}
+    .proj-title em{font-style:italic;color:var(--teal);}
+    .proj-summary{font-size:16px;color:var(--ink2);line-height:1.85;max-width:680px;}
+    .proj-meta-row{display:flex;gap:3rem;flex-wrap:wrap;padding:2rem 0;border-bottom:1px solid var(--border);}
+    .proj-meta-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink4);margin-bottom:6px;}
+    .proj-meta-val{font-size:14px;font-weight:600;}
+    .proj-meta-val.accent{color:var(--teal);}
+
+    .exec-box{background:var(--deep);color:var(--cream);padding:3rem;margin:4rem 0;}
+    .exec-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(244,241,234,.5);margin-bottom:1.25rem;}
+    .exec-text{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;line-height:1.65;font-style:italic;}
+    .exec-text strong{font-style:normal;font-weight:600;color:#a8d4c4;}
+
+    .pitch-tabs{display:flex;border-bottom:1px solid var(--border2);margin-bottom:1.5rem;flex-wrap:wrap;}
+    .pitch-tab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:10px 18px;background:none;border:none;border-bottom:2px solid transparent;color:var(--ink3);cursor:pointer;}
+    .pitch-tab.active{color:var(--deep);border-bottom-color:var(--teal);}
+    .pitch-panel{display:none;font-size:15px;color:var(--ink2);line-height:1.9;max-width:760px;}
+    .pitch-panel.active{display:block;}
+    .pitch-panel p+p{margin-top:1rem;}
+
+    .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:2.5rem 0;}
+    .kpi-card{background:var(--cream2);border:1px solid var(--border);padding:1.75rem;transition:border-color .2s,transform .2s;}
+    .kpi-card:hover{border-color:rgba(42,107,90,.35);transform:translateY(-2px);}
+    .kpi-num{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:300;line-height:1;margin-bottom:6px;color:var(--deep);}
+    .kpi-num.b{color:var(--bark);}
+    .kpi-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);}
+    .kpi-sub{font-size:11px;color:var(--ink3);margin-top:6px;line-height:1.5;}
+
+    .section-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);margin-bottom:1rem;display:flex;align-items:center;gap:10px;}
+    .section-eyebrow::before{content:'';width:20px;height:1px;background:var(--teal);}
+    .section-h{font-family:'Cormorant Garamond',serif;font-size:clamp(30px,4vw,48px);font-weight:300;line-height:1.08;letter-spacing:-.02em;margin-bottom:1.5rem;}
+    .section-h em{font-style:italic;color:var(--teal);}
+    .section-body{font-size:15px;color:var(--ink2);line-height:1.85;max-width:720px;margin-bottom:2rem;}
+    .sub-h{font-size:17px;font-weight:600;margin:3rem 0 .75rem;}
+
+    .src{background:var(--cream2);border:1px solid var(--border);border-left:3px solid var(--teal);padding:1.25rem 1.5rem;margin-bottom:12px;}
+    .src-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:6px;}
+    .src-text{font-size:13px;color:var(--ink2);line-height:1.7;}
+    .src-text a{color:var(--teal);}
+    .src.warn{border-left-color:var(--bark);}
+    .src.warn .src-label{color:var(--bark);}
+
+    .code-wrap{margin:1.5rem 0 0;}
+    .code-header{display:flex;align-items:center;gap:1rem;background:var(--ink);padding:.75rem 1.25rem;}
+    .code-lang{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(244,241,234,.4);}
+    .code-title{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(244,241,234,.75);flex:1;}
+    .code-copy{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,241,234,.5);background:none;border:1px solid rgba(255,255,255,.15);padding:4px 10px;cursor:pointer;}
+    pre{background:#141210;padding:1.5rem;overflow-x:auto;margin:0;}
+    code{font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.75;color:#d4cfc8;}
+    .kw{color:#a8c4a0;}.fn{color:#c4a882;}.str{color:#b8956a;}.cm{color:#6e665a;}.num{color:#8bb4a8;}
+    .explain{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--border);border-top:none;background:var(--cream2);margin-bottom:2.5rem;}
+    .explain div{padding:1rem 1.1rem;border-right:1px solid var(--border);font-size:12px;color:var(--ink2);line-height:1.65;}
+    .explain div:last-child{border-right:none;}
+    .explain b{display:block;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:400;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:6px;}
+
+    .chart-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);margin:2.5rem 0 1rem;display:flex;align-items:center;gap:10px;}
+    .chart-label::before{content:'';width:16px;height:1px;background:var(--ink4);}
+    .chart-container{background:var(--cream2);border:1px solid var(--border);padding:1.25rem;}
+    .chart-note{font-size:12px;color:var(--ink3);margin-top:.6rem;line-height:1.6;}
+    .chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    .chip-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:.75rem;}
+    .chip-btn{font-family:'JetBrains Mono',monospace;font-size:10px;padding:6px 12px;border:1px solid var(--border2);background:var(--cream);color:var(--ink2);cursor:pointer;}
+    .chip-btn.active,.chip-btn:hover{background:var(--deep);color:var(--cream);border-color:var(--deep);}
+
+    .callout{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border2);margin:2rem 0;}
+    .callout div{padding:2rem;}
+    .callout div:first-child{border-right:1px solid var(--border2);}
+    .callout .big{font-family:'Cormorant Garamond',serif;font-size:56px;font-weight:300;line-height:1;}
+    .callout .lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-top:8px;}
+    .callout .desc{font-size:13px;color:var(--ink2);margin-top:.75rem;line-height:1.6;}
+
+    .method-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:1.5rem;}
+    .method{background:var(--cream2);border:1px solid var(--border);padding:1.75rem;}
+    .method h4{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;margin-bottom:1rem;}
+    .method dl{display:grid;grid-template-columns:110px 1fr;gap:.6rem 1rem;font-size:13px;line-height:1.6;}
+    .method dt{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);padding-top:3px;}
+    .method dd{color:var(--ink2);}
+
+    .insight-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:2rem;}
+    .insight-card{background:var(--cream2);border:1px solid var(--border);border-left:3px solid var(--teal);padding:1.5rem;}
+    .insight-card.b{border-left-color:var(--bark);}
+    .insight-num{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;color:var(--teal);line-height:1;margin-bottom:6px;}
+    .insight-card.b .insight-num{color:var(--bark);}
+    .insight-label{font-size:13px;font-weight:600;margin-bottom:4px;}
+    .insight-sub{font-size:12px;color:var(--ink3);line-height:1.6;}
+
+    .rec{display:grid;grid-template-columns:48px 1fr;gap:2rem;padding:2rem 0;border-bottom:1px solid var(--border);}
+    .rec:first-of-type{border-top:1px solid var(--border);}
+    .rec-n{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:300;color:var(--cream3);line-height:1;}
+    .rec-t{font-size:16px;font-weight:600;margin-bottom:6px;}
+    .rec-d{font-size:14px;color:var(--ink2);line-height:1.8;}
+    .rec-d small{display:block;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--teal);margin-top:6px;letter-spacing:.04em;}
+
+    .star-item{padding:2rem 0;border-bottom:1px solid var(--border);display:grid;grid-template-columns:80px 1fr;gap:2rem;}
+    .star-item:first-child{border-top:1px solid var(--border);}
+    .star-letter{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:300;line-height:1;color:var(--cream3);}
+    .star-word{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-top:4px;}
+    .star-text{font-size:14px;color:var(--ink2);line-height:1.8;}
+    .star-text strong{color:var(--ink);}
+    .qa-item{border-bottom:1px solid var(--border);padding:1.5rem 0;}
+    .qa-item:first-child{border-top:1px solid var(--border);}
+    .qa-q{display:flex;align-items:center;justify-content:space-between;gap:1rem;width:100%;background:none;border:none;text-align:left;cursor:pointer;font-family:'Syne',sans-serif;color:var(--ink);}
+    .qa-q-text{font-size:15px;font-weight:600;line-height:1.4;}
+    .qa-toggle{font-family:'JetBrains Mono',monospace;font-size:16px;color:var(--ink3);transition:transform .3s;}
+    .qa-item.open .qa-toggle{transform:rotate(45deg);color:var(--teal);}
+    .qa-a{font-size:14px;color:var(--ink2);line-height:1.85;max-height:0;overflow:hidden;transition:max-height .4s,padding .3s;}
+    .qa-item.open .qa-a{max-height:700px;padding-top:1rem;}
+
+    .bullets-box{background:var(--cream2);border:1px solid var(--border2);padding:2.5rem;margin-top:1rem;}
+    .bullets-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink3);margin-bottom:1.25rem;}
+    .bullet-item{display:flex;gap:1rem;font-size:14px;color:var(--ink2);line-height:1.7;margin-bottom:.75rem;}
+    .bullet-item::before{content:'→';color:var(--teal);flex-shrink:0;}
+    .skill-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:1.5rem;}
+    .stag{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink2);border:1px solid var(--border2);padding:5px 12px;}
+    .stag:hover{background:var(--deep);color:var(--cream);border-color:var(--deep);}
+    .source-note{font-size:12px;color:var(--ink3);line-height:1.7;border-left:2px solid var(--teal);padding:.75rem 1rem;background:var(--cream2);margin-top:2rem;}
+
+    .proj-footer{padding:3rem 0;display:flex;justify-content:space-between;gap:1rem;}
+    .proj-footer a{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);text-decoration:none;}
+    .proj-footer a:hover{color:var(--teal);}
+
+    .reveal{opacity:0;transform:translateY(20px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1);}
+    .reveal.visible{opacity:1;transform:none;}
+
+    @media(max-width:860px){
+      nav{padding:0 1.5rem;}.nav-jump,.nav-title{display:none;}.nav-tag{margin-left:auto;}
+      .wrap{padding:0 1.5rem;}
+      .kpi-grid{grid-template-columns:repeat(2,1fr);}
+      .chart-grid,.method-grid,.insight-grid,.callout{grid-template-columns:1fr;}
+      .callout div:first-child{border-right:none;border-bottom:1px solid var(--border2);}
+      .explain{grid-template-columns:1fr;}.explain div{border-right:none;border-bottom:1px solid var(--border);}
+      .star-item{grid-template-columns:1fr;gap:.5rem;}
+      .method dl{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+<div id="scroll-bar"></div>
+
+<nav>
+  <a href="../../index.html" class="back-link">← Portfolio</a>
+  <span class="nav-title">Economic Mobility in Black America</span>
+  <div class="nav-jump">
+    <a href="#data">Data</a>
+    <a href="#findings">Findings</a>
+    <a href="#models">Models</a>
+    <a href="#interview">Interview</a>
+  </div>
+  <span class="nav-tag">Sociology · Economics</span>
+</nav>
+
+<div class="wrap">
+  <header class="proj-hero">
+    <div class="proj-eyebrow">Project 03 · Sociology & Economics</div>
+    <h1 class="proj-title">Economic Mobility<br><em>in Black America</em></h1>
+    <p class="proj-summary">What actually predicts income and wealth for Black American households, and which gaps close with education versus which don't? A weighted analysis of the Federal Reserve's 2022 Survey of Consumer Finances, set against Opportunity Atlas data on where children grow up.</p>
+  </header>
+
+  <div class="proj-meta-row">
+    <div><div class="proj-meta-label">Primary Data</div><div class="proj-meta-val">Federal Reserve SCF 2022 · 4,595 households</div></div>
+    <div><div class="proj-meta-label">Supporting Data</div><div class="proj-meta-val">Opportunity Atlas · Chetty et al. (2020)</div></div>
+    <div><div class="proj-meta-label">Methods</div><div class="proj-meta-val">Weighted OLS · Multiple Imputation · Random Forest</div></div>
+    <div><div class="proj-meta-label">Tools</div><div class="proj-meta-val">SQL · Python · Statsmodels · Scikit-Learn · Plotly</div></div>
+    <div><div class="proj-meta-label">Core Question</div><div class="proj-meta-val accent">What closes the gap, and what doesn't?</div></div>
+  </div>
+
+  <div class="exec-box reveal">
+    <div class="exec-label">30-Second Executive Summary</div>
+    <div class="exec-text">
+      The typical Black household has <strong>$49,590 in net worth versus $272,000</strong> for the typical White household, a 5.5x gap. Education raises income sharply, about <strong>16% per additional year</strong> of schooling. But a degree closes the income gap far more than the wealth gap: Black households with a bachelor's degree earn more than White households with only a high school diploma, yet hold <strong>less wealth</strong>. And after controlling for education, age, marriage, homeownership and employment, Black household income is still <strong>about 20% lower</strong>.
+    </div>
+  </div>
+
+  <div class="kpi-grid reveal">
+    <div class="kpi-card"><div class="kpi-num">5.5x</div><div class="kpi-label">White / Black Wealth Gap</div><div class="kpi-sub">Median net worth $272K vs $49.6K (SCF 2022, weighted)</div></div>
+    <div class="kpi-card"><div class="kpi-num b">−20%</div><div class="kpi-label">Unexplained Income Gap</div><div class="kpi-sub">After controls, 95% CI −30% to −10%</div></div>
+    <div class="kpi-card"><div class="kpi-num">+16%</div><div class="kpi-label">Income per Year of School</div><div class="kpi-sub">Strongest individual-level predictor</div></div>
+    <div class="kpi-card"><div class="kpi-num b">2.5%</div><div class="kpi-label">Bottom → Top Quintile</div><div class="kpi-sub">Black children vs 10.6% for White (Chetty et al. 2020)</div></div>
+  </div>
+
+  <div class="pitch-tabs" role="tablist">
+    <button class="pitch-tab active" data-panel="p2">2-Minute · Hiring Manager</button>
+    <button class="pitch-tab" data-panel="p5">5-Minute · Senior Data Scientist</button>
+  </div>
+  <div class="pitch-panel active" id="p2">
+    <p>I wanted to move past headlines on the racial wealth gap and measure which factors actually move income and wealth for Black households. I used the Federal Reserve's Survey of Consumer Finances, the most detailed public data on household wealth in the U.S., and compared Black and White households with population weights.</p>
+    <p>Three findings stood out. Education is the biggest individual lever on income. But it closes the income gap much more than the wealth gap, because wealth also depends on inheritance and homeownership. And homeownership is where wealth lives: Black homeowners have a median net worth of about $197,000, versus $4,500 for Black renters. I also found that one claim I expected to confirm, that Black graduates get a smaller payoff from a degree, wasn't supported by this data.</p>
+  </div>
+  <div class="pitch-panel" id="p5">
+    <p>The SCF stores each household as five implicates from multiple imputation, so I ran weighted least squares on each implicate and combined estimates with Rubin's rules, which inflates standard errors to reflect imputation uncertainty. The outcome is log household income for heads aged 25–64, with years of schooling, a centered age quadratic, sex, marital status, homeownership, employment, a Black indicator and a Black × bachelor's interaction, using HC3 robust errors.</p>
+    <p>R² averages 0.50. The Black coefficient is −0.23 (about −20%, p &lt; 0.001); the interaction is −0.01 with a standard error of 0.10, so the data can't distinguish the return to a degree by race. Married is large (+93%) but mostly mechanical: SCF income is household income, so marriage adds a second earner. Homeownership is likely endogenous to income, so I read it as a marker, not a cause. A random forest with permutation importance on the Black subsample agrees on the top drivers. The main limitations are 710 Black households, with only 170 holding a bachelor's degree, and no direct inheritance or parental-income controls in my extract.</p>
+  </div>
+</div>
+
+<!-- DATA -->
+<div class="wrap" id="data">
+  <section class="section reveal">
+    <div class="section-eyebrow">Section 01 · Data</div>
+    <h2 class="section-h">Sources &<br><em>SQL foundation</em></h2>
+
+    <div class="src"><div class="src-label">Primary — Federal Reserve Survey of Consumer Finances 2022</div><div class="src-text">Household-level income, net worth, education, homeownership and demographics. 4,595 households (710 Black, 2,880 White), each stored as five imputed copies (22,975 rows). Every SCF number on this page comes from <code>analyze_scf.py</code> run on the public summary extract from <a href="https://www.federalreserve.gov/econres/scfindex.htm" target="_blank" rel="noopener">federalreserve.gov</a>.</div></div>
+    <div class="src"><div class="src-label">Supporting — Opportunity Atlas (Chetty, Hendren, Jones, Porter)</div><div class="src-text">Household income at age 35 for children who grew up in each of 722 commuting zones, from <a href="https://opportunityatlas.org" target="_blank" rel="noopener">opportunityatlas.org</a>.</div></div>
+    <div class="src warn"><div class="src-label">Limitation — what this Atlas file is not</div><div class="src-text">The downloaded file is pooled across all races and parent incomes (<code>rP_gP_pall</code>). It shows that place matters, but it is not Black-specific. Downloading the Black, parents-at-25th-percentile version (<code>rB_gP_p25</code>) is the next step.</div></div>
+    <div class="src"><div class="src-label">Published benchmark — Chetty et al. (2020), Quarterly Journal of Economics</div><div class="src-text">"Race and Economic Opportunity in the United States": the 2.5% vs 10.6% bottom-to-top quintile mobility rates are cited from this paper, not computed here.</div></div>
+
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">SQL</span><span class="code-title">Schema — mobility_db</span><button class="code-copy">Copy</button></div>
+      <pre><code><span class="kw">CREATE TABLE</span> scf_households (
+    household_id   <span class="kw">INT</span>,
+    implicate      <span class="kw">SMALLINT</span>,           <span class="cm">-- 1-5, multiple imputation copies</span>
+    weight         <span class="kw">DECIMAL</span>(<span class="num">12</span>,<span class="num">4</span>),       <span class="cm">-- population weight (WGT)</span>
+    race           <span class="kw">VARCHAR</span>(<span class="num">20</span>),
+    age            <span class="kw">SMALLINT</span>,
+    edu_group      <span class="kw">VARCHAR</span>(<span class="num">30</span>),
+    educ_years     <span class="kw">DECIMAL</span>(<span class="num">4</span>,<span class="num">1</span>),
+    married        <span class="kw">BOOLEAN</span>,
+    homeowner      <span class="kw">BOOLEAN</span>,
+    working        <span class="kw">BOOLEAN</span>,
+    income         <span class="kw">NUMERIC</span>,
+    net_worth      <span class="kw">NUMERIC</span>,
+    <span class="kw">PRIMARY KEY</span> (household_id, implicate)
+);
+
+<span class="kw">CREATE TABLE</span> atlas_cz (
+    cz_id          <span class="kw">VARCHAR</span>(<span class="num">10</span>) <span class="kw">PRIMARY KEY</span>,
+    cz_name        <span class="kw">VARCHAR</span>(<span class="num">80</span>),
+    hh_income_35   <span class="kw">NUMERIC</span>            <span class="cm">-- pooled race, all parent incomes</span>
+);</code></pre>
+    </div>
+    <div class="explain">
+      <div><b>What</b>One row per household per implicate, with the survey weight kept on every row.</div>
+      <div><b>Why</b>Dropping implicates or weights gives biased, overconfident numbers.</div>
+      <div><b>Business value</b>Results generalize to U.S. households, not just survey respondents.</div>
+      <div><b>Output</b>22,975 SCF rows; 722 commuting zones.</div>
+      <div><b>Talking point</b>The composite key (household, implicate) documents the imputation design.</div>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">SQL</span><span class="code-title">Query 1 — Weighted rates by race and education (CASE + weighted aggregates)</span><button class="code-copy">Copy</button></div>
+      <pre><code><span class="kw">SELECT</span>
+    race,
+    edu_group,
+    <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> household_id)                                      <span class="kw">AS</span> households,
+    <span class="fn">ROUND</span>(<span class="fn">SUM</span>(weight * income) / <span class="fn">SUM</span>(weight), <span class="num">0</span>)                     <span class="kw">AS</span> wtd_mean_income,
+    <span class="fn">ROUND</span>(<span class="num">100.0</span> * <span class="fn">SUM</span>(<span class="kw">CASE WHEN</span> homeowner <span class="kw">THEN</span> weight <span class="kw">ELSE</span> <span class="num">0</span> <span class="kw">END</span>)
+          / <span class="fn">SUM</span>(weight), <span class="num">1</span>)                                           <span class="kw">AS</span> homeownership_pct,
+    <span class="fn">ROUND</span>(<span class="num">100.0</span> * <span class="fn">SUM</span>(<span class="kw">CASE WHEN</span> net_worth &lt;= <span class="num">0</span> <span class="kw">THEN</span> weight <span class="kw">ELSE</span> <span class="num">0</span> <span class="kw">END</span>)
+          / <span class="fn">SUM</span>(weight), <span class="num">1</span>)                                           <span class="kw">AS</span> zero_or_negative_wealth_pct
+<span class="kw">FROM</span> scf_households
+<span class="kw">WHERE</span> race <span class="kw">IN</span> (<span class="str">'Black'</span>, <span class="str">'White'</span>)
+<span class="kw">GROUP BY</span> race, edu_group
+<span class="kw">ORDER BY</span> race, wtd_mean_income;</code></pre>
+    </div>
+    <div class="explain">
+      <div><b>What</b>Population-weighted averages and rates for each race × education cell.</div>
+      <div><b>Why</b><code>SUM(w·x)/SUM(w)</code> is the weighted mean; <code>CASE</code> inside it gives weighted shares.</div>
+      <div><b>Business value</b>Shows where gaps are largest so programs can target them.</div>
+      <div><b>Output</b>8 rows (2 races × 4 education levels).</div>
+      <div><b>Talking point</b>Medians were computed in Python: weighted medians aren't native SQL.</div>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">SQL</span><span class="code-title">Query 2 — The degree paradox: income vs wealth gap side by side (CTE + pivot + RANK)</span><button class="code-copy">Copy</button></div>
+      <pre><code><span class="kw">WITH</span> cells <span class="kw">AS</span> (
+    <span class="kw">SELECT</span> race, edu_group,
+           <span class="fn">SUM</span>(weight * income)    / <span class="fn">SUM</span>(weight) <span class="kw">AS</span> income,
+           <span class="fn">SUM</span>(weight * net_worth) / <span class="fn">SUM</span>(weight) <span class="kw">AS</span> wealth
+    <span class="kw">FROM</span> scf_households
+    <span class="kw">WHERE</span> race <span class="kw">IN</span> (<span class="str">'Black'</span>, <span class="str">'White'</span>)
+    <span class="kw">GROUP BY</span> race, edu_group
+),
+pivoted <span class="kw">AS</span> (
+    <span class="kw">SELECT</span> edu_group,
+           <span class="fn">MAX</span>(<span class="kw">CASE WHEN</span> race = <span class="str">'Black'</span> <span class="kw">THEN</span> income <span class="kw">END</span>) <span class="kw">AS</span> black_income,
+           <span class="fn">MAX</span>(<span class="kw">CASE WHEN</span> race = <span class="str">'White'</span> <span class="kw">THEN</span> income <span class="kw">END</span>) <span class="kw">AS</span> white_income,
+           <span class="fn">MAX</span>(<span class="kw">CASE WHEN</span> race = <span class="str">'Black'</span> <span class="kw">THEN</span> wealth <span class="kw">END</span>) <span class="kw">AS</span> black_wealth,
+           <span class="fn">MAX</span>(<span class="kw">CASE WHEN</span> race = <span class="str">'White'</span> <span class="kw">THEN</span> wealth <span class="kw">END</span>) <span class="kw">AS</span> white_wealth
+    <span class="kw">FROM</span> cells <span class="kw">GROUP BY</span> edu_group
+)
+<span class="kw">SELECT</span> edu_group,
+       <span class="fn">ROUND</span>(black_income / white_income, <span class="num">2</span>)                   <span class="kw">AS</span> income_ratio,
+       <span class="fn">ROUND</span>(black_wealth / white_wealth, <span class="num">2</span>)                   <span class="kw">AS</span> wealth_ratio,
+       <span class="fn">RANK</span>() <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> black_wealth / white_wealth)        <span class="kw">AS</span> widest_wealth_gap_rank
+<span class="kw">FROM</span> pivoted
+<span class="kw">ORDER BY</span> widest_wealth_gap_rank;</code></pre>
+    </div>
+    <div class="explain">
+      <div><b>What</b>Pivots races into columns and compares income and wealth ratios per education level.</div>
+      <div><b>Why</b><code>MAX(CASE…)</code> is a portable pivot that works in any SQL dialect.</div>
+      <div><b>Business value</b>Shows education narrows income gaps more than wealth gaps.</div>
+      <div><b>Output</b>Income ratios closer to 1 than wealth ratios at every level.</div>
+      <div><b>Talking point</b>Ranking a derived ratio with a window function, after aggregation.</div>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">SQL</span><span class="code-title">Query 3 — Where children grow up: Atlas quintiles (NTILE + window average)</span><button class="code-copy">Copy</button></div>
+      <pre><code><span class="kw">SELECT</span>
+    cz_name,
+    hh_income_35,
+    <span class="fn">NTILE</span>(<span class="num">5</span>) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> hh_income_35)                       <span class="kw">AS</span> quintile,
+    <span class="fn">ROUND</span>(hh_income_35 - <span class="fn">AVG</span>(hh_income_35) <span class="kw">OVER</span> (), <span class="num">0</span>)          <span class="kw">AS</span> vs_national_avg,
+    <span class="fn">RANK</span>() <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> hh_income_35 <span class="kw">DESC</span>)                   <span class="kw">AS</span> rank_best
+<span class="kw">FROM</span> atlas_cz
+<span class="kw">ORDER BY</span> hh_income_35 <span class="kw">DESC</span>;</code></pre>
+    </div>
+    <div class="explain">
+      <div><b>What</b>Buckets all 722 commuting zones into quintiles and compares each to the mean.</div>
+      <div><b>Why</b><code>AVG() OVER ()</code> puts the national mean on every row without a self-join.</div>
+      <div><b>Business value</b>Identifies the places where adult outcomes lag most.</div>
+      <div><b>Output</b>Top: Dickinson, ND $68,165. Bottom: Mission, TX $27,350.</div>
+      <div><b>Talking point</b>A 2.5x spread from geography alone, before any individual choices.</div>
+    </div>
+  </section>
+</div>
+
+<!-- FINDINGS / CHARTS -->
+<div class="wrap" id="findings">
+  <section class="section reveal">
+    <div class="section-eyebrow">Section 02 · What the Data Shows</div>
+    <h2 class="section-h">Income gaps narrow with education.<br><em>Wealth gaps don't.</em></h2>
+
+    <div class="chart-label">Fig 1 — Median Household Income vs Net Worth by Education</div>
+    <div class="chip-row" id="edu-toggle">
+      <button class="chip-btn active" data-m="income">Income</button>
+      <button class="chip-btn" data-m="networth">Net worth</button>
+    </div>
+    <div class="chart-container"><div id="chart-edu" style="height:360px;"></div></div>
+    <p class="chart-note">SCF 2022, weighted medians. Toggle between income and net worth: the gap between bars is much larger for wealth at every education level.</p>
+
+    <div class="callout">
+      <div><div class="big" style="color:var(--teal)">$72K vs $56K</div><div class="lbl">Median income</div><div class="desc">Black households with a bachelor's degree or more out-earn White households with only a high school diploma.</div></div>
+      <div><div class="big" style="color:var(--bark)">$128K vs $153K</div><div class="lbl">Median net worth</div><div class="desc">But they hold less wealth. Higher income hasn't had time, or a starting base, to compound into assets.</div></div>
+    </div>
+
+    <div class="chart-grid">
+      <div>
+        <div class="chart-label">Fig 2 — Homeownership: Where Wealth Lives</div>
+        <div class="chart-container"><div id="chart-home" style="height:320px;"></div></div>
+        <p class="chart-note">Median net worth by race and homeownership. Black homeownership is 46.7% vs 72.2% for White households.</p>
+      </div>
+      <div>
+        <div class="chart-label">Fig 3 — Asset Ownership Rates by Race</div>
+        <div class="chart-container"><div id="chart-assets" style="height:320px;"></div></div>
+        <p class="chart-note">Share of households holding each asset or credential, SCF 2022, weighted.</p>
+      </div>
+    </div>
+
+    <div class="chart-grid">
+      <div>
+        <div class="chart-label">Fig 4 — Odds of Rising from Bottom to Top Fifth</div>
+        <div class="chart-container"><div id="chart-mobility" style="height:300px;"></div></div>
+        <p class="chart-note">Children born to bottom-quintile parents who reach the top quintile as adults. Cited from Chetty et al. (2020).</p>
+      </div>
+      <div>
+        <div class="chart-label">Fig 5 — Where You Grow Up: Income at 35</div>
+        <div class="chart-container"><div id="chart-geo" style="height:300px;"></div></div>
+        <p class="chart-note">Opportunity Atlas, top 5 and bottom 5 of 722 commuting zones. Pooled across races; not Black-specific.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- MODELS -->
+<div class="wrap" id="models">
+  <section class="section reveal">
+    <div class="section-eyebrow">Section 03 · Statistical Modeling</div>
+    <h2 class="section-h">Weighted regression with<br><em>multiple imputation</em></h2>
+    <p class="section-body">The model sample is Black and White household heads aged 25–64 with positive income: 2,244 households. The code below is excerpted from <code>analyze_scf.py</code>, which produces every number in this section.</p>
+
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">Python</span><span class="code-title">1 · Weighted medians across implicates</span><button class="code-copy">Copy</button></div>
+      <pre><code><span class="kw">def</span> <span class="fn">wmedian</span>(values, weights):
+    d = pd.<span class="fn">DataFrame</span>({<span class="str">"v"</span>: values, <span class="str">"w"</span>: weights}).<span class="fn">dropna</span>().<span class="fn">sort_values</span>(<span class="str">"v"</span>)
+    c = d[<span class="str">"w"</span>].<span class="fn">cumsum</span>()
+    <span class="kw">return</span> <span class="fn">float</span>(d.loc[c &gt;= d[<span class="str">"w"</span>].<span class="fn">sum</span>() / <span class="num">2</span>, <span class="str">"v"</span>].iloc[<span class="num">0</span>])
+
+<span class="cm"># all 5 implicates stacked, weighted by WGT (Federal Reserve convention)</span>
+<span class="kw">for</span> (race, edu), g <span class="kw">in</span> bw.<span class="fn">groupby</span>([<span class="str">"race"</span>, <span class="str">"edu_group"</span>]):
+    <span class="fn">print</span>(race, edu, <span class="fn">wmedian</span>(g[<span class="str">"INCOME"</span>], g[<span class="str">"WGT"</span>]), <span class="fn">wmedian</span>(g[<span class="str">"NETWORTH"</span>], g[<span class="str">"WGT"</span>]))</code></pre>
+    </div>
+    <div class="explain">
+      <div><b>Line by line</b>Sort values, accumulate weights, return the first value past half the total weight.</div>
+      <div><b>Business</b>Medians resist billionaire outliers that wreck wealth averages.</div>
+      <div><b>Statistics</b>Weights make 4,595 households represent ~131M U.S. households.</div>
+      <div><b>Output</b>e.g. Black, Bachelor's+: income $72,421, net worth $128,150.</div>
+      <div><b>Interview</b>"Mean SCF wealth is dominated by the top 1%; I report medians."</div>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">Python</span><span class="code-title">2 · WLS per implicate, combined with Rubin's rules</span><button class="code-copy">Copy</button></div>
+      <pre><code>X_COLS = [<span class="str">"educ_years"</span>, <span class="str">"age_c"</span>, <span class="str">"age_c2"</span>, <span class="str">"female"</span>, <span class="str">"married"</span>,
+          <span class="str">"homeowner"</span>, <span class="str">"working"</span>, <span class="str">"black"</span>, <span class="str">"black_x_bachelors"</span>]
+
+models = []
+<span class="kw">for</span> i, g <span class="kw">in</span> reg.<span class="fn">groupby</span>(<span class="str">"implicate"</span>):                 <span class="cm"># 5 separate fits</span>
+    X = sm.<span class="fn">add_constant</span>(g[X_COLS])
+    models.<span class="fn">append</span>(sm.<span class="fn">WLS</span>(g[<span class="str">"log_income"</span>], X, weights=g[<span class="str">"WGT"</span>]).<span class="fn">fit</span>(cov_type=<span class="str">"HC3"</span>))
+
+<span class="kw">def</span> <span class="fn">rubin</span>(models, names):
+    est = np.<span class="fn">array</span>([m.params[names] <span class="kw">for</span> m <span class="kw">in</span> models])
+    var = np.<span class="fn">array</span>([m.bse[names] ** <span class="num">2</span> <span class="kw">for</span> m <span class="kw">in</span> models])
+    within  = var.<span class="fn">mean</span>(<span class="num">0</span>)                            <span class="cm"># average sampling variance</span>
+    between = est.<span class="fn">var</span>(<span class="num">0</span>, ddof=<span class="num">1</span>)                    <span class="cm"># disagreement across implicates</span>
+    se = np.<span class="fn">sqrt</span>(within + (<span class="num">1</span> + <span class="num">1</span> / <span class="fn">len</span>(models)) * between)
+    <span class="kw">return</span> est.<span class="fn">mean</span>(<span class="num">0</span>), se</code></pre>
+    </div>
+    <div class="explain">
+      <div><b>Line by line</b>Fit the same weighted model on each implicate, then pool coefficients and variances.</div>
+      <div><b>Business</b>Confidence intervals you can defend in front of skeptical stakeholders.</div>
+      <div><b>Statistics</b>Total variance = within + (1 + 1/m) × between implicate variance.</div>
+      <div><b>Output</b>Black: −0.229 (SE 0.061). Educ years: 0.152 (SE 0.008). R² ≈ 0.50.</div>
+      <div><b>Interview</b>"Treating 22,975 rows as independent would understate SEs by ~√5."</div>
+    </div>
+
+    <div class="chart-label">Fig 6 — Regression Results: % Change in Household Income (95% CI)</div>
+    <div class="chart-container"><div id="chart-coef" style="height:380px;"></div></div>
+    <p class="chart-note">Weighted OLS on log household income, 5 implicates pooled with Rubin's rules, HC3 robust errors. Bars crossing zero are not statistically distinguishable from no effect.</p>
+
+    <div class="chart-grid">
+      <div>
+        <div class="chart-label">Fig 7 — Random Forest Permutation Importance</div>
+        <div class="chart-container"><div id="chart-rf" style="height:320px;"></div></div>
+        <p class="chart-note">Black households only (522 in sample). Drop in held-out R² when each feature is shuffled. Test R² ≈ 0.30.</p>
+      </div>
+      <div>
+        <div class="chart-label">Fig 8 — Correlations, Black Households</div>
+        <div class="chart-container"><div id="chart-corr" style="height:320px;"></div></div>
+        <p class="chart-note">Pearson correlations, implicate 1. Net worth uses a signed log.</p>
+      </div>
+    </div>
+
+    <h3 class="sub-h">Why these methods, and where they break</h3>
+    <div class="method-grid">
+      <div class="method"><h4>Weighted OLS</h4><dl>
+        <dt>Why</dt><dd>Interpretable coefficients: "each year of school is associated with 16% higher income."</dd>
+        <dt>Assumes</dt><dd>Linear in log income; no major omitted variable correlated with the predictors.</dd>
+        <dt>Read it as</dt><dd>Associations, not causes. Homeownership likely follows income as much as it drives it.</dd>
+        <dt>Limits</dt><dd>No inheritance or parental-income controls in this extract; the Black gap partly reflects them.</dd>
+        <dt>So what</dt><dd>A 20% gap remains among otherwise similar households.</dd>
+      </dl></div>
+      <div class="method"><h4>Multiple imputation</h4><dl>
+        <dt>Why</dt><dd>The SCF imputes missing answers five times; ignoring that understates uncertainty.</dd>
+        <dt>Assumes</dt><dd>The Fed's imputation model is reasonable (missing at random given covariates).</dd>
+        <dt>Read it as</dt><dd>Wider, more honest confidence intervals.</dd>
+        <dt>Limits</dt><dd>Rubin's rules don't fix model misspecification.</dd>
+        <dt>So what</dt><dd>Results reflect what the data can actually support.</dd>
+      </dl></div>
+      <div class="method"><h4>Random forest</h4><dl>
+        <dt>Why</dt><dd>Checks the OLS story without assuming linearity or specifying interactions.</dd>
+        <dt>Assumes</dt><dd>Little; but small samples make importances noisy.</dd>
+        <dt>Read it as</dt><dd>A ranking, not effect sizes. Permutation importance on held-out data avoids bias toward continuous features.</dd>
+        <dt>Limits</dt><dd>Correlated features (age, working) split credit and can show near-zero importance.</dd>
+        <dt>So what</dt><dd>Marriage and education lead in both models: the finding is robust.</dd>
+      </dl></div>
+      <div class="method"><h4>Hypothesis test on the interaction</h4><dl>
+        <dt>Why</dt><dd>Tests whether a bachelor's degree pays off differently for Black households.</dd>
+        <dt>Assumes</dt><dd>Enough Black graduates to detect a gap (only 170 households).</dd>
+        <dt>Read it as</dt><dd>−1.4%, 95% CI about −19% to +20%: not significant.</dd>
+        <dt>Limits</dt><dd>Low power. "Not significant" is not "no difference."</dd>
+        <dt>So what</dt><dd>I don't claim a degree-return gap this data can't show.</dd>
+      </dl></div>
+    </div>
+  </section>
+</div>
+
+<!-- INSIGHTS -->
+<div class="wrap">
+  <section class="section reveal">
+    <div class="section-eyebrow">Findings</div>
+    <h2 class="section-h" style="margin-bottom:0">Six things the data<br><em>supports</em></h2>
+    <div class="insight-grid">
+      <div class="insight-card"><div class="insight-num">5.5x</div><div class="insight-label">Median wealth gap</div><div class="insight-sub">$272,000 for White households vs $49,590 for Black households.</div></div>
+      <div class="insight-card b"><div class="insight-num">$128K &lt; $153K</div><div class="insight-label">The degree paradox</div><div class="insight-sub">Black bachelor's holders have less median wealth than White high school graduates, despite higher income.</div></div>
+      <div class="insight-card"><div class="insight-num">44x</div><div class="insight-label">Homeowners vs renters</div><div class="insight-sub">Black homeowners: $196,800 median net worth. Black renters: $4,500.</div></div>
+      <div class="insight-card b"><div class="insight-num">−20%</div><div class="insight-label">Gap after controls</div><div class="insight-sub">Same education, age, sex, marriage, homeownership and employment; still about 20% lower income (p &lt; 0.001).</div></div>
+      <div class="insight-card"><div class="insight-num">+16%</div><div class="insight-label">Per year of school</div><div class="insight-sub">The largest individual lever on income, for Black and White households alike.</div></div>
+      <div class="insight-card b"><div class="insight-num">13% vs 24%</div><div class="insight-label">Direct stock ownership</div><div class="insight-sub">Black vs White households directly holding stocks, one route to compounding wealth.</div></div>
+    </div>
+  </section>
+</div>
+
+<div class="wrap">
+  <section class="section reveal">
+    <div class="section-eyebrow">Implications</div>
+    <h2 class="section-h">What follows<br><em>from the evidence</em></h2>
+    <div class="rec"><div class="rec-n">01</div><div><div class="rec-t">Pair income growth with asset-building</div><div class="rec-d">Education raises income, but income alone isn't closing the wealth gap. Programs that convert income into assets (retirement auto-enrollment, matched savings, first-time investing) target the part of the gap education misses.<small>Follows from: the degree paradox; stock ownership 13% vs 24%</small></div></div></div>
+    <div class="rec"><div class="rec-n">02</div><div><div class="rec-t">Homeownership is the main wealth channel</div><div class="rec-d">For most households, home equity is the wealth. Down-payment assistance and fair lending enforcement address the 25-point homeownership gap directly, though causality runs both ways and the regression can't separate them.<small>Follows from: homeowner vs renter net worth; 46.7% vs 72.2% ownership</small></div></div></div>
+    <div class="rec"><div class="rec-n">03</div><div><div class="rec-t">The unexplained gap needs better data, not assumptions</div><div class="rec-d">A 20% gap after controls is consistent with discrimination, differences in parental wealth, occupation and location. Pinning down the mix requires linked parental income and employer data, which is the next analytical step.<small>Follows from: Black coefficient −0.23 with omitted-variable caveats</small></div></div></div>
+  </section>
+</div>
+
+<!-- INTERVIEW -->
+<div class="wrap" id="interview">
+  <section class="section reveal">
+    <div class="section-eyebrow">Interview Preparation</div>
+    <h2 class="section-h">STAR method<br><em>answer</em></h2>
+    <div class="star-item"><div><div class="star-letter">S</div><div class="star-word">Situation</div></div><div class="star-text">The racial wealth gap is widely discussed but often with headline numbers that don't separate what education fixes from what it doesn't. I wanted a <strong>quantitative answer from authoritative data</strong>.</div></div>
+    <div class="star-item"><div><div class="star-letter">T</div><div class="star-word">Task</div></div><div class="star-text">Identify which household factors predict income and wealth for Black Americans, and measure how much of the gap with White households remains once those factors are accounted for.</div></div>
+    <div class="star-item"><div><div class="star-letter">A</div><div class="star-word">Action</div></div><div class="star-text">I analyzed the Federal Reserve's 2022 SCF with population weights, computed weighted medians by race and education, and ran <strong>weighted OLS on each of the five imputed datasets, pooled with Rubin's rules</strong>. I cross-checked with a random forest using permutation importance, and set the results against Opportunity Atlas geography data.</div></div>
+    <div class="star-item"><div><div class="star-letter">R</div><div class="star-word">Result</div></div><div class="star-text">Education was the biggest income lever (+16% per year), but a <strong>20% gap remained after controls</strong>, and degree holders still trailed on wealth. I also <strong>dropped a claim I'd expected to make</strong>, that Black graduates get a smaller return on a degree, because the interaction wasn't significant. Letting the data overrule my hypothesis was the most important part.</div></div>
+
+    <h3 class="sub-h" style="margin-top:4rem">Common questions</h3>
+    <div class="qa-list">
+      <div class="qa-item"><button class="qa-q"><span class="qa-q-text">Why the SCF instead of Census data?</span><span class="qa-toggle">+</span></button><div class="qa-a">Census surveys measure income well but say almost nothing about wealth. The SCF is the Federal Reserve's dedicated wealth survey: it measures assets, debts and net worth in detail and oversamples wealthy households so the top of the distribution is captured. Since my question was about wealth as much as income, the SCF was the right source, at the cost of a smaller sample.</div></div>
+      <div class="qa-item"><button class="qa-q"><span class="qa-q-text">What are implicates, and why does it matter?</span><span class="qa-toggle">+</span></button><div class="qa-a">When respondents skip questions, the Fed fills in plausible values five separate times, producing five versions of each household. If you treat all 22,975 rows as independent, you overstate your sample size about fivefold and get standard errors that are far too small. Running the model on each implicate and combining with Rubin's rules adds the between-implicate variance back in, so the confidence intervals reflect the real uncertainty.</div></div>
+      <div class="qa-item"><button class="qa-q"><span class="qa-q-text">Does the −20% coefficient prove discrimination?</span><span class="qa-toggle">+</span></button><div class="qa-a">No, and I'm careful not to claim that. It means that among households similar on the variables I controlled for, Black household income is about 20% lower. That gap is consistent with discrimination, but also with factors I couldn't control for in this extract: parental wealth and inheritance, occupation, industry and region. The honest framing is that observable differences in education and household structure don't explain it, and identifying the causes needs richer data.</div></div>
+      <div class="qa-item"><button class="qa-q"><span class="qa-q-text">Why is marriage the biggest effect?</span><span class="qa-toggle">+</span></button><div class="qa-a">Mostly mechanics. SCF income is household income, so a married household often has two earners. The +93% coefficient largely reflects that second income, not some return to marriage itself. I'd flag this immediately if presenting it, because it's the kind of result that gets misread. Modeling individual earnings or adding a two-earner indicator would separate the effects.</div></div>
+      <div class="qa-item"><button class="qa-q"><span class="qa-q-text">You expected one result and found another. How did you handle it?</span><span class="qa-toggle">+</span></button><div class="qa-a">I went in expecting Black graduates to get a smaller income boost from a bachelor's degree, which some research reports. The interaction term came out at −1.4% with a confidence interval from roughly −19% to +20%: not significant. With only 170 Black degree holders, the test has low power, so I report it as inconclusive rather than as evidence of no gap. I removed the claim from the project rather than keep a finding I liked but couldn't support.</div></div>
+    </div>
+  </section>
+</div>
+
+<div class="wrap">
+  <section class="section reveal" style="border-bottom:none">
+    <div class="section-eyebrow">Career Assets</div>
+    <h2 class="section-h">Resume bullets &<br><em>LinkedIn write-up</em></h2>
+    <div class="bullets-box">
+      <div class="bullets-label">Resume Bullets (Personal Project)</div>
+      <div class="bullet-item">Analyzed the Federal Reserve's 2022 Survey of Consumer Finances (4,595 households) with population weights to quantify income and wealth gaps between Black and White households across education levels</div>
+      <div class="bullet-item">Estimated weighted OLS models on all five multiply-imputed datasets and pooled results with Rubin's rules, finding a significant 20% income gap after controlling for education, age, marital status, homeownership and employment</div>
+      <div class="bullet-item">Validated drivers with a random forest and permutation importance; tested and rejected an expected race-by-degree interaction that the data did not support</div>
+      <div class="bullet-item">Built an interactive Plotly report with SQL (CTEs, pivots, window functions) and Opportunity Atlas geography data across 722 commuting zones</div>
+    </div>
+    <div class="bullets-box">
+      <div class="bullets-label">LinkedIn Project Description</div>
+      <p style="font-size:14px;color:var(--ink2);line-height:1.85">Economic Mobility in Black America: using the Federal Reserve's Survey of Consumer Finances, I measured what predicts income and wealth for Black households. Education raises income about 16% per year of schooling, but Black households with a bachelor's degree still hold less median wealth than White households with only a high school diploma, and a 20% income gap remains after controls. Methods: weighted OLS with multiple imputation, random forest, SQL, Plotly.</p>
+    </div>
+    <div class="skill-row">
+      <span class="stag">Survey Weights</span><span class="stag">Multiple Imputation</span><span class="stag">Rubin's Rules</span><span class="stag">Weighted OLS</span><span class="stag">HC3 Errors</span><span class="stag">Interaction Terms</span><span class="stag">Random Forest</span><span class="stag">Permutation Importance</span><span class="stag">SQL Pivots</span><span class="stag">Plotly</span>
+    </div>
+    <div class="source-note"><strong>About the numbers.</strong> All SCF figures are computed by <code>analyze_scf.py</code> from the Federal Reserve's 2022 SCF summary extract and saved to <code>data/scf_results.json</code>. Commuting-zone figures come from the downloaded Opportunity Atlas file. The 2.5% / 10.6% mobility rates are cited from Chetty, Hendren, Jones &amp; Porter (2020), <em>Quarterly Journal of Economics</em>.</div>
+  </section>
+
+  <div class="proj-footer">
+    <a href="../coffee/index.html">← The World Runs on Coffee</a>
+    <a href="../../index.html">Back to Portfolio →</a>
+  </div>
+</div>
+
+<script>
+const C={cream:'#f4f1ea',ink:'#1c1a14',ink3:'#8a8070',teal:'#2a6b5a',deep:'#1d3f36',bark:'#6b4423',bark2:'#8b5e35',sand:'#c4a882',forest:'#2d5a3d',moss:'#4a5e2a'};
+const cfg={displayModeBar:false,responsive:true};
+const base=()=>({paper_bgcolor:'transparent',plot_bgcolor:'transparent',
+  font:{family:"'JetBrains Mono',monospace",size:11,color:C.ink3},margin:{t:16,r:20,b:44,l:60},
+  xaxis:{gridcolor:'rgba(30,24,14,.07)',linecolor:'rgba(30,24,14,.15)',zeroline:false},
+  yaxis:{gridcolor:'rgba(30,24,14,.07)',linecolor:'rgba(30,24,14,.15)',zeroline:false},
+  hoverlabel:{bgcolor:C.ink,bordercolor:C.ink,font:{color:C.cream,family:"'JetBrains Mono',monospace",size:11}},showlegend:false});
+function plot(id,data,layout){
+  if(typeof Plotly==='undefined'){const el=document.getElementById(id);if(el)el.innerHTML='<p style="padding:2rem;font-size:13px;color:#8a8070">Chart library did not load. View this page on the live site to see interactive charts.</p>';return;}
+  Plotly.newPlot(id,data,layout,cfg);
+}
+
+// Real SCF 2022 results (data/scf_results.json)
+const EDU=['No HS diploma','HS diploma','Some college / Assoc.',"Bachelor's+"];
+const DATA={
+  income:{Black:[18376,43236,44317,72421],White:[34589,56207,67017,123224]},
+  networth:{Black:[7000,54720,33700,128150],White:[63151,153270,188600,574460]}
+};
+function drawEdu(m){
+  plot('chart-edu',[
+    {type:'bar',name:'Black households',x:EDU,y:DATA[m].Black,marker:{color:C.teal},hovertemplate:'<b>%{x}</b><br>Black: $%{y:,}<extra></extra>'},
+    {type:'bar',name:'White households',x:EDU,y:DATA[m].White,marker:{color:C.sand},hovertemplate:'<b>%{x}</b><br>White: $%{y:,}<extra></extra>'}
+  ],{...base(),barmode:'group',showlegend:true,legend:{orientation:'h',y:1.1,font:{size:10}},
+     yaxis:{...base().yaxis,title:m==='income'?'Median household income':'Median net worth',tickformat:'$,.0f'}});
+}
+drawEdu('income');
+document.querySelectorAll('#edu-toggle .chip-btn').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('#edu-toggle .chip-btn').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');drawEdu(b.dataset.m);
+}));
+
+plot('chart-home',[
+  {type:'bar',name:'Renters',x:['Black','White'],y:[4500,13400],marker:{color:C.bark2},text:['$4.5K','$13.4K'],textposition:'outside',textfont:{size:10,color:C.ink3},hovertemplate:'%{x} renters: $%{y:,}<extra></extra>'},
+  {type:'bar',name:'Homeowners',x:['Black','White'],y:[196800,435380],marker:{color:C.teal},text:['$197K','$435K'],textposition:'outside',textfont:{size:10,color:C.ink3},hovertemplate:'%{x} homeowners: $%{y:,}<extra></extra>'}
+],{...base(),barmode:'group',showlegend:true,legend:{orientation:'h',y:1.12,font:{size:10}},yaxis:{...base().yaxis,title:'Median net worth',tickformat:'$,.0f',range:[0,500000]}});
+
+const assetLbl=['Homeowner',"Bachelor's+",'Owns stocks','Owns a business'];
+plot('chart-assets',[
+  {type:'bar',name:'Black',x:assetLbl,y:[46.7,28.4,13.1,11.5],marker:{color:C.teal},hovertemplate:'Black — %{x}: %{y}%<extra></extra>'},
+  {type:'bar',name:'White',x:assetLbl,y:[72.2,44.1,23.6,15.7],marker:{color:C.sand},hovertemplate:'White — %{x}: %{y}%<extra></extra>'}
+],{...base(),barmode:'group',showlegend:true,legend:{orientation:'h',y:1.12,font:{size:10}},yaxis:{...base().yaxis,title:'% of households',range:[0,85]}});
+
+plot('chart-mobility',[{type:'bar',x:['Black children','White children'],y:[2.5,10.6],marker:{color:[C.teal,C.sand]},
+  text:['2.5%','10.6%'],textposition:'outside',textfont:{size:12,color:C.ink},hovertemplate:'%{x}: %{y}%<extra></extra>'}],
+  {...base(),yaxis:{...base().yaxis,title:'% reaching top quintile',range:[0,13]}});
+
+const geo=[['Dickinson, ND',68165],['Bowman, ND',67767],['East Grant, UT',67317],['Williston, ND',65797],['Sioux Center, IA',63464],['National mean',44627],['Barnwell, SC',30028],['West Memphis, AR',29994],['Yazoo City, MS',28467],['Eagle Butte, SD',28428],['Mission, TX',27350]];
+plot('chart-geo',[{type:'bar',orientation:'h',x:geo.map(d=>d[1]),y:geo.map(d=>d[0]),
+  marker:{color:geo.map(d=>d[0]==='National mean'?C.ink3:d[1]>44627?C.teal:C.bark2)},
+  hovertemplate:'<b>%{y}</b><br>$%{x:,}<extra></extra>'}],
+  {...base(),xaxis:{...base().xaxis,tickformat:'$,.0f'},yaxis:{...base().yaxis,autorange:'reversed'},margin:{t:10,r:20,b:40,l:120}});
+
+// Coefficients: [label, coef, se] on log scale
+const coefs=[['Black (vs White)',-0.2292,0.0611],['Black × Bachelor\'s',-0.0143,0.1000],['Female head',-0.1270,0.0606],['Each year of school',0.1517,0.0077],['Homeowner',0.3470,0.0436],['Working',0.5866,0.0660],['Married / partnered',0.6570,0.0591]];
+const pct=x=>(Math.exp(x)-1)*100;
+plot('chart-coef',[{type:'scatter',mode:'markers',
+  x:coefs.map(c=>pct(c[1])),y:coefs.map(c=>c[0]),
+  error_x:{type:'data',symmetric:false,array:coefs.map(c=>pct(c[1]+1.96*c[2])-pct(c[1])),arrayminus:coefs.map(c=>pct(c[1])-pct(c[1]-1.96*c[2])),color:C.ink3,thickness:1.5,width:4},
+  marker:{size:11,color:coefs.map(c=>c[1]<0?C.bark:C.teal),line:{color:C.cream,width:1.5}},
+  customdata:coefs.map(c=>[pct(c[1]-1.96*c[2]).toFixed(1),pct(c[1]+1.96*c[2]).toFixed(1)]),
+  hovertemplate:'<b>%{y}</b><br>%{x:.1f}% (95% CI %{customdata[0]}% to %{customdata[1]}%)<extra></extra>'}],
+  {...base(),margin:{t:10,r:20,b:44,l:160},xaxis:{...base().xaxis,title:'% change in household income',ticksuffix:'%'},
+   shapes:[{type:'line',x0:0,x1:0,y0:-.5,y1:coefs.length-.5,line:{color:C.ink,width:1,dash:'dot'}}]});
+
+const rf=[['Married / partnered',0.4057],['Years of school',0.2492],['Homeowner',0.0369],['Age',0.0252],['Female head',0.0015],['Owns stocks',0.0001]];
+plot('chart-rf',[{type:'bar',orientation:'h',x:rf.map(d=>d[1]),y:rf.map(d=>d[0]),
+  marker:{color:rf.map((d,i)=>i<2?C.teal:C.sand)},text:rf.map(d=>d[1].toFixed(3)),textposition:'outside',textfont:{size:10,color:C.ink3},
+  hovertemplate:'<b>%{y}</b><br>R² drop when shuffled: %{x:.3f}<extra></extra>'}],
+  {...base(),margin:{t:10,r:40,b:44,l:140},xaxis:{...base().xaxis,title:'Permutation importance',range:[0,.48]},yaxis:{...base().yaxis,autorange:'reversed'}});
+
+const cl=['Log income','Years school','Age','Homeowner','Married','Working','Owns stocks','Net worth'];
+const cm=[[1,.37,.06,.33,.45,.23,.26,.24],[.37,1,-.1,.11,-.01,.14,.21,-.08],[.06,-.1,1,.27,.1,-.37,-.11,.22],[.33,.11,.27,1,.28,.03,.08,.45],[.45,-.01,.1,.28,1,.11,.1,.22],[.23,.14,-.37,.03,.11,1,.06,0],[.26,.21,-.11,.08,.1,.06,1,.05],[.24,-.08,.22,.45,.22,0,.05,1]];
+plot('chart-corr',[{type:'heatmap',z:cm,x:cl,y:cl,zmin:-1,zmax:1,zmid:0,
+  colorscale:[[0,C.bark],[.5,C.cream],[1,C.teal]],text:cm.map(r=>r.map(v=>v.toFixed(2))),texttemplate:'%{text}',textfont:{size:9},
+  hovertemplate:'%{x} × %{y}: r = %{z:.2f}<extra></extra>',showscale:false}],
+  {...base(),margin:{t:10,r:10,b:80,l:90},yaxis:{autorange:'reversed'}});
+
+document.querySelectorAll('.pitch-tab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.pitch-tab,.pitch-panel').forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');document.getElementById(t.dataset.panel).classList.add('active');
+}));
+document.querySelectorAll('.qa-q').forEach(q=>q.addEventListener('click',()=>q.parentElement.classList.toggle('open')));
+document.querySelectorAll('.code-copy').forEach(b=>b.addEventListener('click',()=>{
+  navigator.clipboard.writeText(b.closest('.code-wrap').querySelector('pre').innerText).then(()=>{b.textContent='Copied';setTimeout(()=>b.textContent='Copy',1600);}).catch(()=>{});
+}));
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');window.dispatchEvent(new Event('resize'));}}),{threshold:.06});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+const bar=document.getElementById('scroll-bar'),jump=[...document.querySelectorAll('.nav-jump a')];
+window.addEventListener('scroll',()=>{
+  bar.style.width=(scrollY/(document.body.scrollHeight-innerHeight)*100)+'%';
+  let cur='';['data','findings','models','interview'].forEach(id=>{const el=document.getElementById(id);if(el&&scrollY>=el.offsetTop-120)cur=id;});
+  jump.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur));
+},{passive:true});
+</script>
+</body>
+</html>
