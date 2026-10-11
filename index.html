@@ -625,7 +625,8 @@
       .exp-date { text-align: left; }
       footer { flex-direction: column; gap: 8px; text-align: center; padding: 1.5rem; }
     }
-  </style>
+  .proj-row-tag.cof{color:#5c3a24;border-color:rgba(92,58,36,.3);background:rgba(92,58,36,.05);}
+</style>
 </head>
 <body>
 
@@ -782,10 +783,10 @@
           </div>
           <div class="hero-index-item">
             <span class="hero-index-label">Projects</span>
-            <span class="hero-index-val gold">6 portfolio pieces</span>
+            <span class="hero-index-val gold">2 portfolio pieces</span>
           </div>
         </div>
-        <div class="hero-num">05</div>
+        <div class="hero-num">02</div>
       </div>
     </div>
   </div>
@@ -821,7 +822,7 @@
 <div class="wrap">
   <div class="stats-strip">
     <div class="stat-cell">
-      <div class="stat-n" data-target="6">0</div>
+      <div class="stat-n" data-target="2">0</div>
       <div class="stat-l">Portfolio Projects</div>
     </div>
     <div class="stat-cell" style="transition-delay:.08s">
@@ -869,41 +870,15 @@
         <div class="eyebrow reveal" data-num="03">Featured Work</div>
         <h2 class="reveal" style="font-family:'Cormorant Garamond',serif;font-size:clamp(38px,5vw,60px);font-weight:300;line-height:1.1;letter-spacing:-.02em;"><em style="font-style:italic;">Deep dives</em><br>into data that matters</h2>
       </div>
-      <span class="proj-count reveal">05 Projects</span>
+      <span class="proj-count reveal">02 Projects</span>
     </div>
 
     <div class="proj-list">
-      <a href="projects/economic-mobility/" class="proj-row"
-         data-tag="Sociology" data-title="Economic Mobility in Black America"
-         data-desc="EDA, regression, and feature importance across education, income, employment, and geography."
-         data-chips="Python,Regression,Plotly,Inference">
-        <span class="proj-row-num">01</span>
-        <div class="proj-row-main">
-          <div class="proj-row-title">Economic Mobility in Black America</div>
-          <div class="proj-row-sub">What factors drive upward economic mobility?</div>
-        </div>
-        <span class="proj-row-tag soc">Sociology</span>
-        <span class="proj-row-arrow">↗</span>
-      </a>
-
-      <a href="projects/housing-wealth-gap/" class="proj-row"
-         data-tag="Sociology" data-title="Housing & Wealth Gap Analysis"
-         data-desc="Cohort analysis, geo visualization, and trend modeling across demographic groups."
-         data-chips="SQL,Cohort Analysis,Geo Viz,Trends">
-        <span class="proj-row-num">02</span>
-        <div class="proj-row-main">
-          <div class="proj-row-title">Housing & Wealth Gap Analysis</div>
-          <div class="proj-row-sub">How does homeownership create wealth across demographics?</div>
-        </div>
-        <span class="proj-row-tag soc">Sociology</span>
-        <span class="proj-row-arrow">↗</span>
-      </a>
-
       <a href="projects/airline-revenue/" class="proj-row"
          data-tag="Aviation" data-title="Delta Flight Delay Analytics"
-         data-desc="Time series forecasting and optimization for revenue, pricing, and capacity planning."
-         data-chips="Forecasting,Optimization,Revenue Modeling,Python">
-        <span class="proj-row-num">03</span>
+         data-desc="Root cause analysis of delays across airports and seasons, with SQL window functions and a delay forecasting model."
+         data-chips="SQL,Time Series,Random Forest,Plotly">
+        <span class="proj-row-num">01</span>
         <div class="proj-row-main">
           <div class="proj-row-title">Delta Flight Delay Analytics</div>
           <div class="proj-row-sub">What causes delays and how can operations improve?</div>
@@ -912,29 +887,16 @@
         <span class="proj-row-arrow">↗</span>
       </a>
 
-      <a href="projects/luxury-fashion/" class="proj-row"
-         data-tag="Fashion" data-title="Luxury Fashion Pricing Analysis"
-         data-desc="Regression and clustering to separate brand prestige markup from actual garment quality."
-         data-chips="Clustering,Regression,Segmentation,LV">
-        <span class="proj-row-num">04</span>
+      <a href="projects/coffee/" class="proj-row"
+         data-tag="Consumer · Commodities" data-title="The World Runs on Coffee"
+         data-desc="Farm to cup in three lenses: global supply and price shocks, the economics of a café latte, and caffeine habits against FDA guidance."
+         data-chips="Time Series,K-Means,Regression,SQL">
+        <span class="proj-row-num">02</span>
         <div class="proj-row-main">
-          <div class="proj-row-title">Luxury Fashion Pricing Analysis</div>
-          <div class="proj-row-sub">What drives pricing at LV, Dior, Gucci, and Prada?</div>
+          <div class="proj-row-title">The World Runs on Coffee</div>
+          <div class="proj-row-sub">What sets the price of a cup, and who captures the value?</div>
         </div>
-        <span class="proj-row-tag fash">Fashion</span>
-        <span class="proj-row-arrow">↗</span>
-      </a>
-
-      <a href="projects/wealth-growth/" class="proj-row"
-         data-tag="Finance" data-title="Income Diversification & Wealth Growth"
-         data-desc="Monte Carlo simulation and scenario modeling on multi-stream income and FIRE planning."
-         data-chips="Monte Carlo,Simulation,FIRE,Scenario Modeling">
-        <span class="proj-row-num">05</span>
-        <div class="proj-row-main">
-          <div class="proj-row-title">Income Diversification & Wealth Growth</div>
-          <div class="proj-row-sub">How do multiple income streams accelerate wealth creation?</div>
-        </div>
-        <span class="proj-row-tag fin">Finance</span>
+        <span class="proj-row-tag cof">Coffee</span>
         <span class="proj-row-arrow">↗</span>
       </a>
     </div>
